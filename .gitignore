@@ -15,6 +15,7 @@ next-env.d.ts
 
 # Payload default media upload directory
 public/media/
+/storage/
 
 # Repository-local backup artifacts
 /backup/
