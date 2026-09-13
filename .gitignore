@@ -6,7 +6,8 @@ build
 dist / media
 node_modules/
 .DS_Store
-.env
+.env*
+!.env.example
 .next
 next-env.d.ts
 *.tsbuildinfo
@@ -14,6 +15,10 @@ next-env.d.ts
 
 # Payload default media upload directory
 public/media/
+
+# Repository-local backup artifacts
+/backup/
+/backups/
 
 # Generated crawler metadata
 public/robots.txt
