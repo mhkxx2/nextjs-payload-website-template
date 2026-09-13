@@ -1,7 +1,7 @@
 {
   "name": "alrukn-payload-website",
   "version": "1.0.0",
-  "description": "Website template for Payload",
+  "description": "Al Rukn Furniture website and content platform",
   "license": "MIT",
   "type": "module",
   "scripts": {

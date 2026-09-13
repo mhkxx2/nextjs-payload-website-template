@@ -7,31 +7,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import React, { useState } from 'react'
+import React, { useState, useSyncExternalStore } from 'react'
 
 import type { Theme } from './types'
 
 import { useTheme } from '..'
 import { themeLocalStorageKey } from './types'
 
+const subscribeToStoredTheme = (onStoreChange: () => void) => {
+  window.addEventListener('storage', onStoreChange)
+  return () => window.removeEventListener('storage', onStoreChange)
+}
+
+const getStoredTheme = () => window.localStorage.getItem(themeLocalStorageKey) ?? 'auto'
+const getServerTheme = () => ''
+
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme()
-  const [value, setValue] = useState('')
+  const storedValue = useSyncExternalStore(
+    subscribeToStoredTheme,
+    getStoredTheme,
+    getServerTheme,
+  )
+  const [selectedValue, setSelectedValue] = useState<Theme | 'auto' | null>(null)
+  const value = selectedValue ?? storedValue
 
-  const onThemeChange = (themeToSet: Theme & 'auto') => {
+  const onThemeChange = (themeToSet: Theme | 'auto') => {
     if (themeToSet === 'auto') {
       setTheme(null)
-      setValue('auto')
+      setSelectedValue('auto')
     } else {
       setTheme(themeToSet)
-      setValue(themeToSet)
+      setSelectedValue(themeToSet)
     }
   }
-
-  React.useEffect(() => {
-    const preference = window.localStorage.getItem(themeLocalStorageKey)
-    setValue(preference ?? 'auto')
-  }, [])
 
   return (
     <Select onValueChange={onThemeChange} value={value}>

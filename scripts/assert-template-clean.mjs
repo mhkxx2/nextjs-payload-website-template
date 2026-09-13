@@ -13,6 +13,10 @@ const demoPaths = [
 
 const demoStrings = [
   'Payload Website Template',
+  'Website template for Payload',
+  "creator: '@payloadcms'",
+  'https://example.com',
+  '/favicon.ico',
   'Demo Author',
   'demo-author@example.com',
   'demo-author@payloadcms.com',
@@ -57,9 +61,21 @@ export async function scanTemplateDemoArtifacts(root) {
 
   const roots = ['public', 'src', 'tests']
   const files = (await Promise.all(roots.map((entry) => collectTextFiles(path.join(root, entry))))).flat()
-  if (await exists(path.join(root, 'README.md'))) files.push(path.join(root, 'README.md'))
+  const rootConfiguration = [
+    '.env.example',
+    'docker-compose.yml',
+    'next-sitemap.config.cjs',
+    'next.config.ts',
+    'package.json',
+  ]
+  for (const relativePath of ['README.md', ...rootConfiguration]) {
+    if (await exists(path.join(root, relativePath))) files.push(path.join(root, relativePath))
+  }
+
+  const scannerTest = path.join(root, 'tests/unit/template-provenance.test.ts')
 
   for (const file of files.sort()) {
+    if (file === scannerTest) continue
     const source = await readFile(file, 'utf8')
     const relativePath = path.relative(root, file)
     for (const needle of demoStrings) {
