@@ -1,9 +1,19 @@
 import type { Field, TextFieldValidation } from 'payload'
 
 const CANONICAL_ORIGIN = 'https://alruknfurniture.ae'
+const ASCII_CONTROL_CHARACTER = /[\u0000-\u001f\u007f]/
+const EXPLICIT_AUTHORITY_PORT = /^https:\/\/[^/?#]*:\d+(?:[/?#]|$)/
 
 const validateCanonicalURL: TextFieldValidation = (value) => {
   if (typeof value !== 'string') return 'Enter an absolute canonical URL.'
+
+  if (
+    value.trim() !== value ||
+    ASCII_CONTROL_CHARACTER.test(value) ||
+    EXPLICIT_AUTHORITY_PORT.test(value)
+  ) {
+    return `Canonical URLs must use ${CANONICAL_ORIGIN} without whitespace, controls, credentials, ports, or fragments.`
+  }
 
   try {
     const canonical = new URL(value)
