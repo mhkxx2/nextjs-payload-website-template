@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    projects: Project;
+    services: Service;
     users: User;
     media: Media;
     categories: Category;
@@ -86,6 +88,8 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -152,6 +156,11 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
     richText?: {
@@ -198,18 +207,24 @@ export interface Page {
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
     description?: string | null;
+    image?: (number | null) | Media;
   };
+  status: 'draft' | 'published';
   publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalURL: string;
+    openGraphTitle?: string | null;
+    openGraphDescription?: string | null;
+    openGraphImage?: (number | null) | Media;
+    index?: boolean | null;
+    follow?: boolean | null;
+    schemaTypes?: ('Organization' | 'LocalBusiness' | 'Service' | 'BreadcrumbList' | 'Article' | 'FAQPage')[] | null;
+  };
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -221,7 +236,17 @@ export interface Page {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  excerpt: string;
   heroImage?: (number | null) | Media;
+  authors?: (number | User)[] | null;
+  categories?: (number | Category)[] | null;
+  services?: (number | Service)[] | null;
+  relatedPosts?: (number | Post)[] | null;
   content: {
     root: {
       type: string;
@@ -237,29 +262,32 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
     description?: string | null;
+    image?: (number | null) | Media;
   };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalURL: string;
+    openGraphTitle?: string | null;
+    openGraphDescription?: string | null;
+    openGraphImage?: (number | null) | Media;
+    index?: boolean | null;
+    follow?: boolean | null;
+    schemaTypes?: ('Organization' | 'LocalBusiness' | 'Service' | 'BreadcrumbList' | 'Article' | 'FAQPage')[] | null;
+  };
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   populatedAuthors?:
     | {
         id?: string | null;
         name?: string | null;
       }[]
     | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -409,10 +437,24 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
+ * via the `definition` "services".
  */
-export interface CallToActionBlock {
-  richText?: {
+export interface Service {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  summary?: string | null;
+  hero?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    copy?: string | null;
+    image?: (number | null) | Media;
+  };
+  details?: {
     root: {
       type: string;
       children: {
@@ -427,33 +469,141 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
-  links?:
+  benefits?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        title: string;
+        description?: string | null;
         id?: string | null;
       }[]
     | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
+  materialsCapabilities?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  process?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Related FAQ record IDs. Resolved when the FAQ collection is available.
+   */
+  faqs?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  serviceAreas?:
+    | {
+        area: string;
+        id?: string | null;
+      }[]
+    | null;
+  projects?: (number | Project)[] | null;
+  /**
+   * Related testimonial record IDs. Resolved when the testimonial collection is available.
+   */
+  testimonials?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  quotationContext?: {
+    heading?: string | null;
+    message?: string | null;
+  };
+  whatsAppContext?: {
+    label?: string | null;
+    message?: string | null;
+  };
+  relatedServices?: (number | Service)[] | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalURL: string;
+    openGraphTitle?: string | null;
+    openGraphDescription?: string | null;
+    openGraphImage?: (number | null) | Media;
+    index?: boolean | null;
+    follow?: boolean | null;
+    schemaTypes?: ('Organization' | 'LocalBusiness' | 'Service' | 'BreadcrumbList' | 'Article' | 'FAQPage')[] | null;
+  };
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  summary?: string | null;
+  cover?: (number | null) | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  service?: (number | null) | Service;
+  category?: (number | null) | Category;
+  location?: string | null;
+  completion?: {
+    date?: string | null;
+    details?: string | null;
+  };
+  narrative?: (ContentBlock | MediaBlock | CallToActionBlock)[] | null;
+  challenge?: string | null;
+  solution?: string | null;
+  featured?: boolean | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalURL: string;
+    openGraphTitle?: string | null;
+    openGraphDescription?: string | null;
+    openGraphImage?: (number | null) | Media;
+    index?: boolean | null;
+    follow?: boolean | null;
+    schemaTypes?: ('Organization' | 'LocalBusiness' | 'Service' | 'BreadcrumbList' | 'Article' | 'FAQPage')[] | null;
+  };
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -514,6 +664,54 @@ export interface MediaBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock".
+ */
+export interface CallToActionBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -939,6 +1137,14 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1014,6 +1220,8 @@ export interface PayloadMigration {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
+  slug?: T;
   hero?:
     | T
     | {
@@ -1049,12 +1257,26 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
+        image?: T;
       };
+  status?: T;
   publishedAt?: T;
-  generateSlug?: T;
-  slug?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalURL?: T;
+        openGraphTitle?: T;
+        openGraphDescription?: T;
+        openGraphImage?: T;
+        index?: T;
+        follow?: T;
+        schemaTypes?: T;
+      };
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1149,27 +1371,189 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
+  slug?: T;
+  excerpt?: T;
   heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
+  authors?: T;
   categories?: T;
+  services?: T;
+  relatedPosts?: T;
+  content?: T;
+  status?: T;
+  publishedAt?: T;
   meta?:
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
+        image?: T;
       };
-  publishedAt?: T;
-  authors?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalURL?: T;
+        openGraphTitle?: T;
+        openGraphDescription?: T;
+        openGraphImage?: T;
+        index?: T;
+        follow?: T;
+        schemaTypes?: T;
+      };
+  createdBy?: T;
+  updatedBy?: T;
   populatedAuthors?:
     | T
     | {
         id?: T;
         name?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
   generateSlug?: T;
   slug?: T;
+  summary?: T;
+  cover?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  service?: T;
+  category?: T;
+  location?: T;
+  completion?:
+    | T
+    | {
+        date?: T;
+        details?: T;
+      };
+  narrative?:
+    | T
+    | {
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
+      };
+  challenge?: T;
+  solution?: T;
+  featured?: T;
+  status?: T;
+  publishedAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalURL?: T;
+        openGraphTitle?: T;
+        openGraphDescription?: T;
+        openGraphImage?: T;
+        index?: T;
+        follow?: T;
+        schemaTypes?: T;
+      };
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  summary?: T;
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        copy?: T;
+        image?: T;
+      };
+  details?: T;
+  benefits?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  materialsCapabilities?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  process?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  faqs?: T;
+  serviceAreas?:
+    | T
+    | {
+        area?: T;
+        id?: T;
+      };
+  projects?: T;
+  testimonials?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  quotationContext?:
+    | T
+    | {
+        heading?: T;
+        message?: T;
+      };
+  whatsAppContext?:
+    | T
+    | {
+        label?: T;
+        message?: T;
+      };
+  relatedServices?: T;
+  status?: T;
+  publishedAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalURL?: T;
+        openGraphTitle?: T;
+        openGraphDescription?: T;
+        openGraphImage?: T;
+        index?: T;
+        follow?: T;
+        schemaTypes?: T;
+      };
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1707,6 +2091,14 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: number | Service;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

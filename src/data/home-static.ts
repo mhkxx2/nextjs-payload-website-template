@@ -3,6 +3,8 @@ import type { RequiredDataFromCollectionSlug } from 'payload'
 // Neutral, repository-owned fallback shown until a homepage is published in Payload.
 export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   slug: 'home',
+  status: 'published',
+  publishedAt: '2026-09-12T00:00:00.000Z',
   _status: 'published',
   hero: {
     type: 'lowImpact',
@@ -59,6 +61,9 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   meta: {
     description: 'Al Rukn Furniture.',
     title: 'Al Rukn Furniture',
+  },
+  seo: {
+    canonicalURL: 'https://alruknfurniture.ae/',
   },
   title: 'Home',
   layout: [],

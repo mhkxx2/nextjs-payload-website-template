@@ -8,6 +8,8 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Projects } from './collections/Projects'
+import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -63,7 +65,7 @@ export default buildConfig({
     },
     schemaName: process.env.NODE_ENV === 'test' ? process.env.PAYLOAD_TEST_SCHEMA : undefined,
   }),
-  collections: [Pages, Posts, Users, Media, Categories],
+  collections: [Pages, Posts, Projects, Services, Users, Media, Categories],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,
