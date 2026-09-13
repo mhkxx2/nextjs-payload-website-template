@@ -46,6 +46,8 @@ describe('reusable SEO fields', () => {
     ['https://alruknfurniture.ae.evil.example/custom-sofas/', false],
     ['https://alruknfurniture.ae:444/custom-sofas/', false],
     ['https://alruknfurniture.ae:443/custom-sofas/', false],
+    ['HTTPS://alruknfurniture.ae:443/custom-sofas/', false],
+    ['HtTpS://alruknfurniture.ae:443/custom-sofas/', false],
     ['https://user:pass@alruknfurniture.ae/custom-sofas/', false],
     ['https://alruknfurniture.ae/custom-sofas/#details', false],
     [' https://alruknfurniture.ae/custom-sofas/ ', false],
