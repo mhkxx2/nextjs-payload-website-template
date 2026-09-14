@@ -146,6 +146,12 @@ describe('Task 7 operational collection schemas', () => {
     expect(fields.get('rating')).toMatchObject({ max: 5, min: 1, required: false })
     expect(fields.get('service')).toMatchObject({ relationTo: 'services', type: 'relationship' })
     expect(fields.get('project')).toMatchObject({ relationTo: 'projects', type: 'relationship' })
+    const verificationNote = fields.get('verificationNote')
+    const verifiedAt = fields.get('verifiedAt')
+    expect(verificationNote && 'access' in verificationNote && verificationNote.access?.read).toBeTypeOf(
+      'function',
+    )
+    expect(verifiedAt && 'access' in verifiedAt && verifiedAt.access?.read).toBeTypeOf('function')
   })
 
   it('migrates Task 6 Service FAQ/testimonial JSON IDs to typed relationships', () => {
@@ -292,6 +298,78 @@ describe('FAQ and testimonial publication integrity', () => {
       overrideAccess: true,
     })
     expect(published.status).toBe('published')
+  })
+
+  it.each([
+    ['verificationNote', { verificationNote: null }],
+    ['verifiedAt', { verifiedAt: null }],
+    ['both evidence fields', { verificationNote: null, verifiedAt: null }],
+  ])('rejects clearing %s from an already-published testimonial', async (_label, data) => {
+    const published = await payload.create({
+      collection: 'testimonials',
+      context: { disableRevalidate: true },
+      data: {
+        _status: 'published',
+        displayName: 'Evidence retained',
+        featured: false,
+        publishedAt: '2026-01-01T00:00:00.000Z',
+        statement: 'Approved statement',
+        status: 'published',
+        verificationNote: 'Written consent retained.',
+        verifiedAt: '2026-01-02T00:00:00.000Z',
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+
+    await expect(
+      payload.update({
+        collection: 'testimonials',
+        context: { disableRevalidate: true },
+        data,
+        draft: false,
+        id: published.id,
+        overrideAccess: true,
+      }),
+    ).rejects.toThrow(/verification note.*date/i)
+  })
+
+  it('omits internal testimonial evidence from anonymous reads', async () => {
+    const testimonial = await payload.create({
+      collection: 'testimonials',
+      context: { disableRevalidate: true },
+      data: {
+        _status: 'published',
+        displayName: 'Public Customer',
+        featured: false,
+        publishedAt: '2026-01-01T00:00:00.000Z',
+        statement: 'Public approved statement',
+        status: 'published',
+        verificationNote: 'Private evidence reference.',
+        verifiedAt: '2026-01-02T00:00:00.000Z',
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+
+    const anonymous = await payload.findByID({
+      collection: 'testimonials',
+      id: testimonial.id,
+      overrideAccess: false,
+    })
+    expect(anonymous).not.toHaveProperty('verificationNote')
+    expect(anonymous).not.toHaveProperty('verifiedAt')
+
+    const authenticated = await payload.findByID({
+      collection: 'testimonials',
+      id: testimonial.id,
+      overrideAccess: false,
+      user: actor,
+    })
+    expect(authenticated).toMatchObject({
+      verificationNote: 'Private evidence reference.',
+      verifiedAt: expect.any(String),
+    })
   })
 })
 

@@ -1,8 +1,8 @@
 import type { CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access/authenticated'
+import { authenticatedField } from '@/access/authenticatedField'
 import { revalidateRedirects, revalidateRedirectsAfterDelete } from '@/hooks/revalidateRedirects'
-import { RESERVED_PREFIXES } from '@/lib/routes'
 
 export type RedirectInput = {
   active: boolean
@@ -14,13 +14,29 @@ export type RedirectInput = {
 }
 
 type ExistingRedirect = RedirectInput & { id?: number | string }
-type ResolvableRedirect = Pick<RedirectInput, 'active' | 'destination' | 'source'> & {
+export type ResolvableRedirect = Pick<RedirectInput, 'active' | 'destination' | 'source'> & {
   id?: number | string
+  type: number
 }
 
 const dangerousEncoding = /%(?:2e|2f|5c)/i
 const scheme = /^[a-z][a-z\d+.-]*:/i
 const bareAuthority = /^(?:[^/?#@]+@)?(?:\[[^\]]+\]|localhost|(?:\d{1,3}\.){3}\d{1,3}|[^/?#]+\.[^/?#]+)(?::\d+)?(?:[/?#]|$)/i
+const REDIRECT_PROTECTED_PREFIXES = new Set([
+  '_next',
+  'admin',
+  'api',
+  'assets',
+  'graphql',
+  'graphql-playground',
+  'health',
+  'internal',
+  'media',
+  'next',
+  'static',
+  'system',
+  'uploads',
+])
 
 const decodeFully = (value: string): string => {
   let decoded = value
@@ -37,7 +53,7 @@ const decodeFully = (value: string): string => {
 
 const protectedPath = (pathname: string): boolean => {
   const firstSegment = pathname.split('/').filter(Boolean)[0]?.toLowerCase()
-  return Boolean(firstSegment && (RESERVED_PREFIXES as readonly string[]).includes(firstSegment))
+  return Boolean(firstSegment && REDIRECT_PROTECTED_PREFIXES.has(firstSegment))
 }
 
 /** Canonicalizes a same-origin path while retaining only an explicitly supplied query string. */
@@ -197,7 +213,7 @@ export const Redirects: CollectionConfig = {
         value === 301 || value === 302 || 'Redirect type must be either 301 or 302.',
     },
     { name: 'active', type: 'checkbox', defaultValue: true, index: true, required: true },
-    { name: 'notes', type: 'textarea' },
+    { name: 'notes', type: 'textarea', access: { read: authenticatedField } },
   ],
   hooks: {
     afterChange: [revalidateRedirects],

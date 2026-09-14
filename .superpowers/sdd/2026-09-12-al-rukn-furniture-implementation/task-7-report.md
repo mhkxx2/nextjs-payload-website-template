@@ -117,3 +117,47 @@ Repository commands used the installed dependencies with `PATH="$PWD/node_module
 ## Concerns
 
 - Non-blocking runner warnings only: npm reports that the project-level `enable-pre-post-scripts` setting will be unsupported in a future npm major, and Payload reports that no email adapter is configured during tests. Neither affects Task 7 behavior.
+
+## Independent-review fix round 1/5
+
+### Status
+
+DONE — every open Important and related Minor finding was addressed in a new fix commit; no Task 8 UI was added.
+
+### Honest RED evidence
+
+The recovered-state Step 1 note above is retained unchanged; this fix round does not claim or manufacture the missing original Task 7 RED.
+
+- Testimonial evidence/access regressions were added first. `pnpm test:integration -- tests/integration/operational-collections.test.ts` exited `1` against reviewed HEAD `b67f238`: explicit-null update cases reached the old nullish fallback instead of rejecting, and the schema/anonymous-read assertions exposed missing field-level read access. The runner invoked the repository-wide integration directory despite the trailing filename, so no narrower count is claimed from that truncated run.
+- Redirect validation/privacy/atomicity regressions were then run against reviewed production code with `pnpm exec vitest run tests/integration/redirects.test.ts`: exit `1`, **16 failed / 27 passed**. Thirteen canonical public/service destinations were incorrectly rejected; anonymous `notes` leaked; `redirects_active_source_unique` was absent; and both concurrent creates fulfilled.
+- The request-boundary regression was added before its implementation. `pnpm exec vitest run tests/unit/redirect-response.test.ts`: exit `1`; Vitest could not resolve the intentionally absent `@/lib/redirectResponse`, proving there was no response-producing boundary that could assert exact 301/302 status or full query matching.
+
+### Fixes
+
+- Testimonial publication validation now distinguishes omitted fields from explicitly supplied `null` and validates the final merged persisted evidence state. Focused update regressions cover clearing `verificationNote`, `verifiedAt`, and both.
+- `verificationNote` and `verifiedAt` now use authenticated-only field-level read access; anonymous Payload reads omit both while authenticated reads retain them.
+- Redirect protection now uses a dedicated internal/system denylist (`admin`, API, media/uploads, Next/framework, health, internal, GraphQL, static/assets/system) rather than page-slug reservations. `/about/`, `/contact/`, `/blog/...`, `/projects/...`, and all fixed canonical service destinations are accepted while all prior unsafe/protected cases remain rejected.
+- `notes` now has authenticated-only field-level read access.
+- Operational redirects moved to `src/proxy.ts`. The proxy has the complete request pathname plus explicit query, delegates exact matching to `createRedirectResponse`, and emits the persisted 301 or 302 through a real `Response`. Non-matches continue through Next; the existing `PayloadRedirects` component now retains only its prior `notFound()`/disabled behavior.
+- PostgreSQL schema construction now adds partial unique index `redirects_active_source_unique` on normalized `source` where `active = true`. The adapter constraint map translates races to a Payload `ValidationError` on `source` with the standard unique-value message. The preflight check remains for early descriptive feedback, while the database is the atomic authority.
+- The index is schema-managed through Payload's supported `afterSchemaInit` extension. Per the existing sequencing, no persistent migration file was added; later migration generation will include the index, while disposable-schema tests prove its generated DDL and concurrency behavior now.
+
+### GREEN and verification evidence
+
+- `pnpm payload:generate-types` — exit `0`.
+- Focused covering command (`operational-collections`, `redirects`, and `redirect-response`) — exit `0`: **3 files / 63 tests passed**.
+- `pnpm test:integration` — exit `0`: **7 files / 97 tests passed**.
+- `pnpm test:unit` — exit `0`: **10 files / 133 tests passed**.
+- `pnpm typecheck` — exit `0`, no TypeScript errors (fresh after the final generated-type compatibility adjustment).
+- Scoped ESLint across every changed TypeScript/TSX/config/test file with `--max-warnings=0` — exit `0`, no warnings or errors.
+- `git diff --check` — exit `0`.
+- Disposable PostgreSQL cleanup query returned `{ "count": 0 }` for schemas matching `task5_%`.
+
+### Security and scope self-review
+
+- External, protocol-relative, host-like, encoded separator/traversal/delimiter, backslash, loop, chain, duplicate-active, and protected internal/system redirect rejections remain covered.
+- Query-specific sources match only the same explicit query at the actual proxy boundary; queryless or different-query requests do not match.
+- Runtime status handling rejects unexpected persisted numeric values defensively even though collection validation permits only 301/302.
+- Public testimonial and redirect reads no longer leak internal evidence/notes; authenticated workflows retain access.
+- The unique partial index allows the intended inactive-history model while eliminating active-source races at commit time.
+- No Lead access, audit, capability, Task 8 UI, or unrelated route/publication behavior was weakened or expanded.

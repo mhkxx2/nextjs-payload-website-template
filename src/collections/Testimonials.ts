@@ -2,6 +2,7 @@ import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 
 import { adminOrPublished } from '@/access/adminOrPublished'
 import { authenticated } from '@/access/authenticated'
+import { authenticatedField } from '@/access/authenticatedField'
 import { contentAuditFields } from '@/fields/contentAudit'
 import { publicationFields } from '@/fields/publication'
 import {
@@ -16,8 +17,10 @@ const requireVerificationForPublication: CollectionBeforeChangeHook = ({ data, o
   const status = next.status ?? originalDoc?.status
   if (status !== 'published') return next
 
-  const verificationNote = next.verificationNote ?? originalDoc?.verificationNote
-  const verifiedAt = next.verifiedAt ?? originalDoc?.verifiedAt
+  const verificationNote = Object.hasOwn(next, 'verificationNote')
+    ? next.verificationNote
+    : originalDoc?.verificationNote
+  const verifiedAt = Object.hasOwn(next, 'verifiedAt') ? next.verifiedAt : originalDoc?.verifiedAt
   const verifiedTimestamp =
     verifiedAt instanceof Date
       ? verifiedAt.getTime()
@@ -71,6 +74,7 @@ export const Testimonials: CollectionConfig = {
     {
       name: 'verificationNote',
       type: 'textarea',
+      access: { read: authenticatedField },
       admin: {
         description:
           'Internal evidence that the statement, display name, and any rating were approved for publication.',
@@ -79,6 +83,7 @@ export const Testimonials: CollectionConfig = {
     {
       name: 'verifiedAt',
       type: 'date',
+      access: { read: authenticatedField },
       admin: { date: { pickerAppearance: 'dayAndTime' } },
     },
     ...publicationFields(),

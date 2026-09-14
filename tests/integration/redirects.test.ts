@@ -70,6 +70,24 @@ describe('safe redirect validation', () => {
     },
   )
 
+  it.each([
+    '/about/',
+    '/contact/',
+    '/blog/a-public-post/',
+    '/projects/a-public-project/',
+    '/sofa-upholstery/',
+    '/custom-furniture/',
+    '/custom-sofa/',
+    '/majlis-furniture/',
+    '/curtains-blinds/',
+    '/sofa-repair/',
+    '/custom-wardrobes/',
+    '/custom-beds-headboards/',
+    '/office-furniture/',
+  ])('accepts the public canonical redirect target %s', (destination) => {
+    expect(validateRedirect(valid({ destination }), [])).toBe(true)
+  })
+
   it('normalizes path-only records and preserves queries only when explicitly supplied', () => {
     expect(normalizeRedirectPath('old//path')).toBe('/old/path/')
     expect(normalizeRedirectPath('/old/path?utm_source=legacy&x=1')).toBe(
@@ -120,7 +138,13 @@ describe('redirect Payload lifecycle', () => {
     const active = await payload.create({
       collection: 'redirects',
       context: { disableRevalidate: true },
-      data: { active: true, destination: 'new//place?from=old', source: 'legacy//place?x=1', type: 302 },
+      data: {
+        active: true,
+        destination: 'new//place?from=old',
+        notes: 'Internal redirect rationale.',
+        source: 'legacy//place?x=1',
+        type: 302,
+      },
       overrideAccess: false,
       user: actor,
     })
@@ -143,6 +167,63 @@ describe('redirect Payload lifecycle', () => {
       pagination: false,
     })
     expect(publicResult.docs.map(({ source }) => source)).toEqual(['/legacy/place/?x=1'])
+    expect(publicResult.docs[0]).not.toHaveProperty('notes')
+
+    const authenticatedResult = await payload.findByID({
+      collection: 'redirects',
+      id: active.id,
+      overrideAccess: false,
+      user: actor,
+    })
+    expect(authenticatedResult.notes).toBe('Internal redirect rationale.')
+  })
+
+  it('installs a partial unique database invariant for active normalized sources', async () => {
+    const result = await payload.db.pool.query<{ indexdef: string }>(
+      `SELECT indexdef FROM pg_indexes WHERE schemaname = $1 AND indexname = 'redirects_active_source_unique'`,
+      [process.env.PAYLOAD_TEST_SCHEMA],
+    )
+    expect(result.rows).toHaveLength(1)
+    expect(result.rows[0]?.indexdef).toMatch(/unique.*\(source\).*where.*active/is)
+  })
+
+  it('atomically rejects concurrent creates for the same active normalized source', async () => {
+    const suffix = randomUUID().slice(0, 8)
+    const source = `/concurrent-${suffix}/`
+    const results = await Promise.allSettled([
+      payload.create({
+        collection: 'redirects',
+        context: { disableRevalidate: true },
+        data: { active: true, destination: `/concurrent-a-${suffix}/`, source, type: 301 },
+        overrideAccess: false,
+        user: actor,
+      }),
+      payload.create({
+        collection: 'redirects',
+        context: { disableRevalidate: true },
+        data: { active: true, destination: `/concurrent-b-${suffix}/`, source: `concurrent-${suffix}`, type: 302 },
+        overrideAccess: false,
+        user: actor,
+      }),
+    ])
+    expect(results.filter(({ status }) => status === 'fulfilled')).toHaveLength(1)
+    const rejection = results.find(({ status }) => status === 'rejected')
+    expect(rejection).toMatchObject({ status: 'rejected' })
+    if (rejection?.status === 'rejected') {
+      expect(rejection.reason).toMatchObject({
+        data: {
+          errors: [expect.objectContaining({ message: expect.stringMatching(/unique/i), path: 'source' })],
+        },
+      })
+    }
+
+    const persisted = await payload.find({
+      collection: 'redirects',
+      overrideAccess: true,
+      pagination: false,
+      where: { source: { equals: source } },
+    })
+    expect(persisted.docs).toHaveLength(1)
   })
 
   it('denies anonymous writes and deterministically rejects a second active normalized source', async () => {

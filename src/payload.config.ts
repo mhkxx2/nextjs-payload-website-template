@@ -1,4 +1,5 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
+import { postgresAdapter, sql } from '@payloadcms/db-postgres'
+import { uniqueIndex } from '@payloadcms/db-postgres/drizzle/pg-core'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -64,6 +65,23 @@ export default buildConfig({
 
   editor: defaultLexical,
   db: postgresAdapter({
+    afterSchemaInit: [
+      ({ adapter, extendTable, schema }) => {
+        extendTable({
+          table: schema.tables.redirects!,
+          extraConfig: (table) => ({
+            redirectsActiveSourceUnique: uniqueIndex('redirects_active_source_unique')
+              .on(table.source)
+              .where(sql`${table.active} = true`),
+          }),
+        })
+
+        adapter.fieldConstraints.redirects ??= {}
+        adapter.fieldConstraints.redirects.redirects_active_source_unique = 'source'
+
+        return schema
+      },
+    ],
     pool: {
       connectionString: process.env.DATABASE_URI,
     },
