@@ -9,7 +9,7 @@ import { SITEMAP_CACHE_TAG } from '@/lib/cacheTags'
 import { canonicalPath, type CanonicalPathKind } from '@/lib/routes'
 import { isPubliclyPublished } from '@/lib/publication'
 
-type ContentCollection = 'pages' | 'posts' | 'projects' | 'services'
+type ContentCollection = 'faqs' | 'pages' | 'posts' | 'projects' | 'services' | 'testimonials'
 type ContentDocument = Record<string, unknown> & {
   _status?: null | string
   id?: number | string
@@ -37,18 +37,21 @@ export type RevalidateContentArgs = {
 
 const collectionRoutes: Record<
   ContentCollection,
-  { index?: string; kind: CanonicalPathKind }
+  { index?: string; kind?: CanonicalPathKind }
 > = {
+  faqs: {},
   pages: { kind: 'page' },
   posts: { index: '/blog/', kind: 'post' },
   projects: { index: '/projects/', kind: 'project' },
   services: { index: '/services/', kind: 'service' },
+  testimonials: {},
 }
 
 const relationFields: Record<
   ContentCollection,
   Array<{ collection: RelatedCollection; field: string; kind: CanonicalPathKind }>
 > = {
+  faqs: [{ collection: 'services', field: 'services', kind: 'service' }],
   pages: [],
   posts: [
     { collection: 'services', field: 'services', kind: 'service' },
@@ -58,6 +61,10 @@ const relationFields: Record<
   services: [
     { collection: 'projects', field: 'projects', kind: 'project' },
     { collection: 'services', field: 'relatedServices', kind: 'service' },
+  ],
+  testimonials: [
+    { collection: 'services', field: 'service', kind: 'service' },
+    { collection: 'projects', field: 'project', kind: 'project' },
   ],
 }
 
@@ -154,11 +161,11 @@ export async function revalidateContent({
   const relatedFrom: ContentDocument[] = []
 
   if (currentIsPublic || deletedIsPublic) {
-    addCanonicalPath(paths, route.kind, doc)
+    if (route.kind) addCanonicalPath(paths, route.kind, doc)
     relatedFrom.push(doc)
   }
   if (previousIsPublic && previousDoc) {
-    addCanonicalPath(paths, route.kind, previousDoc)
+    if (route.kind) addCanonicalPath(paths, route.kind, previousDoc)
     relatedFrom.push(previousDoc)
   }
 

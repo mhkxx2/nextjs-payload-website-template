@@ -28,6 +28,7 @@ export const RESERVED_EXACT_ROUTES = [
   'assets',
   'media',
   'uploads',
+  'internal',
   'health',
   'graphql',
   'graphql-playground',

@@ -5,11 +5,15 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { FAQs } from './collections/FAQs'
+import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
+import { Redirects } from './collections/Redirects'
 import { Services } from './collections/Services'
+import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -65,7 +69,19 @@ export default buildConfig({
     },
     schemaName: process.env.NODE_ENV === 'test' ? process.env.PAYLOAD_TEST_SCHEMA : undefined,
   }),
-  collections: [Pages, Posts, Projects, Services, Users, Media, Categories],
+  collections: [
+    Pages,
+    Posts,
+    Projects,
+    Services,
+    FAQs,
+    Testimonials,
+    Leads,
+    Redirects,
+    Users,
+    Media,
+    Categories,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

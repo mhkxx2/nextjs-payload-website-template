@@ -71,10 +71,13 @@ export interface Config {
     posts: Post;
     projects: Project;
     services: Service;
+    faqs: Faq;
+    testimonials: Testimonial;
+    leads: Lead;
+    redirects: Redirect;
     users: User;
     media: Media;
     categories: Category;
-    redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
@@ -90,10 +93,13 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
@@ -490,18 +496,7 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Related FAQ record IDs. Resolved when the FAQ collection is available.
-   */
-  faqs?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  faqs?: (number | Faq)[] | null;
   serviceAreas?:
     | {
         area: string;
@@ -509,18 +504,7 @@ export interface Service {
       }[]
     | null;
   projects?: (number | Project)[] | null;
-  /**
-   * Related testimonial record IDs. Resolved when the testimonial collection is available.
-   */
-  testimonials?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  testimonials?: (number | Testimonial)[] | null;
   gallery?:
     | {
         image: number | Media;
@@ -549,6 +533,29 @@ export interface Service {
     follow?: boolean | null;
     schemaTypes?: ('Organization' | 'LocalBusiness' | 'Service' | 'BreadcrumbList' | 'Article' | 'FAQPage')[] | null;
   };
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: string;
+  services?: (number | Service)[] | null;
+  group: 'general' | 'services' | 'process' | 'materials-care' | 'pricing-quotations';
+  order: number;
+  /**
+   * Enable only when the visible public page presents this exact question and answer together; this is guidance, not automatic schema output.
+   */
+  schemaEligible?: boolean | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
   createdBy?: (number | null) | User;
   updatedBy?: (number | null) | User;
   updatedAt: string;
@@ -712,6 +719,38 @@ export interface CallToActionBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  /**
+   * Store only the customer-approved statement.
+   */
+  statement: string;
+  displayName: string;
+  /**
+   * Optional. Enter only a rating genuinely supplied by the customer.
+   */
+  rating?: number | null;
+  location?: string | null;
+  service?: (number | null) | Service;
+  project?: (number | null) | Project;
+  featured?: boolean | null;
+  /**
+   * Internal evidence that the statement, display name, and any rating were approved for publication.
+   */
+  verificationNote?: string | null;
+  verifiedAt?: string | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -940,27 +979,60 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  fullName: string;
+  phone: string;
+  email?: string | null;
+  service: number | Service;
+  message: string;
+  referenceMedia?: (number | null) | Media;
+  consent: boolean;
+  consentAt: string;
+  sourcePath: string;
+  sourceTitle: string;
+  projectContext?: string | null;
+  referrer?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmTerm?: string | null;
+  utmContent?: string | null;
+  status: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+  submittedAt?: string | null;
+  statusUpdatedAt?: string | null;
+  statusAudit?:
+    | {
+        from: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+        to: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+        changedAt: string;
+        changedBy: number | User;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional one-way SHA-256 digest only. Never store raw IP addresses or user-agent strings.
+   */
+  abuseContextHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
   id: number;
+  source: string;
+  destination: string;
   /**
-   * You will need to rebuild the website when changing this field.
+   * HTTP redirect status. Only 301 or 302 is accepted.
    */
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-  };
+  type: number;
+  active: boolean;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1145,6 +1217,22 @@ export interface PayloadLockedDocument {
         value: number | Service;
       } | null)
     | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1155,10 +1243,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
-      } | null)
-    | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1560,6 +1644,98 @@ export interface ServicesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  services?: T;
+  group?: T;
+  order?: T;
+  schemaEligible?: T;
+  status?: T;
+  publishedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  statement?: T;
+  displayName?: T;
+  rating?: T;
+  location?: T;
+  service?: T;
+  project?: T;
+  featured?: T;
+  verificationNote?: T;
+  verifiedAt?: T;
+  status?: T;
+  publishedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  fullName?: T;
+  phone?: T;
+  email?: T;
+  service?: T;
+  message?: T;
+  referenceMedia?: T;
+  consent?: T;
+  consentAt?: T;
+  sourcePath?: T;
+  sourceTitle?: T;
+  projectContext?: T;
+  referrer?: T;
+  utmSource?: T;
+  utmMedium?: T;
+  utmCampaign?: T;
+  utmTerm?: T;
+  utmContent?: T;
+  status?: T;
+  submittedAt?: T;
+  statusUpdatedAt?: T;
+  statusAudit?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        changedAt?: T;
+        changedBy?: T;
+        id?: T;
+      };
+  abuseContextHash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  source?: T;
+  destination?: T;
+  type?: T;
+  active?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -1694,22 +1870,6 @@ export interface CategoriesSelect<T extends boolean = true> {
         url?: T;
         label?: T;
         id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects_select".
- */
-export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?:
-    | T
-    | {
-        type?: T;
-        reference?: T;
-        url?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2099,6 +2259,14 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'services';
           value: number | Service;
+        } | null)
+      | ({
+          relationTo: 'faqs';
+          value: number | Faq;
+        } | null)
+      | ({
+          relationTo: 'testimonials';
+          value: number | Testimonial;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

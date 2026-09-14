@@ -115,8 +115,9 @@ export const Services: CollectionConfig = {
     },
     {
       name: 'faqs',
-      type: 'json',
-      admin: { description: 'Related FAQ record IDs. Resolved when the FAQ collection is available.' },
+      type: 'relationship',
+      hasMany: true,
+      relationTo: 'faqs',
     },
     {
       name: 'serviceAreas',
@@ -126,10 +127,9 @@ export const Services: CollectionConfig = {
     { name: 'projects', type: 'relationship', hasMany: true, relationTo: 'projects' },
     {
       name: 'testimonials',
-      type: 'json',
-      admin: {
-        description: 'Related testimonial record IDs. Resolved when the testimonial collection is available.',
-      },
+      type: 'relationship',
+      hasMany: true,
+      relationTo: 'testimonials',
     },
     {
       name: 'gallery',

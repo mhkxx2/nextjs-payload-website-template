@@ -1,4 +1,7 @@
+import type { Payload, RequiredDataFromCollectionSlug } from 'payload'
+
 import { INTERNAL_LEAD_CREATE_CAPABILITY } from '@/access/leadAccess'
+import type { Lead } from '@/payload-types'
 
 export type ControlledLeadCreateOptions<TData> = {
   collection: 'leads'
@@ -22,8 +25,17 @@ type ControlledLeadPayload<TData, TResult> = {
 export function createControlledLead<TData, TResult>(
   payload: ControlledLeadPayload<TData, TResult>,
   data: TData,
-): Promise<TResult> {
-  return payload.create({
+): Promise<TResult>
+export function createControlledLead(
+  payload: Payload,
+  data: RequiredDataFromCollectionSlug<'leads'>,
+): Promise<Lead>
+export function createControlledLead(
+  payload: Payload | ControlledLeadPayload<unknown, unknown>,
+  data: unknown,
+): Promise<Lead> | Promise<unknown> {
+  const create = payload.create as unknown as ControlledLeadPayload<unknown, unknown>['create']
+  return create({
     collection: 'leads',
     context: {
       internalLeadCreateCapability: INTERNAL_LEAD_CREATE_CAPABILITY,

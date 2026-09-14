@@ -1,11 +1,16 @@
-import type { CollectionAfterChangeHook } from 'payload'
+import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, PayloadRequest } from 'payload'
 
 import { revalidateTag } from 'next/cache'
 
-export const revalidateRedirects: CollectionAfterChangeHook = ({ doc, req: { payload } }) => {
-  payload.logger.info(`Revalidating redirects`)
-
+const invalidateRedirectCache = <T>(doc: T, req: PayloadRequest): T => {
+  if (req.context.disableRevalidate === true) return doc
+  req.payload.logger.info('Revalidating redirects')
   revalidateTag('redirects', 'max')
-
   return doc
 }
+
+export const revalidateRedirects: CollectionAfterChangeHook = ({ doc, req }) =>
+  invalidateRedirectCache(doc, req)
+
+export const revalidateRedirectsAfterDelete: CollectionAfterDeleteHook = ({ doc, req }) =>
+  invalidateRedirectCache(doc, req)
