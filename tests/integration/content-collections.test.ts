@@ -78,7 +78,14 @@ describe('Task 6 content collection schemas', () => {
         'search',
       ]),
     )
-    expect(payload.config.globals.map(({ slug }) => slug)).toEqual(['header', 'footer'])
+    expect(payload.config.globals.map(({ slug }) => slug)).toEqual([
+      'site-settings',
+      'header',
+      'footer',
+      'contact-information',
+      'seo-defaults',
+      'social-media',
+    ])
   })
 
   it('shares field-level audit write denial across all content collections', async () => {

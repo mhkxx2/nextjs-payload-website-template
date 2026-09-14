@@ -112,16 +112,24 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | 'en' | 'en'[];
   globals: {
+    'site-settings': SiteSetting;
     header: Header;
     footer: Footer;
+    'contact-information': ContactInformation;
+    'seo-defaults': SeoDefault;
+    'social-media': SocialMedia;
   };
   globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'contact-information': ContactInformationSelect<false> | ContactInformationSelect<true>;
+    'seo-defaults': SeoDefaultsSelect<false> | SeoDefaultsSelect<true>;
+    'social-media': SocialMediaSelect<false> | SocialMediaSelect<true>;
   };
-  locale: null;
+  locale: 'en';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -429,15 +437,6 @@ export interface Category {
   id: number;
   title: string;
   slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1862,15 +1861,6 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2123,30 +2113,75 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  businessName: string;
+  brandName: string;
+  logo?: (number | null) | Media;
+  logoDark?: (number | null) | Media;
+  favicon?: (number | null) | Media;
+  quotationLabels?: {
+    primaryLabel?: string | null;
+    formHeading?: string | null;
+    submitLabel?: string | null;
+  };
+  whatsAppCopy?: {
+    defaultLabel?: string | null;
+    defaultMessage?: string | null;
+  };
+  locale: {
+    defaultLocale: 'en';
+    direction: 'ltr';
+  };
+  canonicalSiteURL: string;
+  announcement?: {
+    enabled?: boolean | null;
+    message?: string | null;
+    linkLabel?: string | null;
+    destination?: ('quotation' | 'contact' | 'projects') | null;
+  };
+  presentation?: {
+    buttonStyle?: ('solid' | 'outline') | null;
+    imageShape?: ('square' | 'soft' | 'rounded') | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
   id: number;
-  navItems?:
+  navigation?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        label: string;
+        destination: 'home' | 'services' | 'projects' | 'blog' | 'about' | 'contact';
         id?: string | null;
       }[]
     | null;
+  serviceLinks?:
+    | {
+        service: number | Service;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  conversionActions?:
+    | {
+        action: 'quotation' | 'whatsapp' | 'phone';
+        label: string;
+        appearance?: ('primary' | 'secondary') | null;
+        id?: string | null;
+      }[]
+    | null;
+  mobileNavigation?: {
+    menuLabel?: string | null;
+    closeLabel?: string | null;
+    showConversionActions?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2156,23 +2191,80 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  navItems?:
+  navigationGroups?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        heading: string;
+        items?:
+          | {
+              label: string;
+              destination: 'home' | 'services' | 'projects' | 'blog' | 'about' | 'contact' | 'privacy' | 'terms';
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  serviceLinks?:
+    | {
+        service: number | Service;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  legalLinks?:
+    | {
+        label: string;
+        legalDestination: 'privacy' | 'terms';
+        id?: string | null;
+      }[]
+    | null;
+  supportingCopy?: string | null;
+  conversionContent?: {
+    heading?: string | null;
+    copy?: string | null;
+    quotationLabel?: string | null;
+    whatsAppLabel?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-information".
+ */
+export interface ContactInformation {
+  id: number;
+  phoneE164?: string | null;
+  whatsappE164?: string | null;
+  whatsappAvailable?: boolean | null;
+  email?: string | null;
+  address?: {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    emirate?: string | null;
+    country?: string | null;
+  };
+  mapURL?: string | null;
+  openingHours?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        closed?: boolean | null;
+        /**
+         * 24-hour time, for example 09:00.
+         */
+        opens?: string | null;
+        /**
+         * 24-hour time, for example 18:00.
+         */
+        closes?: string | null;
+        displayLabel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  serviceAreas?:
+    | {
+        area: string;
         id?: string | null;
       }[]
     | null;
@@ -2181,22 +2273,128 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-defaults".
+ */
+export interface SeoDefault {
+  id: number;
+  /**
+   * Use {title} and {brand}; no markup is accepted.
+   */
+  titlePattern?: string | null;
+  fallbackDescription?: string | null;
+  socialImage?: (number | null) | Media;
+  index?: boolean | null;
+  follow?: boolean | null;
+  organizationSchema?: {
+    name?: string | null;
+    description?: string | null;
+    logo?: (number | null) | Media;
+  };
+  localBusinessSchema?: {
+    businessType?: ('FurnitureStore' | 'LocalBusiness') | null;
+    priceRange?: ('moderate' | 'premium') | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-media".
+ */
+export interface SocialMedia {
+  id: number;
+  links?:
+    | {
+        network: 'facebook' | 'instagram' | 'linkedin' | 'pinterest' | 'tiktok' | 'x' | 'youtube';
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  businessName?: T;
+  brandName?: T;
+  logo?: T;
+  logoDark?: T;
+  favicon?: T;
+  quotationLabels?:
+    | T
+    | {
+        primaryLabel?: T;
+        formHeading?: T;
+        submitLabel?: T;
+      };
+  whatsAppCopy?:
+    | T
+    | {
+        defaultLabel?: T;
+        defaultMessage?: T;
+      };
+  locale?:
+    | T
+    | {
+        defaultLocale?: T;
+        direction?: T;
+      };
+  canonicalSiteURL?: T;
+  announcement?:
+    | T
+    | {
+        enabled?: T;
+        message?: T;
+        linkLabel?: T;
+        destination?: T;
+      };
+  presentation?:
+    | T
+    | {
+        buttonStyle?: T;
+        imageShape?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
+  navigation?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
+        label?: T;
+        destination?: T;
         id?: T;
+      };
+  serviceLinks?:
+    | T
+    | {
+        service?: T;
+        label?: T;
+        id?: T;
+      };
+  conversionActions?:
+    | T
+    | {
+        action?: T;
+        label?: T;
+        appearance?: T;
+        id?: T;
+      };
+  mobileNavigation?:
+    | T
+    | {
+        menuLabel?: T;
+        closeLabel?: T;
+        showConversionActions?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2207,18 +2405,123 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  navigationGroups?:
     | T
     | {
-        link?:
+        heading?: T;
+        items?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
               label?: T;
+              destination?: T;
+              id?: T;
             };
+        id?: T;
+      };
+  serviceLinks?:
+    | T
+    | {
+        service?: T;
+        label?: T;
+        id?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        legalDestination?: T;
+        id?: T;
+      };
+  supportingCopy?: T;
+  conversionContent?:
+    | T
+    | {
+        heading?: T;
+        copy?: T;
+        quotationLabel?: T;
+        whatsAppLabel?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-information_select".
+ */
+export interface ContactInformationSelect<T extends boolean = true> {
+  phoneE164?: T;
+  whatsappE164?: T;
+  whatsappAvailable?: T;
+  email?: T;
+  address?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        city?: T;
+        emirate?: T;
+        country?: T;
+      };
+  mapURL?: T;
+  openingHours?:
+    | T
+    | {
+        day?: T;
+        closed?: T;
+        opens?: T;
+        closes?: T;
+        displayLabel?: T;
+        id?: T;
+      };
+  serviceAreas?:
+    | T
+    | {
+        area?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-defaults_select".
+ */
+export interface SeoDefaultsSelect<T extends boolean = true> {
+  titlePattern?: T;
+  fallbackDescription?: T;
+  socialImage?: T;
+  index?: T;
+  follow?: T;
+  organizationSchema?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        logo?: T;
+      };
+  localBusinessSchema?:
+    | T
+    | {
+        businessType?: T;
+        priceRange?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-media_select".
+ */
+export interface SocialMediaSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        network?: T;
+        label?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;

@@ -48,7 +48,14 @@ describe('core Payload collections', () => {
     expect(collectionSlugs).toEqual(
       expect.arrayContaining(['pages', 'posts', 'redirects', 'forms', 'form-submissions', 'search']),
     )
-    expect(payload.config.globals.map(({ slug }) => slug)).toEqual(['header', 'footer'])
+    expect(payload.config.globals.map(({ slug }) => slug)).toEqual([
+      'site-settings',
+      'header',
+      'footer',
+      'contact-information',
+      'seo-defaults',
+      'social-media',
+    ])
 
     await expect(
       payload.create({

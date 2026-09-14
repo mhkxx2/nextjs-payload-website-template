@@ -18,6 +18,10 @@ import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { ContactInformation } from './globals/ContactInformation'
+import { SEODefaults } from './globals/SEODefaults'
+import { SiteSettings } from './globals/SiteSettings'
+import { SocialMedia } from './globals/SocialMedia'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
@@ -101,7 +105,12 @@ export default buildConfig({
     Categories,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  localization: {
+    defaultLocale: 'en',
+    fallback: true,
+    locales: [{ code: 'en', label: 'English' }],
+  },
+  globals: [SiteSettings, Header, Footer, ContactInformation, SEODefaults, SocialMedia],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
