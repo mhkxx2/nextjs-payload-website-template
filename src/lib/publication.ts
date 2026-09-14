@@ -1,10 +1,15 @@
 export type PublicationState = {
+  _status?: null | string
   publishedAt?: Date | null | string
   status?: null | string
 }
 
 export function isPubliclyPublished(publication: PublicationState, now: Date): boolean {
-  if (publication.status !== 'published' || publication.publishedAt == null) {
+  if (
+    publication._status !== 'published' ||
+    publication.status !== 'published' ||
+    publication.publishedAt == null
+  ) {
     return false
   }
 

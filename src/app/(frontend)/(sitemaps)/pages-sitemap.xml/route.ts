@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
 
+import { PAGES_SITEMAP_CACHE_TAGS } from '@/lib/cacheTags'
 import { getCanonicalURL } from '@/utilities/getCanonicalURL'
 
 const getPagesSitemap = unstable_cache(
@@ -56,7 +57,7 @@ const getPagesSitemap = unstable_cache(
   },
   ['pages-sitemap'],
   {
-    tags: ['pages-sitemap'],
+    tags: [...PAGES_SITEMAP_CACHE_TAGS],
   },
 )
 

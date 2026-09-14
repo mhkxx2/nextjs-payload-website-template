@@ -5,11 +5,13 @@ import type {
   CollectionBeforeChangeHook,
 } from 'payload'
 
+import { SITEMAP_CACHE_TAG } from '@/lib/cacheTags'
 import { canonicalPath, type CanonicalPathKind } from '@/lib/routes'
 import { isPubliclyPublished } from '@/lib/publication'
 
 type ContentCollection = 'pages' | 'posts' | 'projects' | 'services'
 type ContentDocument = Record<string, unknown> & {
+  _status?: null | string
   id?: number | string
   publishedAt?: Date | null | string
   slug?: null | string
@@ -68,6 +70,10 @@ const addCanonicalPath = (
   document: ContentDocument,
 ): void => {
   if (typeof document.slug !== 'string') return
+  if (kind === 'page' && document.slug === 'home') {
+    paths.add('/')
+    return
+  }
   try {
     paths.add(canonicalPath(kind, document.slug))
   } catch {
@@ -111,6 +117,7 @@ async function addRelatedPaths(
       where: {
         and: [
           { id: { in: [...ids] } },
+          { _status: { equals: 'published' } },
           { status: { equals: 'published' } },
           { publishedAt: { less_than_equal: now.toISOString() } },
         ],
@@ -170,7 +177,7 @@ export async function revalidateContent({
     req.payload.logger.info(`Revalidating content at path: ${path}`)
     revalidatePath(path)
   }
-  revalidateTag('sitemap', 'max')
+  revalidateTag(SITEMAP_CACHE_TAG, 'max')
 }
 
 export const revalidateContentAfterChange: CollectionAfterChangeHook = async (args) => {

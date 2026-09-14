@@ -5,6 +5,7 @@ import { authenticated } from '@/access/authenticated'
 import { CallToAction } from '@/blocks/CallToAction/config'
 import { Content } from '@/blocks/Content/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { contentAuditFields } from '@/fields/contentAudit'
 import { publicationFields } from '@/fields/publication'
 import { seoFields } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
@@ -71,8 +72,7 @@ export const Projects: CollectionConfig = {
     { name: 'featured', type: 'checkbox', defaultValue: false, index: true },
     ...publicationFields(),
     { name: 'seo', type: 'group', fields: seoFields() },
-    { name: 'createdBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
-    { name: 'updatedBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
+    ...contentAuditFields(),
   ],
   hooks: {
     afterChange: [revalidateContentAfterChange],

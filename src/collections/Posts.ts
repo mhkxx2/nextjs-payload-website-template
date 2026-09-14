@@ -13,6 +13,7 @@ import { authenticated } from '@/access/authenticated'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '@/blocks/Code/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { contentAuditFields } from '@/fields/contentAudit'
 import { publicationFields } from '@/fields/publication'
 import { seoFields } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
@@ -119,8 +120,7 @@ export const Posts: CollectionConfig = {
       ],
     },
     { name: 'seo', type: 'group', fields: seoFields() },
-    { name: 'createdBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
-    { name: 'updatedBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
+    ...contentAuditFields(),
     {
       name: 'populatedAuthors',
       type: 'array',

@@ -54,6 +54,7 @@ describe('access policies', () => {
   it('returns a publication and date query for anonymous public reads, never true', () => {
     expect(adminOrPublished(accessArgs('anonymous'))).toEqual({
       and: [
+        { _status: { equals: 'published' } },
         { status: { equals: 'published' } },
         { publishedAt: { less_than_equal: '2026-09-12T12:00:00.000Z' } },
       ],

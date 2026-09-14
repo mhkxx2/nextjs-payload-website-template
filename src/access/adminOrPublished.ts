@@ -10,6 +10,11 @@ export const adminOrPublished: Access = ({ req: { user } }) => {
   const publicWhere: Where = {
     and: [
       {
+        _status: {
+          equals: 'published',
+        },
+      },
+      {
         status: {
           equals: 'published',
         },

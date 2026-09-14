@@ -32,13 +32,31 @@ const fieldMap = (collection: CollectionConfig) =>
 
 let isolatedPayload: IsolatedPayload
 let payload: Payload
+let auditActor: Awaited<ReturnType<Payload['create']>>
+let auditOtherUser: Awaited<ReturnType<Payload['create']>>
 
 beforeAll(async () => {
   isolatedPayload = await startIsolatedPayload('t6_content')
   payload = isolatedPayload.payload
+  auditActor = await payload.create({
+    collection: 'users',
+    data: { email: `audit-actor-${randomUUID()}@example.invalid`, password: randomUUID() },
+    overrideAccess: true,
+  })
+  auditOtherUser = await payload.create({
+    collection: 'users',
+    data: { email: `audit-other-${randomUUID()}@example.invalid`, password: randomUUID() },
+    overrideAccess: true,
+  })
 }, 90_000)
 
 afterAll(async () => {
+  if (payload && auditActor) {
+    await payload.delete({ collection: 'users', id: auditActor.id, overrideAccess: true }).catch(() => undefined)
+  }
+  if (payload && auditOtherUser) {
+    await payload.delete({ collection: 'users', id: auditOtherUser.id, overrideAccess: true }).catch(() => undefined)
+  }
   await isolatedPayload?.destroy()
 }, 90_000)
 
@@ -61,6 +79,98 @@ describe('Task 6 content collection schemas', () => {
       ]),
     )
     expect(payload.config.globals.map(({ slug }) => slug)).toEqual(['header', 'footer'])
+  })
+
+  it('shares field-level audit write denial across all content collections', async () => {
+    const policies = []
+    for (const slug of ['services', 'projects', 'posts', 'pages']) {
+      const fields = fieldMap(payload.config.collections.find((collection) => collection.slug === slug)!)
+      for (const name of ['createdBy', 'updatedBy']) {
+        const field = fields.get(name)
+        const access = field && 'access' in field ? field.access : undefined
+        expect(access?.create).toEqual(expect.any(Function))
+        expect(access?.update).toEqual(expect.any(Function))
+        expect(await access?.create?.({ req: { user: auditActor } } as never)).toBe(false)
+        expect(await access?.update?.({ req: { user: auditActor } } as never)).toBe(false)
+        policies.push(access?.create, access?.update)
+      }
+    }
+    expect(new Set(policies)).toHaveLength(1)
+  })
+
+  it('rejects authenticated audit-field tampering while trusted hooks assign and preserve ownership', async () => {
+    const relationID = (value: unknown): number | string | undefined =>
+      typeof value === 'object' && value !== null && 'id' in value
+        ? (value as { id: number | string }).id
+        : typeof value === 'number' || typeof value === 'string'
+          ? value
+          : undefined
+
+    const slug = `audit-${randomUUID().slice(0, 8)}`
+    const created = await payload.create({
+      collection: 'projects',
+      context: { disableRevalidate: true },
+      data: {
+        createdBy: auditOtherUser.id,
+        seo: { canonicalURL: `https://alruknfurniture.ae/projects/${slug}/` },
+        slug,
+        status: 'draft',
+        title: 'Audit tampering regression',
+        updatedBy: auditOtherUser.id,
+      },
+      draft: false,
+      overrideAccess: false,
+      user: auditActor,
+    })
+
+    expect(relationID(created.createdBy)).toBe(auditActor.id)
+    expect(relationID(created.updatedBy)).toBe(auditActor.id)
+
+    const updated = await payload.update({
+      collection: 'projects',
+      context: { disableRevalidate: true },
+      data: { createdBy: auditOtherUser.id, updatedBy: auditActor.id },
+      id: created.id,
+      overrideAccess: false,
+      user: auditOtherUser,
+    })
+
+    expect(relationID(updated.createdBy)).toBe(auditActor.id)
+    expect(relationID(updated.updatedBy)).toBe(auditOtherUser.id)
+
+    const legacySlug = `audit-legacy-${randomUUID().slice(0, 8)}`
+    const legacy = await payload.create({
+      collection: 'projects',
+      context: { disableRevalidate: true },
+      data: {
+        seo: { canonicalURL: `https://alruknfurniture.ae/projects/${legacySlug}/` },
+        slug: legacySlug,
+        status: 'draft',
+        title: 'Legacy audit regression',
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+    const legacyUpdated = await payload.update({
+      collection: 'projects',
+      context: { disableRevalidate: true },
+      data: { createdBy: auditOtherUser.id, updatedBy: auditOtherUser.id },
+      id: legacy.id,
+      overrideAccess: false,
+      user: auditActor,
+    })
+
+    expect(relationID(legacyUpdated.createdBy)).toBeUndefined()
+    expect(relationID(legacyUpdated.updatedBy)).toBe(auditActor.id)
+
+    for (const id of [created.id, legacy.id]) {
+      await payload.delete({
+        collection: 'projects',
+        context: { disableRevalidate: true },
+        id,
+        overrideAccess: true,
+      })
+    }
   })
 
   it('models every independently editable service field group', () => {

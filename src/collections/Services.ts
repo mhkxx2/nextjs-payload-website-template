@@ -8,6 +8,7 @@ import type { CollectionConfig, FieldHook, TextField } from 'payload'
 
 import { adminOrPublished } from '@/access/adminOrPublished'
 import { authenticated } from '@/access/authenticated'
+import { contentAuditFields } from '@/fields/contentAudit'
 import { seoFields } from '@/fields/seo'
 import { slugField } from '@/fields/slug'
 import { publicationFields } from '@/fields/publication'
@@ -160,8 +161,7 @@ export const Services: CollectionConfig = {
     },
     ...publicationFields(),
     { name: 'seo', type: 'group', fields: seoFields() },
-    { name: 'createdBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
-    { name: 'updatedBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
+    ...contentAuditFields(),
   ],
   hooks: {
     afterChange: [revalidateContentAfterChange],
