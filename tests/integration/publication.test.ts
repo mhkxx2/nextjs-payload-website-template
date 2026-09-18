@@ -256,6 +256,32 @@ describe('precise content cache invalidation', () => {
     expect(JSON.stringify(find.mock.calls)).toContain('status')
   })
 
+  it('invalidates populated Header and Footer service relationship caches after public Service changes', async () => {
+    await revalidateContent({
+      collection: 'services',
+      doc: {
+        _status: 'published',
+        id: 41,
+        publishedAt: '2026-01-01T00:00:00.000Z',
+        slug: 'custom-sofa',
+        status: 'published',
+        title: 'Updated public title',
+      },
+      operation: 'change',
+      previousDoc: {
+        _status: 'published',
+        id: 41,
+        publishedAt: '2026-01-01T00:00:00.000Z',
+        slug: 'custom-sofa',
+        status: 'published',
+        title: 'Old public title',
+      },
+      req: { context: {}, payload: { find: vi.fn().mockResolvedValue({ docs: [] }), logger } },
+    })
+
+    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('collection_services', 'max')
+  })
+
   it('does not invalidate public caches for a Payload draft with public custom fields', async () => {
     const find = vi.fn()
     await revalidateContent({

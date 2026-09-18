@@ -47,6 +47,20 @@ const requiredTrimmedText = (value: unknown): true | string =>
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  defaultPopulate: {
+    alt: true,
+    caption: true,
+    decorative: true,
+    filename: true,
+    focalX: true,
+    focalY: true,
+    height: true,
+    mimeType: true,
+    sizes: true,
+    thumbnailURL: true,
+    url: true,
+    width: true,
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -82,6 +96,7 @@ export const Media: CollectionConfig = {
     {
       name: 'sourceURL',
       type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
       required: true,
       hooks: { beforeValidate: [trim] },
       validate: (value: unknown) => {
@@ -99,6 +114,7 @@ export const Media: CollectionConfig = {
     {
       name: 'license',
       type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
       required: true,
       hooks: { beforeValidate: [trim] },
       validate: requiredTrimmedText,
@@ -106,11 +122,13 @@ export const Media: CollectionConfig = {
     {
       name: 'sourceNotes',
       type: 'textarea',
+      access: { read: ({ req }) => Boolean(req.user) },
       hooks: { beforeValidate: [trim] },
     },
     {
       name: 'uploadedBy',
       type: 'relationship',
+      access: { read: ({ req }) => Boolean(req.user) },
       relationTo: 'users',
       required: true,
       admin: { readOnly: true },

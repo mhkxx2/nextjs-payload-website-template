@@ -185,6 +185,7 @@ export async function revalidateContent({
     revalidatePath(path)
   }
   revalidateTag(SITEMAP_CACHE_TAG, 'max')
+  revalidateTag(`collection_${collection}`, 'max')
 }
 
 export const revalidateContentAfterChange: CollectionAfterChangeHook = async (args) => {

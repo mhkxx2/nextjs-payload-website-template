@@ -12,6 +12,7 @@
 | Task 5 — Users, Media, and Categories collections | PASS | Amended commit `ab6bcae`; TASK5-SEC-001 auth-before-decode and AVIF brand/codec regressions fixed; isolated-schema integration 17/17, unit 127/127, generated types (schema unchanged by review fix), typecheck, scoped ESLint, and diff check PASS; Task 5 report records RED/GREEN and scoped security review evidence |
 | Task 6 — Services, Projects, Posts, and Pages | PASS | Strict RED/GREEN recorded in Task 6 report; focused Task 6 integration 13/13, full integration 30/30, unit 127/127, generated types, typecheck, zero-warning scoped ESLint, diff check, security review, and disposable-schema cleanup PASS |
 | Task 7 — FAQs, Testimonials, Leads, and Redirects | PASS | Commits `b67f238..6eb5c64`; independent spec PASS + quality APPROVED after fix round 1; focused 63/63, full integration 97/97, unit 133/133; generated types, typecheck, scoped ESLint, diff check, redirect security RED/GREEN, and disposable-schema cleanup PASS |
+| Task 8 — Editable Site Globals | PASS | Commits `617a454` and review hardening; 35/35 integration tests PASS, 135/135 unit tests PASS, 134/134 full integration PASS, generated types, ESLint, typecheck PASS |
 
 Task 6: complete (collection/publication/revalidation contracts verified; no blocking findings)
 Task 6: reopened after independent review — fix round 1 required for public `_status` filtering, effective sitemap invalidation, root homepage revalidation, and immutable audit ownership.

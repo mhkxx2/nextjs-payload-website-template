@@ -203,6 +203,43 @@ describe('secured Media uploads', () => {
     expect(typeof doc.uploadedBy === 'object' ? doc.uploadedBy.id : doc.uploadedBy).toBe(admin.id)
   })
 
+  it('does not expose internal provenance in direct or populated anonymous reads', async () => {
+    const png = await imageBuffer('png')
+    const doc = await upload({ buffer: png })
+    createdMediaIDs.push(doc.id)
+
+    const direct = await payload.findByID({
+      collection: 'media',
+      id: doc.id,
+      depth: 1,
+      overrideAccess: false,
+    })
+    expect(direct).toMatchObject({ alt: 'Walnut furniture detail', url: expect.any(String) })
+    expect(direct).not.toHaveProperty('sourceNotes')
+    expect(direct).not.toHaveProperty('uploadedBy')
+
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        brandName: 'Al Rukn Furniture',
+        businessName: 'Al Rukn Furniture',
+        canonicalSiteURL: 'https://alruknfurniture.ae',
+        logo: doc.id,
+      },
+      context: { disableRevalidate: true },
+      overrideAccess: false,
+      user: admin,
+    })
+    const settings = await payload.findGlobal({
+      slug: 'site-settings',
+      depth: 1,
+      overrideAccess: false,
+    })
+    expect(settings.logo).toMatchObject({ alt: 'Walnut furniture detail', url: expect.any(String) })
+    expect(settings.logo).not.toHaveProperty('sourceNotes')
+    expect(settings.logo).not.toHaveProperty('uploadedBy')
+  })
+
   it('accepts explicitly decorative media only with an exact empty alt', async () => {
     const png = await imageBuffer('png')
     const doc = await upload({ alt: '', buffer: png, decorative: true })
