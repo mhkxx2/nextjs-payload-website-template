@@ -2,11 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOrPublished } from '@/access/adminOrPublished'
 import { authenticated } from '@/access/authenticated'
-import { Archive } from '@/blocks/ArchiveBlock/config'
-import { CallToAction } from '@/blocks/CallToAction/config'
-import { Content } from '@/blocks/Content/config'
-import { FormBlock } from '@/blocks/Form/config'
-import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { ALL_PAGE_BUILDER_BLOCKS } from '@/blocks'
 import { contentAuditFields } from '@/fields/contentAudit'
 import { publicationFields } from '@/fields/publication'
 import { seoFields } from '@/fields/seo'
@@ -52,7 +48,7 @@ export const Pages: CollectionConfig = {
       name: 'layout',
       type: 'blocks',
       admin: { initCollapsed: true },
-      blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+      blocks: ALL_PAGE_BUILDER_BLOCKS,
       required: true,
     },
     {

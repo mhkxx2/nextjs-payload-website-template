@@ -330,7 +330,7 @@ describe('Task 6 content collection schemas', () => {
     expect(fields.get('services')).toMatchObject({ hasMany: true, relationTo: 'services' })
     expect(JSON.stringify(fields.get('content'))).toContain('banner')
     expect(JSON.stringify(fields.get('content'))).toContain('code')
-    expect(JSON.stringify(fields.get('content'))).toContain('mediaBlock')
+    expect(JSON.stringify(fields.get('content'))).toContain('media')
     expect(collection.versions).toMatchObject({ drafts: { schedulePublish: true }, maxPerDoc: 50 })
     expect(collection.admin?.preview).toEqual(expect.any(Function))
   })
@@ -340,11 +340,20 @@ describe('Task 6 content collection schemas', () => {
     const fields = fieldMap(collection)
     const layout = fields.get('layout') as NamedField & { blocks?: Array<{ slug: string }> }
     expect(layout.blocks?.map(({ slug }) => slug)).toEqual([
-      'cta',
-      'content',
-      'mediaBlock',
-      'archive',
-      'formBlock',
+      'hero',
+      'richContent',
+      'media',
+      'splitContent',
+      'serviceGrid',
+      'projectGallery',
+      'benefits',
+      'processSteps',
+      'testimonials',
+      'faqs',
+      'locationCoverage',
+      'statistics',
+      'callToAction',
+      'quoteForm',
     ])
     expect([...fields.keys()]).toEqual(
       expect.arrayContaining([

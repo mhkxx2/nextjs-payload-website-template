@@ -1,17 +1,20 @@
-import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
-
+import type { Post } from '@/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import RichText from '@/components/RichText'
-
 import { CollectionArchive } from '@/components/CollectionArchive'
 
-export const ArchiveBlock: React.FC<
-  ArchiveBlockProps & {
-    id?: string
-  }
-> = async (props) => {
+export type ArchiveBlockProps = {
+  id?: string
+  categories?: (string | { id: string })[] | null
+  introContent?: Record<string, unknown> | null
+  limit?: number | null
+  populateBy?: string | null
+  selectedDocs?: { value: string | Post }[] | null
+}
+
+export const ArchiveBlock: React.FC<ArchiveBlockProps> = async (props) => {
   const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
 
   const limit = limitFromProps || 3
@@ -21,8 +24,8 @@ export const ArchiveBlock: React.FC<
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    const flattenedCategories = categories?.map((category) => {
-      if (typeof category === 'object') return category.id
+    const flattenedCategories = categories?.map((category: string | { id: string }) => {
+      if (typeof category === 'object' && category !== null) return category.id
       else return category
     })
 
@@ -44,9 +47,12 @@ export const ArchiveBlock: React.FC<
     posts = fetchedPosts.docs
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
-        if (typeof post.value === 'object') return post.value
-      }) as Post[]
+      const filteredSelectedPosts = selectedDocs
+        .map((post: { value: string | Post }) => {
+          if (typeof post.value === 'object') return post.value
+          return null
+        })
+        .filter(Boolean) as Post[]
 
       posts = filteredSelectedPosts
     }
@@ -55,8 +61,8 @@ export const ArchiveBlock: React.FC<
   return (
     <div className="my-16" id={`block-${id}`}>
       {introContent && (
-        <div className="container mb-16">
-          <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
+        <div className="container mb-8 font-sans">
+          <RichText content={introContent as never} enableGutter={false} />
         </div>
       )}
       <CollectionArchive posts={posts} />

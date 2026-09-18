@@ -218,7 +218,22 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | HeroBlock
+    | RichContentBlock
+    | MediaBlock
+    | SplitContentBlock
+    | ServiceGridBlock
+    | ProjectGalleryBlock
+    | BenefitsBlock
+    | ProcessStepsBlock
+    | TestimonialsBlock
+    | FaqsBlock
+    | LocationCoverageBlock
+    | StatisticsBlock
+    | CallToActionBlock
+    | QuoteFormBlock
+  )[];
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -667,57 +682,25 @@ export interface ContentBlock {
  */
 export interface MediaBlock {
   media: number | Media;
+  caption?: string | null;
+  position?: ('default' | 'wide' | 'fullscreen') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'mediaBlock';
+  blockType: 'media';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  heading: string;
+  description?: string | null;
+  buttonText: string;
+  buttonLink: string;
+  variant?: ('primary' | 'secondary' | 'accent') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'cta';
+  blockType: 'callToAction';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -753,10 +736,26 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
+ * via the `definition` "HeroBlock".
  */
-export interface ArchiveBlock {
-  introContent?: {
+export interface HeroBlock {
+  heading: string;
+  subheading?: string | null;
+  media?: (number | null) | Media;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  variant?: ('default' | 'centered' | 'split') | null;
+  alignment?: ('left' | 'center') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RichContentBlock".
+ */
+export interface RichContentBlock {
+  content: {
     root: {
       type: string;
       children: {
@@ -770,46 +769,219 @@ export interface ArchiveBlock {
       version: number;
     };
     [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
+  };
+  width?: ('narrow' | 'wide' | 'full') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'richContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitContentBlock".
+ */
+export interface SplitContentBlock {
+  heading: string;
+  body: string;
+  media: number | Media;
+  mediaPosition?: ('left' | 'right') | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'splitContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceGridBlock".
+ */
+export interface ServiceGridBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  services?: (number | Service)[] | null;
   limit?: number | null;
-  selectedDocs?:
+  columns?: ('2' | '3' | '4') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectGalleryBlock".
+ */
+export interface ProjectGalleryBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  projects?: (number | Project)[] | null;
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BenefitsBlock".
+ */
+export interface BenefitsBlock {
+  heading: string;
+  items: {
+    title: string;
+    description?: string | null;
+    icon?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'benefits';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock".
+ */
+export interface ProcessStepsBlock {
+  heading: string;
+  steps: {
+    stepNumber: number;
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'processSteps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock".
+ */
+export interface TestimonialsBlock {
+  heading?: string | null;
+  testimonials?: (number | Testimonial)[] | null;
+  displayMode?: ('grid' | 'carousel') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonials';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqsBlock".
+ */
+export interface FaqsBlock {
+  heading?: string | null;
+  faqs?: (number | Faq)[] | null;
+  enableSchema?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationCoverageBlock".
+ */
+export interface LocationCoverageBlock {
+  heading: string;
+  subheading?: string | null;
+  areas?:
     | {
-        relationTo: 'posts';
-        value: number | Post;
+        name: string;
+        details?: string | null;
+        id?: string | null;
       }[]
     | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'archive';
+  blockType: 'locationCoverage';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock".
+ * via the `definition` "StatisticsBlock".
  */
-export interface FormBlock {
-  form: number | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+export interface StatisticsBlock {
+  heading?: string | null;
+  /**
+   * Mandatory source or substantiation details for these metrics (no unverified claims).
+   */
+  substantiationNote: string;
+  stats: {
+    label: string;
+    value: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'formBlock';
+  blockType: 'statistics';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteFormBlock".
+ */
+export interface QuoteFormBlock {
+  heading?: string | null;
+  description?: string | null;
+  serviceContext?: (number | null) | Service;
+  formTitle?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'quoteForm';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  fullName: string;
+  phone: string;
+  email?: string | null;
+  service: number | Service;
+  message: string;
+  referenceMedia?: (number | null) | Media;
+  consent: boolean;
+  consentAt: string;
+  sourcePath: string;
+  sourceTitle: string;
+  projectContext?: string | null;
+  referrer?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmTerm?: string | null;
+  utmContent?: string | null;
+  status: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+  submittedAt?: string | null;
+  statusUpdatedAt?: string | null;
+  statusAudit?:
+    | {
+        from: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+        to: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
+        changedAt: string;
+        changedBy: number | User;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional one-way SHA-256 digest only. Never store raw IP addresses or user-agent strings.
+   */
+  abuseContextHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  source: string;
+  destination: string;
+  /**
+   * HTTP redirect status. Only 301 or 302 is accepted.
+   */
+  type: number;
+  active: boolean;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -973,65 +1145,6 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads".
- */
-export interface Lead {
-  id: number;
-  fullName: string;
-  phone: string;
-  email?: string | null;
-  service: number | Service;
-  message: string;
-  referenceMedia?: (number | null) | Media;
-  consent: boolean;
-  consentAt: string;
-  sourcePath: string;
-  sourceTitle: string;
-  projectContext?: string | null;
-  referrer?: string | null;
-  utmSource?: string | null;
-  utmMedium?: string | null;
-  utmCampaign?: string | null;
-  utmTerm?: string | null;
-  utmContent?: string | null;
-  status: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
-  submittedAt?: string | null;
-  statusUpdatedAt?: string | null;
-  statusAudit?:
-    | {
-        from: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
-        to: 'new' | 'contacted' | 'quotation-sent' | 'won' | 'lost';
-        changedAt: string;
-        changedBy: number | User;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Optional one-way SHA-256 digest only. Never store raw IP addresses or user-agent strings.
-   */
-  abuseContextHash?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
-  id: number;
-  source: string;
-  destination: string;
-  /**
-   * HTTP redirect status. Only 301 or 302 is accepted.
-   */
-  type: number;
-  active: boolean;
-  notes?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1330,11 +1443,20 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        cta?: T | CallToActionBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
+        hero?: T | HeroBlockSelect<T>;
+        richContent?: T | RichContentBlockSelect<T>;
+        media?: T | MediaBlockSelect<T>;
+        splitContent?: T | SplitContentBlockSelect<T>;
+        serviceGrid?: T | ServiceGridBlockSelect<T>;
+        projectGallery?: T | ProjectGalleryBlockSelect<T>;
+        benefits?: T | BenefitsBlockSelect<T>;
+        processSteps?: T | ProcessStepsBlockSelect<T>;
+        testimonials?: T | TestimonialsBlockSelect<T>;
+        faqs?: T | FaqsBlockSelect<T>;
+        locationCoverage?: T | LocationCoverageBlockSelect<T>;
+        statistics?: T | StatisticsBlockSelect<T>;
+        callToAction?: T | CallToActionBlockSelect<T>;
+        quoteForm?: T | QuoteFormBlockSelect<T>;
       };
   meta?:
     | T
@@ -1366,51 +1488,26 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "HeroBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
+export interface HeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  media?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  variant?: T;
+  alignment?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
+ * via the `definition` "RichContentBlock_select".
  */
-export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
-    | T
-    | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
+export interface RichContentBlockSelect<T extends boolean = true> {
+  content?: T;
+  width?: T;
   id?: T;
   blockName?: T;
 }
@@ -1420,31 +1517,163 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  caption?: T;
+  position?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock_select".
+ * via the `definition` "SplitContentBlock_select".
  */
-export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
+export interface SplitContentBlockSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  media?: T;
+  mediaPosition?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceGridBlock_select".
+ */
+export interface ServiceGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  services?: T;
   limit?: T;
-  selectedDocs?: T;
+  columns?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock_select".
+ * via the `definition` "ProjectGalleryBlock_select".
  */
-export interface FormBlockSelect<T extends boolean = true> {
-  form?: T;
-  enableIntro?: T;
-  introContent?: T;
+export interface ProjectGalleryBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  projects?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BenefitsBlock_select".
+ */
+export interface BenefitsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock_select".
+ */
+export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  steps?:
+    | T
+    | {
+        stepNumber?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock_select".
+ */
+export interface TestimonialsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  testimonials?: T;
+  displayMode?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqsBlock_select".
+ */
+export interface FaqsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  faqs?: T;
+  enableSchema?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationCoverageBlock_select".
+ */
+export interface LocationCoverageBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  areas?:
+    | T
+    | {
+        name?: T;
+        details?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatisticsBlock_select".
+ */
+export interface StatisticsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  substantiationNote?: T;
+  stats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock_select".
+ */
+export interface CallToActionBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  buttonText?: T;
+  buttonLink?: T;
+  variant?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteFormBlock_select".
+ */
+export interface QuoteFormBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  serviceContext?: T;
+  formTitle?: T;
   id?: T;
   blockName?: T;
 }
@@ -1526,8 +1755,8 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        cta?: T | CallToActionBlockSelect<T>;
+        media?: T | MediaBlockSelect<T>;
+        callToAction?: T | CallToActionBlockSelect<T>;
       };
   challenge?: T;
   solution?: T;
@@ -1552,6 +1781,32 @@ export interface ProjectsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock_select".
+ */
+export interface ContentBlockSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        size?: T;
+        richText?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,42 +1,44 @@
 import type { Block } from 'payload'
 
-import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-
-import { linkGroup } from '../../fields/linkGroup'
-
-export const CallToAction: Block = {
-  slug: 'cta',
+export const CallToActionBlockConfig: Block = {
+  slug: 'callToAction',
   interfaceName: 'CallToActionBlock',
+  labels: {
+    singular: 'Call to Action',
+    plural: 'Calls to Action',
+  },
   fields: [
     {
-      name: 'richText',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
-      }),
-      label: false,
+      name: 'heading',
+      type: 'text',
+      required: true,
     },
-    linkGroup({
-      appearances: ['default', 'outline'],
-      overrides: {
-        maxRows: 2,
-      },
-    }),
+    {
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      name: 'buttonText',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'buttonLink',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: 'primary',
+      options: [
+        { label: 'Primary', value: 'primary' },
+        { label: 'Secondary', value: 'secondary' },
+        { label: 'Accent', value: 'accent' },
+      ],
+    },
   ],
-  labels: {
-    plural: 'Calls to Action',
-    singular: 'Call to Action',
-  },
 }
+
+export const CallToActionBlock = CallToActionBlockConfig
+export const CallToAction = CallToActionBlockConfig

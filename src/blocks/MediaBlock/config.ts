@@ -1,8 +1,12 @@
 import type { Block } from 'payload'
 
-export const MediaBlock: Block = {
-  slug: 'mediaBlock',
+export const MediaBlockConfig: Block = {
+  slug: 'media',
   interfaceName: 'MediaBlock',
+  labels: {
+    singular: 'Media',
+    plural: 'Media Blocks',
+  },
   fields: [
     {
       name: 'media',
@@ -10,5 +14,21 @@ export const MediaBlock: Block = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'caption',
+      type: 'text',
+    },
+    {
+      name: 'position',
+      type: 'select',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Wide', value: 'wide' },
+        { label: 'Fullscreen', value: 'fullscreen' },
+      ],
+    },
   ],
 }
+
+export const MediaBlock = MediaBlockConfig

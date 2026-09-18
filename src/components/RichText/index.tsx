@@ -1,4 +1,4 @@
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { MediaBlockComponent as MediaBlock, MediaBlockProps } from '@/blocks/MediaBlock/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -12,19 +12,13 @@ import {
 } from '@payloadcms/richtext-lexical/react'
 
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
-
-import type {
-  BannerBlock as BannerBlockProps,
-  CallToActionBlock as CTABlockProps,
-  MediaBlock as MediaBlockProps,
-} from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { CallToActionBlockComponent as CallToActionBlock, CallToActionBlockProps } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps>
+  | SerializedBlockNode<Record<string, unknown>>
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const { value, relationTo } = linkNode.fields.doc!
@@ -39,33 +33,54 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...node.fields}
-        captionClassName="mx-auto max-w-[48rem]"
-        enableGutter={false}
-        disableInnerContainer={true}
+    banner: ({ node }: { node: { fields: Record<string, unknown> } }) => (
+      <BannerBlock
+        blockType="banner"
+        className="col-start-2 mb-4"
+        style={(node.fields?.style as 'info' | 'warning' | 'error' | 'success') || 'info'}
+        content={node.fields?.content as DefaultTypedEditorState}
       />
     ),
-    code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
-    cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+    mediaBlock: ({ node }: { node: { fields: Record<string, unknown> } }) => (
+      <MediaBlock
+        media={node.fields.media as MediaBlockProps['media']}
+        caption={node.fields.caption as string}
+        position={node.fields.position as MediaBlockProps['position']}
+      />
+    ),
+    code: ({ node }: { node: { fields: Record<string, unknown> } }) => (
+      <CodeBlock className="col-start-2" {...(node.fields as unknown as CodeBlockProps)} />
+    ),
+    cta: ({ node }: { node: { fields: Record<string, unknown> } }) => (
+      <CallToActionBlock
+        {...(node.fields as unknown as CallToActionBlockProps)}
+        heading={(node.fields?.heading as string) || ''}
+        buttonText={(node.fields?.buttonText as string) || ''}
+        buttonLink={(node.fields?.buttonLink as string) || ''}
+      />
+    ),
   },
 })
 
 type Props = {
-  data: DefaultTypedEditorState
+  content?: unknown
+  data?: DefaultTypedEditorState
   enableGutter?: boolean
   enableProse?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function RichText(props: Props) {
-  const { className, enableProse = true, enableGutter = true, ...rest } = props
+  const { className, enableProse = true, enableGutter = true, content, data, ...rest } = props
+  const editorData = (data || (typeof content === 'object' && content !== null ? content : undefined)) as never
+
+  if (typeof content === 'string') {
+    return <div className={cn('payload-richtext', className)}>{content}</div>
+  }
+
   return (
     <ConvertRichText
       converters={jsxConverters}
+      data={editorData}
       className={cn(
         'payload-richtext',
         {

@@ -1,67 +1,42 @@
-import type { StaticImageData } from 'next/image'
-
-import { cn } from '@/utilities/ui'
 import React from 'react'
-import RichText from '@/components/RichText'
+import Image from 'next/image'
 
-import type { MediaBlock as MediaBlockProps } from '@/payload-types'
-
-import { Media } from '../../components/Media'
-
-type Props = MediaBlockProps & {
-  breakout?: boolean
-  captionClassName?: string
-  className?: string
-  enableGutter?: boolean
-  imgClassName?: string
-  staticImage?: StaticImageData
-  disableInnerContainer?: boolean
+export type MediaBlockProps = {
+  blockType?: 'media'
+  media: { url?: string; alt?: string; width?: number; height?: number } | number | null
+  caption?: string | null
+  position?: 'default' | 'wide' | 'fullscreen' | null
 }
 
-export const MediaBlock: React.FC<Props> = (props) => {
-  const {
-    captionClassName,
-    className,
-    enableGutter = true,
-    imgClassName,
-    media,
-    staticImage,
-    disableInnerContainer,
-  } = props
+export const MediaBlockComponent: React.FC<MediaBlockProps> = ({
+  media,
+  caption,
+  position = 'default',
+}) => {
+  const imageUrl = typeof media === 'object' && media !== null ? media.url : null
+  const imageAlt = typeof media === 'object' && media !== null ? media.alt || '' : ''
 
-  let caption
-  if (media && typeof media === 'object') caption = media.caption
+  if (!imageUrl) return null
+
+  const widthClass =
+    position === 'fullscreen'
+      ? 'w-full'
+      : position === 'wide'
+      ? 'max-w-5xl mx-auto'
+      : 'max-w-3xl mx-auto'
 
   return (
-    <div
-      className={cn(
-        '',
-        {
-          container: enableGutter,
-        },
-        className,
-      )}
-    >
-      {(media || staticImage) && (
-        <Media
-          imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
-          resource={media}
-          src={staticImage}
-        />
-      )}
-      {caption && (
-        <div
-          className={cn(
-            'mt-6',
-            {
-              container: !disableInnerContainer,
-            },
-            captionClassName,
-          )}
-        >
-          <RichText data={caption} enableGutter={false} />
+    <figure className={`py-6 ${widthClass}`}>
+      <div className="container mx-auto px-4">
+        <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">
+          <Image src={imageUrl} alt={imageAlt} fill className="object-cover" />
         </div>
-      )}
-    </div>
+        {caption && (
+          <figcaption className="mt-2 text-center text-sm text-neutral-500 italic">
+            {caption}
+          </figcaption>
+        )}
+      </div>
+    </figure>
   )
 }
