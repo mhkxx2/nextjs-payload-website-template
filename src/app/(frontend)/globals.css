@@ -123,6 +123,10 @@
   --success: oklch(78% 0.08 200deg);
   --warning: oklch(89% 0.1 75deg);
   --error: oklch(75% 0.15 25deg);
+  --ivory: oklch(98.5% 0.008 85deg);
+  --beige: oklch(94% 0.015 85deg);
+  --charcoal: oklch(20% 0.005 60deg);
+  --gold-muted: oklch(68% 0.08 70deg);
 }
 
 [data-theme='dark'] {
@@ -203,6 +207,10 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-ivory: var(--ivory);
+  --color-beige: var(--beige);
+  --color-charcoal: var(--charcoal);
+  --color-gold-muted: var(--gold-muted);
 }
 
 @layer base {

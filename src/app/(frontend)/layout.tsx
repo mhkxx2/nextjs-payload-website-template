@@ -12,21 +12,37 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
+import { SkipLink } from '@/components/SkipLink'
+import { getDocumentLocale } from '@/lib/locale'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout(props: {
+  children: React.ReactNode
+  params?: Promise<{ locale?: string }>
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
+}) {
   const { isEnabled } = await draftMode()
+  const params = props.params ? await props.params : undefined
+  const searchParams = props.searchParams ? await props.searchParams : undefined
+
+  const { lang, dir } = getDocumentLocale(params?.locale, searchParams)
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html
+      className={cn(GeistSans.variable, GeistMono.variable)}
+      lang={lang}
+      dir={dir}
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
         <Providers>
+          <SkipLink />
           <AdminBar
             adminBarProps={{
               preview: isEnabled,
@@ -34,7 +50,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Header />
-          {children}
+          <main id="main-content" tabIndex={-1}>
+            {props.children}
+          </main>
           <Footer />
         </Providers>
       </body>
