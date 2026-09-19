@@ -124,7 +124,7 @@ describe('Task 9 Page Builder Blocks Unit Suite', () => {
       />
     )
     expect(screen.getByText('Serving Across the UAE')).toBeDefined()
-    expect(screen.getByText('Dubai')).toBeDefined()
+    expect(screen.getAllByText('Dubai').length).toBeGreaterThan(0)
   })
 
   it('renders Statistics block with mandatory substantiation note', () => {

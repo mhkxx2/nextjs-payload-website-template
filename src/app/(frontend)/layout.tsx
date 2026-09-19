@@ -8,6 +8,8 @@ import React from 'react'
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
+import { AnnouncementBar } from '@/components/AnnouncementBar'
+import { WhatsAppAction } from '@/components/WhatsAppAction'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -43,6 +45,12 @@ export default async function RootLayout(props: {
       <body>
         <Providers>
           <SkipLink />
+          <AnnouncementBar
+            badgeText="UAE SPECIAL"
+            message="Free On-Site Consultation & Fabric Sampling Across Ajman, Sharjah & Dubai"
+            linkText="Book Visit"
+            linkUrl="/contact/"
+          />
           <AdminBar
             adminBarProps={{
               preview: isEnabled,
@@ -54,6 +62,7 @@ export default async function RootLayout(props: {
             {props.children}
           </main>
           <Footer />
+          <WhatsAppAction href="https://wa.me/971501234567" label="Chat on WhatsApp" />
         </Providers>
       </body>
     </html>
