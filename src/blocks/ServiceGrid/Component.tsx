@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 
+import { serviceHref } from '@/lib/contentLinks'
+
 export type ServiceGridBlockProps = {
   blockType?: 'serviceGrid'
   heading?: string | null
@@ -16,11 +18,14 @@ export const ServiceGridBlockComponent: React.FC<ServiceGridBlockProps> = ({
   services = [],
   columns = '3',
 }) => {
-  const serviceItems = (services || []).map((item) =>
-    typeof item === 'object' && item !== null
-      ? (item as { title?: string; summary?: string; slug?: string })
-      : {}
-  )
+  const serviceItems = (services || []).map((item) => {
+    const service =
+      typeof item === 'object' && item !== null
+        ? (item as { title?: string; summary?: string; slug?: string })
+        : {}
+
+    return { ...service, href: serviceHref(service.slug) }
+  })
 
   const gridCols =
     columns === '2'
@@ -43,8 +48,8 @@ export const ServiceGridBlockComponent: React.FC<ServiceGridBlockProps> = ({
             <div key={idx} className="p-6 bg-white rounded-lg border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
               <h3 className="font-serif font-bold text-xl text-amber-900 mb-2">{service.title || ''}</h3>
               {service.summary && <p className="text-neutral-600 text-sm mb-4">{service.summary}</p>}
-              {service.slug && (
-                <Link href={`/services/${service.slug}`} className="text-amber-800 hover:text-amber-900 font-bold text-sm inline-flex items-center gap-1">
+              {service.href && (
+                <Link href={service.href} className="text-amber-800 hover:text-amber-900 font-bold text-sm inline-flex items-center gap-1">
                   Learn More →
                 </Link>
               )}

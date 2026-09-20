@@ -2,6 +2,8 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { projectHref } from '@/lib/contentLinks'
+
 export type ProjectGalleryBlockProps = {
   blockType?: 'projectGallery'
   heading?: string | null
@@ -15,11 +17,19 @@ export const ProjectGalleryBlockComponent: React.FC<ProjectGalleryBlockProps> = 
   subheading,
   projects = [],
 }) => {
-  const projectItems = (projects || []).map((item) =>
-    typeof item === 'object' && item !== null
-      ? (item as { title?: string; slug?: string; featuredImage?: { url?: string } })
-      : {}
-  )
+  const projectItems = (projects || []).map((item) => {
+    const project =
+      typeof item === 'object' && item !== null
+        ? (item as {
+            cover?: { url?: string } | number | null
+            featuredImage?: { url?: string } | number | null
+            slug?: string
+            title?: string
+          })
+        : {}
+
+    return { ...project, href: projectHref(project.slug) }
+  })
 
   return (
     <section className="py-12 md:py-16 bg-neutral-900 text-white">
@@ -32,7 +42,10 @@ export const ProjectGalleryBlockComponent: React.FC<ProjectGalleryBlockProps> = 
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projectItems.map((project, idx) => {
-            const imgUrl = typeof project.featuredImage === 'object' ? project.featuredImage?.url : null
+            const cover = typeof project.cover === 'object' ? project.cover?.url : null
+            const featured =
+              typeof project.featuredImage === 'object' ? project.featuredImage?.url : null
+            const imgUrl = cover || featured || null
             return (
               <div key={idx} className="bg-neutral-800 rounded-lg overflow-hidden border border-neutral-700 hover:border-amber-600 transition-colors">
                 {imgUrl ? (
@@ -44,8 +57,8 @@ export const ProjectGalleryBlockComponent: React.FC<ProjectGalleryBlockProps> = 
                 )}
                 <div className="p-5">
                   <h3 className="font-serif font-bold text-xl text-amber-50 mb-2">{project.title || ''}</h3>
-                  {project.slug && (
-                    <Link href={`/projects/${project.slug}`} className="text-amber-400 hover:text-amber-300 text-sm font-bold inline-flex items-center gap-1">
+                  {project.href && (
+                    <Link href={project.href} className="text-amber-400 hover:text-amber-300 text-sm font-bold inline-flex items-center gap-1">
                       View Project Case Study →
                     </Link>
                   )}

@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   reactStrictMode: true,
+  // Every canonical public URL built by src/lib/routes.ts ends in a slash, so the
+  // served form matches the canonical form instead of redirecting to it.
+  trailingSlash: true,
   redirects,
   turbopack: {
     root: path.resolve(dirname),

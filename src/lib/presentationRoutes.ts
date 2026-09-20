@@ -1,5 +1,5 @@
 const presentationPaths = {
-  about: '/about',
+  about: '/about-us',
   blog: '/blog',
   contact: '/contact',
   home: '/',
