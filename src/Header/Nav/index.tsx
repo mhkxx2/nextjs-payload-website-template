@@ -31,10 +31,13 @@ export const HeaderNav: React.FC<{
         </Link>
       ))}
       {(data.serviceLinks ?? []).map((item) => {
-        if (typeof item.service === 'number') return null
+        const service = item.service
+        // A link is only rendered while its service still exists: deleting a service
+        // clears this relationship, and the row must not turn into a dangling nav item.
+        if (!service || typeof service === 'number') return null
         return (
-          <Link href={canonicalPath('service', item.service.slug)} key={item.id ?? item.service.id}>
-            {item.label || item.service.title}
+          <Link href={canonicalPath('service', service.slug)} key={item.id ?? service.id}>
+            {item.label || service.title}
           </Link>
         )
       })}

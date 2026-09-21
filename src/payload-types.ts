@@ -2419,7 +2419,7 @@ export interface Header {
     | null;
   serviceLinks?:
     | {
-        service: number | Service;
+        service?: (number | null) | Service;
         label?: string | null;
         id?: string | null;
       }[]
@@ -2461,7 +2461,7 @@ export interface Footer {
     | null;
   serviceLinks?:
     | {
-        service: number | Service;
+        service?: (number | null) | Service;
         label?: string | null;
         id?: string | null;
       }[]

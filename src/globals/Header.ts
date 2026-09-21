@@ -31,7 +31,10 @@ export const Header: GlobalConfig = {
       type: 'array',
       maxRows: 9,
       fields: [
-        { name: 'service', type: 'relationship', relationTo: 'services', required: true },
+        // Optional on purpose: when a service is deleted Payload clears the referencing
+        // relationship column, and a NOT NULL column would make that delete fail. Links
+        // whose service is gone are dropped by sanitizeServiceLinks in getGlobals.
+        { name: 'service', type: 'relationship', relationTo: 'services' },
         { name: 'label', type: 'text', localized: true },
       ],
     },

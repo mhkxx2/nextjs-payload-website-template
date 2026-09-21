@@ -22,7 +22,7 @@ type RequestLike = {
   context?: Record<string, unknown>
   payload: {
     find: (args: Record<string, unknown>) => Promise<{ docs: ContentDocument[] }>
-    logger: { info: (message: string) => void }
+    logger: { info: (message: string) => void; warn?: (message: string) => void }
   }
   user?: { id?: number | string } | null
 }
@@ -182,10 +182,28 @@ export async function revalidateContent({
 
   for (const path of paths) {
     req.payload.logger.info(`Revalidating content at path: ${path}`)
-    revalidatePath(path)
+    safeRevalidate(req, () => revalidatePath(path), path)
   }
-  revalidateTag(SITEMAP_CACHE_TAG, 'max')
-  revalidateTag(`collection_${collection}`, 'max')
+  safeRevalidate(req, () => revalidateTag(SITEMAP_CACHE_TAG, 'max'), SITEMAP_CACHE_TAG)
+  safeRevalidate(req, () => revalidateTag(`collection_${collection}`, 'max'), `collection_${collection}`)
+}
+
+/**
+ * Next.js only registers `revalidatePath`/`revalidateTag` inside a request scope.
+ * Writes that arrive through the local API (seed scripts, maintenance jobs) have
+ * no store, and that invariant must not fail an otherwise valid write. Any other
+ * cache error still surfaces so real revalidation problems stay visible.
+ */
+function safeRevalidate(req: RequestLike, run: () => void, target: string): void {
+  try {
+    run()
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+
+    if (!message.includes('static generation store missing')) throw error
+
+    req.payload.logger.warn?.(`Skipped cache revalidation for ${target} outside a request context.`)
+  }
 }
 
 export const revalidateContentAfterChange: CollectionAfterChangeHook = async (args) => {

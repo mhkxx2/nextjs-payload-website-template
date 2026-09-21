@@ -46,7 +46,9 @@ export const Footer: GlobalConfig = {
       type: 'array',
       maxRows: 9,
       fields: [
-        { name: 'service', type: 'relationship', relationTo: 'services', required: true },
+        // Optional on purpose: Payload nulls this column when the linked service is
+        // deleted, and NOT NULL would block that delete. Empty links are filtered out.
+        { name: 'service', type: 'relationship', relationTo: 'services' },
         { name: 'label', type: 'text', localized: true },
       ],
     },

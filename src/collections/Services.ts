@@ -157,7 +157,8 @@ export const Services: CollectionConfig = {
       type: 'relationship',
       hasMany: true,
       relationTo: 'services',
-      filterOptions: ({ id }) => ({ id: { not_equals: id } }),
+      filterOptions: ({ id }) =>
+        id === undefined || id === null ? true : { id: { not_equals: id } },
     },
     ...publicationFields(),
     { name: 'seo', type: 'group', fields: seoFields() },
