@@ -8,12 +8,15 @@ import configPromise from '@payload-config'
 
 import type { Service, Project, Faq, Testimonial, Media as MediaType } from '@/payload-types'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 import { WhatsAppAction } from '@/components/WhatsAppAction'
 import { QuoteFormBlockComponent } from '@/blocks/QuoteForm/Component'
-import { generateMeta } from '@/utilities/generateMeta'
-import { FIXED_SERVICE_SLUGS } from '@/lib/routes'
+import { buildBreadcrumbs } from '@/lib/breadcrumbs'
+import { canonicalPath, FIXED_SERVICE_SLUGS } from '@/lib/routes'
+import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
+import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 
 interface ServicePageProps {
   slug: string
@@ -43,7 +46,9 @@ export async function generateServiceMetadata({ slug }: ServicePageProps): Promi
   const service = await queryServiceBySlug(slug)
   if (!service) return {}
 
-  return generateMeta({ doc: service })
+  const defaults = await getSeoDefaults()
+
+  return buildMetadata(service, { ...defaults, path: canonicalPath('service', slug) })
 }
 
 export async function ServicePage({ slug }: ServicePageProps) {
@@ -74,16 +79,25 @@ export async function ServicePage({ slug }: ServicePageProps) {
     relatedServices,
   } = service
 
-  const breadcrumbItems = [
-    { label: 'Services', href: '/#services' },
-    { label: title },
-  ]
+  const breadcrumbItems = buildBreadcrumbs(`/${slug}/`, service)
+  // Structured data never claims more than the page shows: the FAQPage is built
+  // from exactly the FAQ relations rendered below, and only for eligible ones.
+  const visibleFaqs = (faqs ?? []).filter((faq): faq is Faq => typeof faq === 'object' && faq !== null)
+  const schemas = buildSchemas({
+    breadcrumbs: breadcrumbItems,
+    globals: await getSchemaGlobals(),
+    kind: 'service',
+    path: `/${slug}/`,
+    record: service,
+    visibleFaqs,
+  })
 
   const waMessage = whatsAppContext?.message || `Hello Al Rukn, I am inquiring about ${title}.`
   const waHref = `https://wa.me/971501234567?text=${encodeURIComponent(waMessage)}`
 
   return (
     <article className="min-h-screen bg-cream text-charcoal pt-24 pb-20">
+      <JsonLd schemas={schemas} />
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
         <Breadcrumbs items={breadcrumbItems} />
 

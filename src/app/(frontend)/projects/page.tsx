@@ -7,21 +7,36 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
 import type { Project } from '@/payload-types'
 import { archiveCopy, homeCopy } from '@/data/launch-copy'
+import { JsonLd } from '@/components/JsonLd'
+import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { projectHref, serviceHref } from '@/lib/contentLinks'
 import { queryPublicList } from '@/lib/publicQueries'
+import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
+import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  description: archiveCopy.projects.intro,
-  title: `${archiveCopy.projects.heading} | Al Rukn Furniture`,
+export async function generateMetadata(): Promise<Metadata> {
+  const defaults = await getSeoDefaults()
+
+  return buildMetadata(null, {
+    ...defaults,
+    descriptionFallback: archiveCopy.projects.intro,
+    path: '/projects/',
+    titleFallback: archiveCopy.projects.heading,
+  })
 }
 
 export default async function ProjectsIndex() {
-  const { docs } = await queryPublicList<Project>({
-    collection: 'projects',
-    depth: 1,
-    limit: 100,
-    sort: '-publishedAt',
-  })
+  const [{ docs }, globals] = await Promise.all([
+    queryPublicList<Project>({
+      collection: 'projects',
+      depth: 1,
+      limit: 100,
+      sort: '-publishedAt',
+    }),
+    getSchemaGlobals(),
+  ])
+  const breadcrumbs = buildBreadcrumbs('/projects/')
+  const schemas = buildSchemas({ breadcrumbs, globals, kind: 'archive', path: '/projects/' })
 
   // Featured work leads the archive, then newest first. Ordering happens in code
   // so it stays deterministic without relying on a multi-field database sort.
@@ -31,8 +46,9 @@ export default async function ProjectsIndex() {
 
   return (
     <div className="pt-16 pb-16">
+      <JsonLd schemas={schemas} />
       <div className="container mx-auto px-4">
-        <Breadcrumbs items={[{ label: 'Projects' }]} />
+        <Breadcrumbs items={breadcrumbs} />
         <header className="max-w-3xl py-6">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
             {archiveCopy.projects.heading}

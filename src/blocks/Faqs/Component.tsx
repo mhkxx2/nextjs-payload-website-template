@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { JsonLd } from '@/components/JsonLd'
+import { buildFaqSchema } from '@/lib/schema'
+
 export type FaqsBlockProps = {
   blockType?: 'faqs'
   heading?: string | null
@@ -18,21 +21,10 @@ export const FaqsBlockComponent: React.FC<FaqsBlockProps> = ({
       : { question: '', answer: '' }
   )
 
-  const jsonLd =
-    enableSchema && faqItems.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faqItems.map((faq) => ({
-            '@type': 'Question',
-            name: faq.question || '',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: faq.answer || '',
-            },
-          })),
-        }
-      : null
+  // Structured data never claims more than the page shows: the FAQPage covers
+  // exactly these visible questions and answers, and only the ones an editor
+  // marked as schema eligible.
+  const faqSchema = enableSchema ? buildFaqSchema(faqItems) : null
 
   return (
     <section className="py-12 md:py-16 bg-cream text-charcoal">
@@ -49,12 +41,7 @@ export const FaqsBlockComponent: React.FC<FaqsBlockProps> = ({
             </details>
           ))}
         </div>
-        {jsonLd && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />
-        )}
+        <JsonLd schemas={faqSchema ? [faqSchema] : null} />
       </div>
     </section>
   )

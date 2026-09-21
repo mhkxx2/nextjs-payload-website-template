@@ -4,10 +4,18 @@ const SITE_URL =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'https://alruknfurniture.ae')
 
-/** @type {import('next-sitemap').IConfig} */
+/**
+ * `next-sitemap` only writes the legacy per-collection sitemap files. The public
+ * `/robots.txt` and `/sitemap.xml` are owned by the App Router
+ * (`src/app/(frontend)/robots.ts` and `src/app/(frontend)/sitemap.ts`), so
+ * generating copies into `public/` would shadow them at build time.
+ *
+ * @type {import('next-sitemap').IConfig}
+ */
 module.exports = {
   siteUrl: SITE_URL,
-  generateRobotsTxt: true,
+  generateRobotsTxt: false,
+  outDir: 'out',
   exclude: ['/posts-sitemap.xml', '/pages-sitemap.xml', '/*', '/posts/*'],
   robotsTxtOptions: {
     policies: [

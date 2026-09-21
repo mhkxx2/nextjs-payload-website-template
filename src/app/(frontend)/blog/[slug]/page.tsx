@@ -4,15 +4,18 @@ import React from 'react'
 
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
 import { PostHero } from '@/heros/PostHero'
 import type { Post } from '@/payload-types'
+import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { canonicalPath } from '@/lib/routes'
 import { queryPublicDocBySlug, queryPublicSlugs } from '@/lib/publicQueries'
+import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
+import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 import { formatDateTime } from '@/utilities/formatDateTime'
-import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 
 export async function generateStaticParams() {
@@ -37,8 +40,18 @@ export default async function BlogPost({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const breadcrumbs = buildBreadcrumbs(url, post)
+  const schemas = buildSchemas({
+    breadcrumbs,
+    globals: await getSchemaGlobals(),
+    kind: 'post',
+    path: url,
+    record: post,
+  })
+
   return (
     <article className="pt-16 pb-16">
+      <JsonLd schemas={schemas} />
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -50,7 +63,7 @@ export default async function BlogPost({ params: paramsPromise }: Args) {
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
-          <Breadcrumbs items={[{ label: 'Blog', href: '/blog/' }, { label: post.title }]} />
+          <Breadcrumbs items={breadcrumbs} />
 
           {post.publishedAt && (
             <p className="text-xs text-neutral-500 mb-4">
@@ -76,7 +89,16 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPublicDocBySlug<Post>('posts', decodedSlug)
+  const [post, defaults] = await Promise.all([
+    queryPublicDocBySlug<Post>('posts', decodedSlug),
+    getSeoDefaults(),
+  ])
 
-  return generateMeta({ doc: post })
+  if (!post) return {}
+
+  return buildMetadata(post, {
+    ...defaults,
+    path: canonicalPath('post', decodedSlug),
+    type: 'article',
+  })
 }

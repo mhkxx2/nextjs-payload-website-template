@@ -5,12 +5,22 @@ import React from 'react'
 import { LocationCoverageBlockComponent } from '@/blocks/LocationCoverage/Component'
 import { QuoteFormBlockComponent } from '@/blocks/QuoteForm/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { contactCopy, homeCopy } from '@/data/launch-copy'
+import { buildBreadcrumbs } from '@/lib/breadcrumbs'
+import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
+import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
-export const metadata: Metadata = {
-  description: contactCopy.intro,
-  title: 'Contact | Al Rukn Furniture',
+export async function generateMetadata(): Promise<Metadata> {
+  const defaults = await getSeoDefaults()
+
+  return buildMetadata(null, {
+    ...defaults,
+    descriptionFallback: contactCopy.intro,
+    path: '/contact/',
+    titleFallback: 'Contact',
+  })
 }
 
 const formatDay = (day?: null | string): string =>
@@ -19,7 +29,18 @@ const formatDay = (day?: null | string): string =>
 const digitsOnly = (value?: null | string): string => (value ?? '').replace(/\D/g, '')
 
 export default async function ContactPage() {
-  const contact = await getCachedGlobal('contact-information', 1)()
+  const breadcrumbs = buildBreadcrumbs('/contact/')
+  const [contact, globals] = await Promise.all([
+    getCachedGlobal('contact-information', 1)(),
+    getSchemaGlobals(),
+  ])
+  const schemas = buildSchemas({
+    breadcrumbs,
+    globals,
+    includeLocalBusiness: true,
+    kind: 'page',
+    path: '/contact/',
+  })
 
   const address = contact?.address
   const addressLines = [
@@ -41,9 +62,10 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd schemas={schemas} />
       <div className="pt-16 pb-8">
         <div className="container mx-auto px-4">
-          <Breadcrumbs items={[{ label: 'Contact' }]} />
+          <Breadcrumbs items={breadcrumbs} />
           <header className="max-w-3xl py-6">
             <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
               {contactCopy.heading}

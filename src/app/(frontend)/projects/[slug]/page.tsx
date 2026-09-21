@@ -7,15 +7,18 @@ import React from 'react'
 import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { homeCopy } from '@/data/launch-copy'
 import type { Media as MediaType, Project } from '@/payload-types'
+import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { serviceHref } from '@/lib/contentLinks'
 import { canonicalPath } from '@/lib/routes'
 import { queryPublicDocBySlug, queryPublicSlugs } from '@/lib/publicQueries'
-import { generateMeta } from '@/utilities/generateMeta'
+import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
+import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 
 export async function generateStaticParams() {
   const slugs = await queryPublicSlugs('projects')
@@ -45,17 +48,24 @@ export default async function ProjectDetail({ params: paramsPromise }: Args) {
     .map((item) => (typeof item.image === 'object' ? (item.image as MediaType) : null))
     .filter((image): image is MediaType => image !== null)
   const narrative = Array.isArray(project.narrative) ? project.narrative : []
+  const breadcrumbs = buildBreadcrumbs(url, project)
+  const schemas = buildSchemas({
+    breadcrumbs,
+    globals: await getSchemaGlobals(),
+    kind: 'project',
+    path: url,
+    record: project,
+  })
 
   return (
     <article className="pt-16 pb-16">
+      <JsonLd schemas={schemas} />
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
       <div className="container mx-auto px-4">
-        <Breadcrumbs
-          items={[{ label: 'Projects', href: '/projects/' }, { label: project.title }]}
-        />
+        <Breadcrumbs items={breadcrumbs} />
 
         <header className="max-w-3xl py-6 space-y-3">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal">
@@ -146,7 +156,12 @@ export default async function ProjectDetail({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const project = await queryPublicDocBySlug<Project>('projects', decodedSlug)
+  const [project, defaults] = await Promise.all([
+    queryPublicDocBySlug<Project>('projects', decodedSlug),
+    getSeoDefaults(),
+  ])
 
-  return generateMeta({ doc: project })
+  if (!project) return {}
+
+  return buildMetadata(project, { ...defaults, path: canonicalPath('project', decodedSlug) })
 }

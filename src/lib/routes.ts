@@ -37,6 +37,37 @@ export const RESERVED_EXACT_ROUTES = [
 
 export const RESERVED_PREFIXES = [...RESERVED_EXACT_ROUTES] as const
 
+/**
+ * Routes the application always renders itself. Redirect middleware must never
+ * supersede one of these: a stored redirect can point *to* them, never *over* them.
+ */
+export const APPLICATION_OWNED_PATHS = [
+  '/',
+  '/about-us/',
+  '/blog/',
+  '/contact/',
+  '/projects/',
+  '/robots.txt/',
+  '/search/',
+  '/services/',
+  '/sitemap.xml/',
+  ...FIXED_SERVICE_SLUGS.map((slug) => `/${slug}/`),
+] as const
+
+/** Normalize a request path into the trailing-slash form used by the site. */
+export function normalizeRoutePath(pathname: string): string {
+  const [withoutQuery = ''] = String(pathname ?? '').split(/[?#]/)
+  const segments = withoutQuery.split('/').filter((segment) => segment.length > 0 && segment !== '.')
+
+  return segments.length === 0 ? '/' : `/${segments.join('/')}/`
+}
+
+export function isApplicationOwnedPath(pathname: string): boolean {
+  const normalized = normalizeRoutePath(pathname).toLowerCase()
+
+  return (APPLICATION_OWNED_PATHS as readonly string[]).includes(normalized)
+}
+
 export type CanonicalPathKind = 'service' | 'project' | 'post' | 'page'
 
 export function canonicalPath(kind: CanonicalPathKind, slug: string): string {

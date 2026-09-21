@@ -24,6 +24,8 @@ public/media/
 # Generated crawler metadata
 public/robots.txt
 public/sitemap*.xml
+# next-sitemap output directory (the App Router owns /robots.txt and /sitemap.xml)
+/out/
 
 # Packed codebase dump generated locally for agent context
 repomix-output.xml

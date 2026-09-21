@@ -7,9 +7,20 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 import { redirects } from './redirects'
 
-const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
+// Media records store absolute URLs, so every origin the site is actually
+// served from has to be allowed for `next/image`: the configured site URL, the
+// canonical production host, and the local development port. Deriving this from
+// Vercel-only vars alone breaks images on non-Vercel deployments.
+const NEXT_PUBLIC_SERVER_URL =
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.__NEXT_PRIVATE_ORIGIN) ||
+  'http://localhost:3000'
+
+const IMAGE_REMOTE_ORIGINS = Array.from(
+  new Set([NEXT_PUBLIC_SERVER_URL, 'https://alruknfurniture.ae', 'http://localhost:3000']),
+)
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -27,7 +38,7 @@ const nextConfig: NextConfig = {
     ],
     qualities: [100],
     remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL].map((item) => {
+      ...IMAGE_REMOTE_ORIGINS.map((item) => {
         const url = new URL(item)
 
         return {

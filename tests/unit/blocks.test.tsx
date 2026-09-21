@@ -105,7 +105,13 @@ describe('Task 9 Page Builder Blocks Unit Suite', () => {
     const { container } = render(
       <FaqsBlockComponent
         heading="Frequently Asked Questions"
-        faqs={[{ question: 'How long does sofa making take?', answer: 'Usually 7-10 business days.' }]}
+        faqs={[
+          {
+            answer: 'Usually 7-10 business days.',
+            question: 'How long does sofa making take?',
+            schemaEligible: true,
+          },
+        ]}
         enableSchema={true}
       />
     )
@@ -114,6 +120,36 @@ describe('Task 9 Page Builder Blocks Unit Suite', () => {
     const script = container.querySelector('script[type="application/ld+json"]')
     expect(script).not.toBeNull()
     expect(script?.textContent).toContain('FAQPage')
+  })
+
+  it('omits the Faqs schema for pairs that are not marked eligible', () => {
+    const { container } = render(
+      <FaqsBlockComponent
+        enableSchema={true}
+        faqs={[{ answer: 'Usually 7-10 business days.', question: 'How long does sofa making take?' }]}
+        heading="Frequently Asked Questions"
+      />
+    )
+
+    expect(screen.getByText('How long does sofa making take?')).toBeDefined()
+    expect(container.querySelector('script[type="application/ld+json"]')).toBeNull()
+  })
+
+  it('omits the Faqs schema when the block toggle is off', () => {
+    const { container } = render(
+      <FaqsBlockComponent
+        enableSchema={false}
+        faqs={[
+          {
+            answer: 'Usually 7-10 business days.',
+            question: 'How long does sofa making take?',
+            schemaEligible: true,
+          },
+        ]}
+      />
+    )
+
+    expect(container.querySelector('script[type="application/ld+json"]')).toBeNull()
   })
 
   it('renders LocationCoverage block correctly', () => {
