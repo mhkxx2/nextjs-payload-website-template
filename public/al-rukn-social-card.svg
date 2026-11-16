@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Al Rukn Furniture</title>
+  <desc id="desc">Neutral Al Rukn Furniture social card</desc>
+  <rect width="1200" height="630" fill="#f4efe9"/>
+  <rect x="90" y="105" width="180" height="180" rx="32" fill="#8a5a35"/>
+  <path d="M130 238v-82h25v60h84v22H130Zm35-45 20-47 21 47h-41Z" fill="#fff"/>
+  <text x="90" y="390" fill="#26211d" font-family="Arial, sans-serif" font-size="76" font-weight="700">Al Rukn Furniture</text>
+  <text x="94" y="458" fill="#6d6259" font-family="Arial, sans-serif" font-size="34">Furniture website</text>
+</svg>

@@ -1,0 +1,44 @@
+{
+  "completedAt": "2026-09-29T10:30:31.578Z",
+  "createdItems": 132,
+  "createdMedia": 734,
+  "failedImages": [
+    {
+      "product": "Modern Entryway Console with LED Round Mirror, Shoe Storage &#038; Seating Bench",
+      "reason": "Image dimensions are below 600px (736x552)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/e702b157182b548cdac13d8963ea6eb7.jpg"
+    },
+    {
+      "product": "Minimalist Fluted Round Coffee Table",
+      "reason": "Image is suspiciously small (10910 bytes)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/3-69.jpg"
+    },
+    {
+      "product": "Vewal Minimalist Media Unit",
+      "reason": "Image is suspiciously small (19907 bytes)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/3-72.jpg"
+    },
+    {
+      "product": "Sleek Low-Profile Contemporary TV Unit",
+      "reason": "Image is suspiciously small (18699 bytes)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/6-46.jpg"
+    },
+    {
+      "product": "Alto L-Shaped Sectional Sofa with Chaise",
+      "reason": "Image is suspiciously small (9670 bytes)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/2_045ab470-ffe3-405a-b464-20905df60eb4.webp"
+    },
+    {
+      "product": "Alto L-Shaped Sectional Sofa with Chaise",
+      "reason": "Image is suspiciously small (17248 bytes)",
+      "url": "https://eco-furniture.ae/wp-content/uploads/2025/09/4_ab73914d-9c40-4baa-9b94-64ed5cc294a6.webp"
+    }
+  ],
+  "hashDuplicatesRemoved": 5,
+  "navigationUpdated": false,
+  "reusedMedia": 180,
+  "skippedExistingItems": 0,
+  "skippedProducts": 2,
+  "totalImportedMedia": 908,
+  "totalPortfolioItems": 165
+}

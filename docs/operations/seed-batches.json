@@ -1,0 +1,3466 @@
+{
+  "batches": [
+    {
+      "batchId": "seed-2026-09-21T00-55-58-835Z",
+      "createdAt": "2026-09-21T00:56:28.908Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-21T00:56:02.079Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-21T00:56:04.536Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:05.708Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-21T00:56:06.683Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:09.092Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-21T00:56:10.941Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-21T00:56:13.063Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-21T00:56:15.196Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-21T00:56:17.700Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:18.811Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-21T00:56:19.809Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-21T00:56:21.000Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 1,
+          "identifier": "How do I get a price for upholstery work?",
+          "updatedAt": "2026-09-21T00:56:21.041Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 2,
+          "identifier": "Do you collect and deliver furniture?",
+          "updatedAt": "2026-09-21T00:56:21.085Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 3,
+          "identifier": "Can I supply my own fabric?",
+          "updatedAt": "2026-09-21T00:56:21.126Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 4,
+          "identifier": "Can you re-upholster a sofa without replacing the frame?",
+          "updatedAt": "2026-09-21T00:56:21.161Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 5,
+          "identifier": "Can a sagging sofa seat be repaired?",
+          "updatedAt": "2026-09-21T00:56:21.186Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 6,
+          "identifier": "Can you repair a recliner mechanism?",
+          "updatedAt": "2026-09-21T00:56:21.215Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 7,
+          "identifier": "Does a repair cost less than re-upholstery?",
+          "updatedAt": "2026-09-21T00:56:21.248Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 8,
+          "identifier": "Can you build a sofa to my exact dimensions?",
+          "updatedAt": "2026-09-21T00:56:21.281Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 9,
+          "identifier": "What custom furniture can you build?",
+          "updatedAt": "2026-09-21T00:56:21.312Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 10,
+          "identifier": "How long does a custom furniture project take?",
+          "updatedAt": "2026-09-21T00:56:21.343Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 11,
+          "identifier": "How long does a custom sofa take?",
+          "updatedAt": "2026-09-21T00:56:21.368Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 12,
+          "identifier": "How is majlis seating built and installed?",
+          "updatedAt": "2026-09-21T00:56:21.399Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 13,
+          "identifier": "Can you match the fabric to my existing majlis?",
+          "updatedAt": "2026-09-21T00:56:21.441Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 14,
+          "identifier": "Do you measure windows before making curtains?",
+          "updatedAt": "2026-09-21T00:56:21.471Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 15,
+          "identifier": "Which curtain linings are available?",
+          "updatedAt": "2026-09-21T00:56:21.490Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 16,
+          "identifier": "How do you plan a fitted wardrobe layout?",
+          "updatedAt": "2026-09-21T00:56:21.529Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 17,
+          "identifier": "Do you build sliding door wardrobes?",
+          "updatedAt": "2026-09-21T00:56:21.577Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 18,
+          "identifier": "Can you build a bed for a non-standard mattress?",
+          "updatedAt": "2026-09-21T00:56:21.618Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 19,
+          "identifier": "Do you make upholstered headboards?",
+          "updatedAt": "2026-09-21T00:56:21.646Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 20,
+          "identifier": "Can you fit out an office to our floor plan?",
+          "updatedAt": "2026-09-21T00:56:21.673Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 21,
+          "identifier": "Do you make reception desks and meeting tables?",
+          "updatedAt": "2026-09-21T00:56:21.713Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-21T00:56:21.755Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-21T00:56:23.218Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-21T00:56:23.419Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-21T00:56:23.587Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-21T00:56:23.753Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-21T00:56:23.936Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-21T00:56:24.097Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-21T00:56:24.275Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-21T00:56:24.445Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-21T00:56:24.617Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-21T00:56:26.666Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-21T00:56:26.960Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-21T00:56:27.077Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-21T01-02-11-394Z",
+      "createdAt": "2026-09-21T01:02:21.385Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-21T00:56:02.079Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-21T00:56:04.536Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:05.708Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-21T00:56:06.683Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:09.092Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-21T00:56:10.941Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-21T00:56:13.063Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-21T00:56:15.196Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-21T00:56:17.700Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:18.811Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-21T00:56:19.809Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-21T00:56:21.000Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-21T01:02:12.191Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-21T01:02:15.465Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-21T01:02:15.810Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-21T01:02:16.024Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-21T01:02:16.390Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-21T01:02:16.760Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-21T01:02:16.997Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-21T01:02:17.266Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-21T01:02:17.508Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-21T01:02:17.894Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-21T01:02:18.370Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-21T01:02:19.025Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-21T01:02:19.221Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-21T01-02-54-481Z",
+      "createdAt": "2026-09-21T01:03:03.976Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-21T00:56:02.079Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-21T00:56:04.536Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:05.708Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-21T00:56:06.683Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:09.092Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-21T00:56:10.941Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-21T00:56:13.063Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-21T00:56:15.196Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-21T00:56:17.700Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:18.811Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-21T00:56:19.809Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-21T00:56:21.000Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-21T01:02:55.092Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-21T01:02:57.903Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-21T01:02:58.106Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-21T01:02:58.282Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-21T01:02:58.471Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-21T01:02:58.712Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-21T01:02:58.921Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-21T01:02:59.342Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-21T01:02:59.743Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-21T01:02:59.966Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-21T01:03:00.560Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-21T01:03:01.237Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-21T01:03:01.459Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T12-29-36-179Z",
+      "createdAt": "2026-09-27T12:29:47.843Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-21T00:56:02.079Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-21T00:56:04.536Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:05.708Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-21T00:56:06.683Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:09.092Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-21T00:56:10.941Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-21T00:56:13.063Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-21T00:56:15.196Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-21T00:56:17.700Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:18.811Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-21T00:56:19.809Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-21T00:56:21.000Z"
+        },
+        {
+          "collection": "areas",
+          "id": 1,
+          "identifier": "palm-jumeirah",
+          "updatedAt": "2026-09-27T12:29:36.325Z"
+        },
+        {
+          "collection": "areas",
+          "id": 2,
+          "identifier": "dubai-marina",
+          "updatedAt": "2026-09-27T12:29:36.389Z"
+        },
+        {
+          "collection": "areas",
+          "id": 3,
+          "identifier": "jumeirah-beach-residence",
+          "updatedAt": "2026-09-27T12:29:36.418Z"
+        },
+        {
+          "collection": "areas",
+          "id": 4,
+          "identifier": "emirates-hills",
+          "updatedAt": "2026-09-27T12:29:36.447Z"
+        },
+        {
+          "collection": "areas",
+          "id": 5,
+          "identifier": "jumeirah-village-circle",
+          "updatedAt": "2026-09-27T12:29:36.469Z"
+        },
+        {
+          "collection": "areas",
+          "id": 6,
+          "identifier": "dubai-hills-estate",
+          "updatedAt": "2026-09-27T12:29:36.503Z"
+        },
+        {
+          "collection": "areas",
+          "id": 7,
+          "identifier": "arabian-ranches",
+          "updatedAt": "2026-09-27T12:29:36.543Z"
+        },
+        {
+          "collection": "areas",
+          "id": 8,
+          "identifier": "business-bay",
+          "updatedAt": "2026-09-27T12:29:36.574Z"
+        },
+        {
+          "collection": "areas",
+          "id": 9,
+          "identifier": "arjan",
+          "updatedAt": "2026-09-27T12:29:36.606Z"
+        },
+        {
+          "collection": "areas",
+          "id": 10,
+          "identifier": "murjan-jbr",
+          "updatedAt": "2026-09-27T12:29:36.638Z"
+        },
+        {
+          "collection": "areas",
+          "id": 11,
+          "identifier": "al-barsha",
+          "updatedAt": "2026-09-27T12:29:36.664Z"
+        },
+        {
+          "collection": "areas",
+          "id": 12,
+          "identifier": "downtown-dubai",
+          "updatedAt": "2026-09-27T12:29:36.701Z"
+        },
+        {
+          "collection": "areas",
+          "id": 13,
+          "identifier": "jumeirah-lakes-towers",
+          "updatedAt": "2026-09-27T12:29:36.731Z"
+        },
+        {
+          "collection": "areas",
+          "id": 14,
+          "identifier": "mirdif",
+          "updatedAt": "2026-09-27T12:29:36.767Z"
+        },
+        {
+          "collection": "areas",
+          "id": 15,
+          "identifier": "nad-al-hamar",
+          "updatedAt": "2026-09-27T12:29:36.798Z"
+        },
+        {
+          "collection": "areas",
+          "id": 16,
+          "identifier": "nad-al-sheba",
+          "updatedAt": "2026-09-27T12:29:36.821Z"
+        },
+        {
+          "collection": "areas",
+          "id": 17,
+          "identifier": "the-greens",
+          "updatedAt": "2026-09-27T12:29:36.844Z"
+        },
+        {
+          "collection": "areas",
+          "id": 18,
+          "identifier": "meydan",
+          "updatedAt": "2026-09-27T12:29:36.878Z"
+        },
+        {
+          "collection": "areas",
+          "id": 19,
+          "identifier": "palm-jebel-ali",
+          "updatedAt": "2026-09-27T12:29:36.906Z"
+        },
+        {
+          "collection": "areas",
+          "id": 20,
+          "identifier": "difc",
+          "updatedAt": "2026-09-27T12:29:36.935Z"
+        },
+        {
+          "collection": "areas",
+          "id": 21,
+          "identifier": "damac-hills",
+          "updatedAt": "2026-09-27T12:29:36.956Z"
+        },
+        {
+          "collection": "areas",
+          "id": 22,
+          "identifier": "damac-hills-2",
+          "updatedAt": "2026-09-27T12:29:36.981Z"
+        },
+        {
+          "collection": "areas",
+          "id": 23,
+          "identifier": "al-yalayis-2",
+          "updatedAt": "2026-09-27T12:29:37.015Z"
+        },
+        {
+          "collection": "areas",
+          "id": 24,
+          "identifier": "remraam",
+          "updatedAt": "2026-09-27T12:29:37.044Z"
+        },
+        {
+          "collection": "areas",
+          "id": 25,
+          "identifier": "zabeel",
+          "updatedAt": "2026-09-27T12:29:37.076Z"
+        },
+        {
+          "collection": "areas",
+          "id": 26,
+          "identifier": "mudon",
+          "updatedAt": "2026-09-27T12:29:37.107Z"
+        },
+        {
+          "collection": "areas",
+          "id": 27,
+          "identifier": "al-waha",
+          "updatedAt": "2026-09-27T12:29:37.133Z"
+        },
+        {
+          "collection": "areas",
+          "id": 28,
+          "identifier": "dubai-sports-city",
+          "updatedAt": "2026-09-27T12:29:37.163Z"
+        },
+        {
+          "collection": "areas",
+          "id": 29,
+          "identifier": "jumeirah-golf-estates",
+          "updatedAt": "2026-09-27T12:29:37.189Z"
+        },
+        {
+          "collection": "areas",
+          "id": 30,
+          "identifier": "the-springs",
+          "updatedAt": "2026-09-27T12:29:37.209Z"
+        },
+        {
+          "collection": "areas",
+          "id": 31,
+          "identifier": "al-furjan",
+          "updatedAt": "2026-09-27T12:29:37.252Z"
+        },
+        {
+          "collection": "areas",
+          "id": 32,
+          "identifier": "dubai-internet-city",
+          "updatedAt": "2026-09-27T12:29:37.280Z"
+        },
+        {
+          "collection": "areas",
+          "id": 33,
+          "identifier": "bluewaters-island",
+          "updatedAt": "2026-09-27T12:29:37.308Z"
+        },
+        {
+          "collection": "areas",
+          "id": 34,
+          "identifier": "old-dubai",
+          "updatedAt": "2026-09-27T12:29:37.339Z"
+        },
+        {
+          "collection": "areas",
+          "id": 35,
+          "identifier": "dubailand-residence-complex",
+          "updatedAt": "2026-09-27T12:29:37.375Z"
+        },
+        {
+          "collection": "areas",
+          "id": 36,
+          "identifier": "the-villa",
+          "updatedAt": "2026-09-27T12:29:37.398Z"
+        },
+        {
+          "collection": "areas",
+          "id": 37,
+          "identifier": "wadi-al-safa",
+          "updatedAt": "2026-09-27T12:29:37.430Z"
+        },
+        {
+          "collection": "areas",
+          "id": 38,
+          "identifier": "dubai-creek-harbour",
+          "updatedAt": "2026-09-27T12:29:37.461Z"
+        },
+        {
+          "collection": "areas",
+          "id": 39,
+          "identifier": "al-aweer",
+          "updatedAt": "2026-09-27T12:29:37.484Z"
+        },
+        {
+          "collection": "areas",
+          "id": 40,
+          "identifier": "al-khawaneej",
+          "updatedAt": "2026-09-27T12:29:37.511Z"
+        },
+        {
+          "collection": "areas",
+          "id": 41,
+          "identifier": "dubai-harbour",
+          "updatedAt": "2026-09-27T12:29:37.533Z"
+        },
+        {
+          "collection": "areas",
+          "id": 42,
+          "identifier": "dubai-festival-city",
+          "updatedAt": "2026-09-27T12:29:37.564Z"
+        },
+        {
+          "collection": "areas",
+          "id": 43,
+          "identifier": "dubai-silicon-oasis",
+          "updatedAt": "2026-09-27T12:29:37.595Z"
+        },
+        {
+          "collection": "areas",
+          "id": 44,
+          "identifier": "saih-shuaib-1",
+          "updatedAt": "2026-09-27T12:29:37.626Z"
+        },
+        {
+          "collection": "areas",
+          "id": 45,
+          "identifier": "saih-shuaib-2",
+          "updatedAt": "2026-09-27T12:29:37.671Z"
+        },
+        {
+          "collection": "areas",
+          "id": 46,
+          "identifier": "sharjah",
+          "updatedAt": "2026-09-27T12:29:37.706Z"
+        },
+        {
+          "collection": "areas",
+          "id": 47,
+          "identifier": "ras-al-khaimah",
+          "updatedAt": "2026-09-27T12:29:37.737Z"
+        },
+        {
+          "collection": "areas",
+          "id": 48,
+          "identifier": "al-marjan-island",
+          "updatedAt": "2026-09-27T12:29:37.758Z"
+        },
+        {
+          "collection": "areas",
+          "id": 49,
+          "identifier": "mina-al-arab",
+          "updatedAt": "2026-09-27T12:29:37.780Z"
+        },
+        {
+          "collection": "areas",
+          "id": 50,
+          "identifier": "al-hamra-village",
+          "updatedAt": "2026-09-27T12:29:37.807Z"
+        },
+        {
+          "collection": "areas",
+          "id": 51,
+          "identifier": "al-jazirah-al-hamra",
+          "updatedAt": "2026-09-27T12:29:37.837Z"
+        },
+        {
+          "collection": "areas",
+          "id": 52,
+          "identifier": "ajman",
+          "updatedAt": "2026-09-27T12:29:37.860Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-27T12:29:38.085Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-27T12:29:39.865Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-27T12:29:40.010Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-27T12:29:40.154Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-27T12:29:40.315Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-27T12:29:40.480Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-27T12:29:40.634Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-27T12:29:40.833Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-27T12:29:41.005Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-27T12:29:41.156Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-27T12:29:41.468Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-27T12:29:41.837Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-27T12:29:41.977Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T13-35-12-340Z",
+      "createdAt": "2026-09-27T13:35:19.580Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-23T18:40:56.697Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-23T18:41:00.017Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-23T18:41:01.905Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-23T18:41:03.854Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-23T18:41:07.625Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-23T18:41:09.974Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-23T18:41:12.416Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-23T18:41:14.786Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-23T18:41:17.509Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-23T18:41:18.976Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-23T18:41:20.431Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-23T18:41:22.484Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T13-35-59-553Z",
+      "createdAt": "2026-09-27T13:36:14.169Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-27T13:35:59.625Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-27T13:35:59.685Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-27T13:35:59.720Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-27T13:35:59.764Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-27T13:35:59.820Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-27T13:35:59.882Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-27T13:35:59.921Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-27T13:35:59.974Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-27T13:36:00.036Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-27T13:36:00.120Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-27T13:36:00.166Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-27T13:36:00.203Z"
+        },
+        {
+          "collection": "areas",
+          "id": 1,
+          "identifier": "palm-jumeirah",
+          "updatedAt": "2026-09-27T13:36:00.268Z"
+        },
+        {
+          "collection": "areas",
+          "id": 2,
+          "identifier": "dubai-marina",
+          "updatedAt": "2026-09-27T13:36:00.474Z"
+        },
+        {
+          "collection": "areas",
+          "id": 3,
+          "identifier": "jumeirah-beach-residence",
+          "updatedAt": "2026-09-27T13:36:00.626Z"
+        },
+        {
+          "collection": "areas",
+          "id": 4,
+          "identifier": "emirates-hills",
+          "updatedAt": "2026-09-27T13:36:00.702Z"
+        },
+        {
+          "collection": "areas",
+          "id": 5,
+          "identifier": "jumeirah-village-circle",
+          "updatedAt": "2026-09-27T13:36:00.771Z"
+        },
+        {
+          "collection": "areas",
+          "id": 6,
+          "identifier": "dubai-hills-estate",
+          "updatedAt": "2026-09-27T13:36:00.838Z"
+        },
+        {
+          "collection": "areas",
+          "id": 7,
+          "identifier": "arabian-ranches",
+          "updatedAt": "2026-09-27T13:36:00.921Z"
+        },
+        {
+          "collection": "areas",
+          "id": 8,
+          "identifier": "business-bay",
+          "updatedAt": "2026-09-27T13:36:00.994Z"
+        },
+        {
+          "collection": "areas",
+          "id": 9,
+          "identifier": "arjan",
+          "updatedAt": "2026-09-27T13:36:01.084Z"
+        },
+        {
+          "collection": "areas",
+          "id": 10,
+          "identifier": "murjan-jbr",
+          "updatedAt": "2026-09-27T13:36:01.170Z"
+        },
+        {
+          "collection": "areas",
+          "id": 11,
+          "identifier": "al-barsha",
+          "updatedAt": "2026-09-27T13:36:01.264Z"
+        },
+        {
+          "collection": "areas",
+          "id": 12,
+          "identifier": "downtown-dubai",
+          "updatedAt": "2026-09-27T13:36:01.345Z"
+        },
+        {
+          "collection": "areas",
+          "id": 13,
+          "identifier": "jumeirah-lakes-towers",
+          "updatedAt": "2026-09-27T13:36:01.384Z"
+        },
+        {
+          "collection": "areas",
+          "id": 14,
+          "identifier": "mirdif",
+          "updatedAt": "2026-09-27T13:36:01.450Z"
+        },
+        {
+          "collection": "areas",
+          "id": 15,
+          "identifier": "nad-al-hamar",
+          "updatedAt": "2026-09-27T13:36:01.511Z"
+        },
+        {
+          "collection": "areas",
+          "id": 16,
+          "identifier": "nad-al-sheba",
+          "updatedAt": "2026-09-27T13:36:01.562Z"
+        },
+        {
+          "collection": "areas",
+          "id": 17,
+          "identifier": "the-greens",
+          "updatedAt": "2026-09-27T13:36:01.615Z"
+        },
+        {
+          "collection": "areas",
+          "id": 18,
+          "identifier": "meydan",
+          "updatedAt": "2026-09-27T13:36:01.671Z"
+        },
+        {
+          "collection": "areas",
+          "id": 19,
+          "identifier": "palm-jebel-ali",
+          "updatedAt": "2026-09-27T13:36:01.744Z"
+        },
+        {
+          "collection": "areas",
+          "id": 20,
+          "identifier": "difc",
+          "updatedAt": "2026-09-27T13:36:01.785Z"
+        },
+        {
+          "collection": "areas",
+          "id": 21,
+          "identifier": "damac-hills",
+          "updatedAt": "2026-09-27T13:36:01.840Z"
+        },
+        {
+          "collection": "areas",
+          "id": 22,
+          "identifier": "damac-hills-2",
+          "updatedAt": "2026-09-27T13:36:01.885Z"
+        },
+        {
+          "collection": "areas",
+          "id": 23,
+          "identifier": "al-yalayis-2",
+          "updatedAt": "2026-09-27T13:36:01.940Z"
+        },
+        {
+          "collection": "areas",
+          "id": 24,
+          "identifier": "remraam",
+          "updatedAt": "2026-09-27T13:36:01.985Z"
+        },
+        {
+          "collection": "areas",
+          "id": 25,
+          "identifier": "zabeel",
+          "updatedAt": "2026-09-27T13:36:02.032Z"
+        },
+        {
+          "collection": "areas",
+          "id": 26,
+          "identifier": "mudon",
+          "updatedAt": "2026-09-27T13:36:02.072Z"
+        },
+        {
+          "collection": "areas",
+          "id": 27,
+          "identifier": "al-waha",
+          "updatedAt": "2026-09-27T13:36:02.110Z"
+        },
+        {
+          "collection": "areas",
+          "id": 28,
+          "identifier": "dubai-sports-city",
+          "updatedAt": "2026-09-27T13:36:02.157Z"
+        },
+        {
+          "collection": "areas",
+          "id": 29,
+          "identifier": "jumeirah-golf-estates",
+          "updatedAt": "2026-09-27T13:36:02.206Z"
+        },
+        {
+          "collection": "areas",
+          "id": 30,
+          "identifier": "the-springs",
+          "updatedAt": "2026-09-27T13:36:02.259Z"
+        },
+        {
+          "collection": "areas",
+          "id": 31,
+          "identifier": "al-furjan",
+          "updatedAt": "2026-09-27T13:36:02.322Z"
+        },
+        {
+          "collection": "areas",
+          "id": 32,
+          "identifier": "dubai-internet-city",
+          "updatedAt": "2026-09-27T13:36:02.369Z"
+        },
+        {
+          "collection": "areas",
+          "id": 33,
+          "identifier": "bluewaters-island",
+          "updatedAt": "2026-09-27T13:36:02.423Z"
+        },
+        {
+          "collection": "areas",
+          "id": 34,
+          "identifier": "old-dubai",
+          "updatedAt": "2026-09-27T13:36:02.470Z"
+        },
+        {
+          "collection": "areas",
+          "id": 35,
+          "identifier": "dubailand-residence-complex",
+          "updatedAt": "2026-09-27T13:36:02.529Z"
+        },
+        {
+          "collection": "areas",
+          "id": 36,
+          "identifier": "the-villa",
+          "updatedAt": "2026-09-27T13:36:02.571Z"
+        },
+        {
+          "collection": "areas",
+          "id": 37,
+          "identifier": "wadi-al-safa",
+          "updatedAt": "2026-09-27T13:36:02.618Z"
+        },
+        {
+          "collection": "areas",
+          "id": 38,
+          "identifier": "dubai-creek-harbour",
+          "updatedAt": "2026-09-27T13:36:02.652Z"
+        },
+        {
+          "collection": "areas",
+          "id": 39,
+          "identifier": "al-aweer",
+          "updatedAt": "2026-09-27T13:36:02.688Z"
+        },
+        {
+          "collection": "areas",
+          "id": 40,
+          "identifier": "al-khawaneej",
+          "updatedAt": "2026-09-27T13:36:02.728Z"
+        },
+        {
+          "collection": "areas",
+          "id": 41,
+          "identifier": "dubai-harbour",
+          "updatedAt": "2026-09-27T13:36:02.770Z"
+        },
+        {
+          "collection": "areas",
+          "id": 42,
+          "identifier": "dubai-festival-city",
+          "updatedAt": "2026-09-27T13:36:02.804Z"
+        },
+        {
+          "collection": "areas",
+          "id": 43,
+          "identifier": "dubai-silicon-oasis",
+          "updatedAt": "2026-09-27T13:36:02.852Z"
+        },
+        {
+          "collection": "areas",
+          "id": 44,
+          "identifier": "saih-shuaib-1",
+          "updatedAt": "2026-09-27T13:36:02.884Z"
+        },
+        {
+          "collection": "areas",
+          "id": 45,
+          "identifier": "saih-shuaib-2",
+          "updatedAt": "2026-09-27T13:36:02.914Z"
+        },
+        {
+          "collection": "areas",
+          "id": 46,
+          "identifier": "sharjah",
+          "updatedAt": "2026-09-27T13:36:02.951Z"
+        },
+        {
+          "collection": "areas",
+          "id": 47,
+          "identifier": "ras-al-khaimah",
+          "updatedAt": "2026-09-27T13:36:02.988Z"
+        },
+        {
+          "collection": "areas",
+          "id": 48,
+          "identifier": "al-marjan-island",
+          "updatedAt": "2026-09-27T13:36:03.044Z"
+        },
+        {
+          "collection": "areas",
+          "id": 49,
+          "identifier": "mina-al-arab",
+          "updatedAt": "2026-09-27T13:36:03.105Z"
+        },
+        {
+          "collection": "areas",
+          "id": 50,
+          "identifier": "al-hamra-village",
+          "updatedAt": "2026-09-27T13:36:03.155Z"
+        },
+        {
+          "collection": "areas",
+          "id": 51,
+          "identifier": "al-jazirah-al-hamra",
+          "updatedAt": "2026-09-27T13:36:03.211Z"
+        },
+        {
+          "collection": "areas",
+          "id": 52,
+          "identifier": "ajman",
+          "updatedAt": "2026-09-27T13:36:03.257Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 1,
+          "identifier": "How do I get a price for upholstery work?",
+          "updatedAt": "2026-09-27T13:36:03.322Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 2,
+          "identifier": "Do you collect and deliver furniture?",
+          "updatedAt": "2026-09-27T13:36:03.468Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 3,
+          "identifier": "Can I supply my own fabric?",
+          "updatedAt": "2026-09-27T13:36:03.585Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 4,
+          "identifier": "Can you re-upholster a sofa without replacing the frame?",
+          "updatedAt": "2026-09-27T13:36:03.693Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 5,
+          "identifier": "Can a sagging sofa seat be repaired?",
+          "updatedAt": "2026-09-27T13:36:03.767Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 6,
+          "identifier": "Can you repair a recliner mechanism?",
+          "updatedAt": "2026-09-27T13:36:03.840Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 7,
+          "identifier": "Does a repair cost less than re-upholstery?",
+          "updatedAt": "2026-09-27T13:36:03.914Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 8,
+          "identifier": "Can you build a sofa to my exact dimensions?",
+          "updatedAt": "2026-09-27T13:36:03.988Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 9,
+          "identifier": "What custom furniture can you build?",
+          "updatedAt": "2026-09-27T13:36:04.076Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 10,
+          "identifier": "How long does a custom furniture project take?",
+          "updatedAt": "2026-09-27T13:36:04.156Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 11,
+          "identifier": "How long does a custom sofa take?",
+          "updatedAt": "2026-09-27T13:36:04.242Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 12,
+          "identifier": "How is majlis seating built and installed?",
+          "updatedAt": "2026-09-27T13:36:04.305Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 13,
+          "identifier": "Can you match the fabric to my existing majlis?",
+          "updatedAt": "2026-09-27T13:36:04.363Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 14,
+          "identifier": "Do you measure windows before making curtains?",
+          "updatedAt": "2026-09-27T13:36:04.419Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 15,
+          "identifier": "Which curtain linings are available?",
+          "updatedAt": "2026-09-27T13:36:04.487Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 16,
+          "identifier": "How do you plan a fitted wardrobe layout?",
+          "updatedAt": "2026-09-27T13:36:04.552Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 17,
+          "identifier": "Do you build sliding door wardrobes?",
+          "updatedAt": "2026-09-27T13:36:04.615Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 18,
+          "identifier": "Can you build a bed for a non-standard mattress?",
+          "updatedAt": "2026-09-27T13:36:04.676Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 19,
+          "identifier": "Do you make upholstered headboards?",
+          "updatedAt": "2026-09-27T13:36:04.743Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 20,
+          "identifier": "Can you fit out an office to our floor plan?",
+          "updatedAt": "2026-09-27T13:36:04.809Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 21,
+          "identifier": "Do you make reception desks and meeting tables?",
+          "updatedAt": "2026-09-27T13:36:04.881Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-27T13:36:04.956Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-27T13:36:06.585Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-27T13:36:06.731Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-27T13:36:06.873Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-27T13:36:07.043Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-27T13:36:07.207Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-27T13:36:07.380Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-27T13:36:07.561Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-27T13:36:07.734Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-27T13:36:07.887Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-27T13:36:08.180Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-27T13:36:08.575Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-27T13:36:08.700Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T13-41-35-951Z",
+      "createdAt": "2026-09-27T13:42:09.819Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-27T13:41:38.232Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-27T13:41:40.411Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-27T13:41:41.388Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-27T13:41:42.333Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-27T13:41:44.812Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-27T13:41:46.588Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-27T13:41:48.722Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-27T13:41:50.851Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-27T13:41:52.861Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-27T13:41:53.936Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-27T13:41:54.946Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-27T13:41:56.010Z"
+        },
+        {
+          "collection": "areas",
+          "id": 1,
+          "identifier": "palm-jumeirah",
+          "updatedAt": "2026-09-27T13:41:56.065Z"
+        },
+        {
+          "collection": "areas",
+          "id": 2,
+          "identifier": "dubai-marina",
+          "updatedAt": "2026-09-27T13:41:56.104Z"
+        },
+        {
+          "collection": "areas",
+          "id": 3,
+          "identifier": "jumeirah-beach-residence",
+          "updatedAt": "2026-09-27T13:41:56.140Z"
+        },
+        {
+          "collection": "areas",
+          "id": 4,
+          "identifier": "emirates-hills",
+          "updatedAt": "2026-09-27T13:41:56.172Z"
+        },
+        {
+          "collection": "areas",
+          "id": 5,
+          "identifier": "jumeirah-village-circle",
+          "updatedAt": "2026-09-27T13:41:56.210Z"
+        },
+        {
+          "collection": "areas",
+          "id": 6,
+          "identifier": "dubai-hills-estate",
+          "updatedAt": "2026-09-27T13:41:56.237Z"
+        },
+        {
+          "collection": "areas",
+          "id": 7,
+          "identifier": "arabian-ranches",
+          "updatedAt": "2026-09-27T13:41:56.261Z"
+        },
+        {
+          "collection": "areas",
+          "id": 8,
+          "identifier": "business-bay",
+          "updatedAt": "2026-09-27T13:41:56.289Z"
+        },
+        {
+          "collection": "areas",
+          "id": 9,
+          "identifier": "arjan",
+          "updatedAt": "2026-09-27T13:41:56.315Z"
+        },
+        {
+          "collection": "areas",
+          "id": 10,
+          "identifier": "murjan-jbr",
+          "updatedAt": "2026-09-27T13:41:56.343Z"
+        },
+        {
+          "collection": "areas",
+          "id": 11,
+          "identifier": "al-barsha",
+          "updatedAt": "2026-09-27T13:41:56.374Z"
+        },
+        {
+          "collection": "areas",
+          "id": 12,
+          "identifier": "downtown-dubai",
+          "updatedAt": "2026-09-27T13:41:56.399Z"
+        },
+        {
+          "collection": "areas",
+          "id": 13,
+          "identifier": "jumeirah-lakes-towers",
+          "updatedAt": "2026-09-27T13:41:56.436Z"
+        },
+        {
+          "collection": "areas",
+          "id": 14,
+          "identifier": "mirdif",
+          "updatedAt": "2026-09-27T13:41:56.468Z"
+        },
+        {
+          "collection": "areas",
+          "id": 15,
+          "identifier": "nad-al-hamar",
+          "updatedAt": "2026-09-27T13:41:56.500Z"
+        },
+        {
+          "collection": "areas",
+          "id": 16,
+          "identifier": "nad-al-sheba",
+          "updatedAt": "2026-09-27T13:41:56.527Z"
+        },
+        {
+          "collection": "areas",
+          "id": 17,
+          "identifier": "the-greens",
+          "updatedAt": "2026-09-27T13:41:56.553Z"
+        },
+        {
+          "collection": "areas",
+          "id": 18,
+          "identifier": "meydan",
+          "updatedAt": "2026-09-27T13:41:56.580Z"
+        },
+        {
+          "collection": "areas",
+          "id": 19,
+          "identifier": "palm-jebel-ali",
+          "updatedAt": "2026-09-27T13:41:56.604Z"
+        },
+        {
+          "collection": "areas",
+          "id": 20,
+          "identifier": "difc",
+          "updatedAt": "2026-09-27T13:41:56.633Z"
+        },
+        {
+          "collection": "areas",
+          "id": 21,
+          "identifier": "damac-hills",
+          "updatedAt": "2026-09-27T13:41:56.656Z"
+        },
+        {
+          "collection": "areas",
+          "id": 22,
+          "identifier": "damac-hills-2",
+          "updatedAt": "2026-09-27T13:41:56.677Z"
+        },
+        {
+          "collection": "areas",
+          "id": 23,
+          "identifier": "al-yalayis-2",
+          "updatedAt": "2026-09-27T13:41:56.703Z"
+        },
+        {
+          "collection": "areas",
+          "id": 24,
+          "identifier": "remraam",
+          "updatedAt": "2026-09-27T13:41:56.721Z"
+        },
+        {
+          "collection": "areas",
+          "id": 25,
+          "identifier": "zabeel",
+          "updatedAt": "2026-09-27T13:41:56.751Z"
+        },
+        {
+          "collection": "areas",
+          "id": 26,
+          "identifier": "mudon",
+          "updatedAt": "2026-09-27T13:41:56.781Z"
+        },
+        {
+          "collection": "areas",
+          "id": 27,
+          "identifier": "al-waha",
+          "updatedAt": "2026-09-27T13:41:56.814Z"
+        },
+        {
+          "collection": "areas",
+          "id": 28,
+          "identifier": "dubai-sports-city",
+          "updatedAt": "2026-09-27T13:41:56.844Z"
+        },
+        {
+          "collection": "areas",
+          "id": 29,
+          "identifier": "jumeirah-golf-estates",
+          "updatedAt": "2026-09-27T13:41:56.866Z"
+        },
+        {
+          "collection": "areas",
+          "id": 30,
+          "identifier": "the-springs",
+          "updatedAt": "2026-09-27T13:41:56.897Z"
+        },
+        {
+          "collection": "areas",
+          "id": 31,
+          "identifier": "al-furjan",
+          "updatedAt": "2026-09-27T13:41:56.927Z"
+        },
+        {
+          "collection": "areas",
+          "id": 32,
+          "identifier": "dubai-internet-city",
+          "updatedAt": "2026-09-27T13:41:56.957Z"
+        },
+        {
+          "collection": "areas",
+          "id": 33,
+          "identifier": "bluewaters-island",
+          "updatedAt": "2026-09-27T13:41:56.981Z"
+        },
+        {
+          "collection": "areas",
+          "id": 34,
+          "identifier": "old-dubai",
+          "updatedAt": "2026-09-27T13:41:57.016Z"
+        },
+        {
+          "collection": "areas",
+          "id": 35,
+          "identifier": "dubailand-residence-complex",
+          "updatedAt": "2026-09-27T13:41:57.039Z"
+        },
+        {
+          "collection": "areas",
+          "id": 36,
+          "identifier": "the-villa",
+          "updatedAt": "2026-09-27T13:41:57.064Z"
+        },
+        {
+          "collection": "areas",
+          "id": 37,
+          "identifier": "wadi-al-safa",
+          "updatedAt": "2026-09-27T13:41:57.101Z"
+        },
+        {
+          "collection": "areas",
+          "id": 38,
+          "identifier": "dubai-creek-harbour",
+          "updatedAt": "2026-09-27T13:41:57.148Z"
+        },
+        {
+          "collection": "areas",
+          "id": 39,
+          "identifier": "al-aweer",
+          "updatedAt": "2026-09-27T13:41:57.188Z"
+        },
+        {
+          "collection": "areas",
+          "id": 40,
+          "identifier": "al-khawaneej",
+          "updatedAt": "2026-09-27T13:41:57.249Z"
+        },
+        {
+          "collection": "areas",
+          "id": 41,
+          "identifier": "dubai-harbour",
+          "updatedAt": "2026-09-27T13:41:57.304Z"
+        },
+        {
+          "collection": "areas",
+          "id": 42,
+          "identifier": "dubai-festival-city",
+          "updatedAt": "2026-09-27T13:41:57.365Z"
+        },
+        {
+          "collection": "areas",
+          "id": 43,
+          "identifier": "dubai-silicon-oasis",
+          "updatedAt": "2026-09-27T13:41:57.414Z"
+        },
+        {
+          "collection": "areas",
+          "id": 44,
+          "identifier": "saih-shuaib-1",
+          "updatedAt": "2026-09-27T13:41:57.472Z"
+        },
+        {
+          "collection": "areas",
+          "id": 45,
+          "identifier": "saih-shuaib-2",
+          "updatedAt": "2026-09-27T13:41:57.519Z"
+        },
+        {
+          "collection": "areas",
+          "id": 46,
+          "identifier": "sharjah",
+          "updatedAt": "2026-09-27T13:41:57.561Z"
+        },
+        {
+          "collection": "areas",
+          "id": 47,
+          "identifier": "ras-al-khaimah",
+          "updatedAt": "2026-09-27T13:41:57.597Z"
+        },
+        {
+          "collection": "areas",
+          "id": 48,
+          "identifier": "al-marjan-island",
+          "updatedAt": "2026-09-27T13:41:57.621Z"
+        },
+        {
+          "collection": "areas",
+          "id": 49,
+          "identifier": "mina-al-arab",
+          "updatedAt": "2026-09-27T13:41:57.665Z"
+        },
+        {
+          "collection": "areas",
+          "id": 50,
+          "identifier": "al-hamra-village",
+          "updatedAt": "2026-09-27T13:41:57.714Z"
+        },
+        {
+          "collection": "areas",
+          "id": 51,
+          "identifier": "al-jazirah-al-hamra",
+          "updatedAt": "2026-09-27T13:41:57.751Z"
+        },
+        {
+          "collection": "areas",
+          "id": 52,
+          "identifier": "ajman",
+          "updatedAt": "2026-09-27T13:41:57.798Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 1,
+          "identifier": "How do I get a price for upholstery work?",
+          "updatedAt": "2026-09-27T13:41:57.843Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 2,
+          "identifier": "Do you collect and deliver furniture?",
+          "updatedAt": "2026-09-27T13:41:57.880Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 3,
+          "identifier": "Can I supply my own fabric?",
+          "updatedAt": "2026-09-27T13:41:57.903Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 4,
+          "identifier": "Can you re-upholster a sofa without replacing the frame?",
+          "updatedAt": "2026-09-27T13:41:57.937Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 5,
+          "identifier": "Can a sagging sofa seat be repaired?",
+          "updatedAt": "2026-09-27T13:41:57.969Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 6,
+          "identifier": "Can you repair a recliner mechanism?",
+          "updatedAt": "2026-09-27T13:41:57.989Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 7,
+          "identifier": "Does a repair cost less than re-upholstery?",
+          "updatedAt": "2026-09-27T13:41:58.021Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 8,
+          "identifier": "Can you build a sofa to my exact dimensions?",
+          "updatedAt": "2026-09-27T13:41:58.055Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 9,
+          "identifier": "What custom furniture can you build?",
+          "updatedAt": "2026-09-27T13:41:58.094Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 10,
+          "identifier": "How long does a custom furniture project take?",
+          "updatedAt": "2026-09-27T13:41:58.123Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 11,
+          "identifier": "How long does a custom sofa take?",
+          "updatedAt": "2026-09-27T13:41:58.157Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 12,
+          "identifier": "How is majlis seating built and installed?",
+          "updatedAt": "2026-09-27T13:41:58.176Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 13,
+          "identifier": "Can you match the fabric to my existing majlis?",
+          "updatedAt": "2026-09-27T13:41:58.197Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 14,
+          "identifier": "Do you measure windows before making curtains?",
+          "updatedAt": "2026-09-27T13:41:58.221Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 15,
+          "identifier": "Which curtain linings are available?",
+          "updatedAt": "2026-09-27T13:41:58.243Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 16,
+          "identifier": "How do you plan a fitted wardrobe layout?",
+          "updatedAt": "2026-09-27T13:41:58.261Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 17,
+          "identifier": "Do you build sliding door wardrobes?",
+          "updatedAt": "2026-09-27T13:41:58.281Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 18,
+          "identifier": "Can you build a bed for a non-standard mattress?",
+          "updatedAt": "2026-09-27T13:41:58.310Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 19,
+          "identifier": "Do you make upholstered headboards?",
+          "updatedAt": "2026-09-27T13:41:58.335Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 20,
+          "identifier": "Can you fit out an office to our floor plan?",
+          "updatedAt": "2026-09-27T13:41:58.358Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 21,
+          "identifier": "Do you make reception desks and meeting tables?",
+          "updatedAt": "2026-09-27T13:41:58.375Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-27T13:41:58.404Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-27T13:41:59.389Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-27T13:41:59.551Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-27T13:41:59.735Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-27T13:41:59.893Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-27T13:42:00.047Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-27T13:42:00.207Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-27T13:42:00.370Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-27T13:42:00.544Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-27T13:42:00.779Z"
+        },
+        {
+          "collection": "pages",
+          "id": 1,
+          "identifier": "home",
+          "updatedAt": "2026-09-27T13:42:03.531Z"
+        },
+        {
+          "collection": "pages",
+          "id": 2,
+          "identifier": "privacy",
+          "updatedAt": "2026-09-27T13:42:03.830Z"
+        },
+        {
+          "collection": "pages",
+          "id": 3,
+          "identifier": "terms",
+          "updatedAt": "2026-09-27T13:42:03.941Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T17-31-35-144Z",
+      "createdAt": "2026-09-27T17:32:10.601Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 13,
+          "identifier": "service-sofa-upholstery-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:36.733Z"
+        },
+        {
+          "collection": "media",
+          "id": 14,
+          "identifier": "service-custom-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:38.157Z"
+        },
+        {
+          "collection": "media",
+          "id": 15,
+          "identifier": "service-custom-sofa-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:39.541Z"
+        },
+        {
+          "collection": "media",
+          "id": 16,
+          "identifier": "service-majlis-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:40.889Z"
+        },
+        {
+          "collection": "media",
+          "id": 17,
+          "identifier": "service-curtains-blinds-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:42.158Z"
+        },
+        {
+          "collection": "media",
+          "id": 18,
+          "identifier": "service-sofa-repair-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:43.601Z"
+        },
+        {
+          "collection": "media",
+          "id": 19,
+          "identifier": "service-custom-wardrobes-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:45.168Z"
+        },
+        {
+          "collection": "media",
+          "id": 20,
+          "identifier": "service-custom-beds-headboards-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:46.782Z"
+        },
+        {
+          "collection": "media",
+          "id": 21,
+          "identifier": "service-office-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:31:48.153Z"
+        },
+        {
+          "collection": "media",
+          "id": 22,
+          "identifier": "service-sofa-upholstery-ai.webp",
+          "updatedAt": "2026-09-27T17:31:49.480Z"
+        },
+        {
+          "collection": "media",
+          "id": 23,
+          "identifier": "service-custom-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:31:50.872Z"
+        },
+        {
+          "collection": "media",
+          "id": 24,
+          "identifier": "service-custom-sofa-ai.webp",
+          "updatedAt": "2026-09-27T17:31:52.243Z"
+        },
+        {
+          "collection": "media",
+          "id": 25,
+          "identifier": "service-majlis-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:31:53.861Z"
+        },
+        {
+          "collection": "media",
+          "id": 26,
+          "identifier": "service-curtains-blinds-ai.webp",
+          "updatedAt": "2026-09-27T17:31:55.126Z"
+        },
+        {
+          "collection": "media",
+          "id": 27,
+          "identifier": "service-sofa-repair-ai.webp",
+          "updatedAt": "2026-09-27T17:31:56.543Z"
+        },
+        {
+          "collection": "media",
+          "id": 28,
+          "identifier": "service-custom-wardrobes-ai.webp",
+          "updatedAt": "2026-09-27T17:31:57.844Z"
+        },
+        {
+          "collection": "media",
+          "id": 29,
+          "identifier": "service-custom-beds-headboards-ai.webp",
+          "updatedAt": "2026-09-27T17:31:59.544Z"
+        },
+        {
+          "collection": "media",
+          "id": 30,
+          "identifier": "service-office-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:32:00.963Z"
+        },
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-21T00:56:02.079Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-21T00:56:04.536Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:05.708Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-21T00:56:06.683Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:09.092Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-21T00:56:10.941Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-21T00:56:13.063Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-21T00:56:15.196Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-21T00:56:17.700Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-21T00:56:18.811Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-21T00:56:19.809Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-21T00:56:21.000Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 23,
+          "identifier": "Can you upholster an L-shaped sofa?",
+          "updatedAt": "2026-09-27T17:32:01.789Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 24,
+          "identifier": "Can the sofa foam be replaced during upholstery?",
+          "updatedAt": "2026-09-27T17:32:01.830Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 25,
+          "identifier": "Can you build custom furniture from a reference photo?",
+          "updatedAt": "2026-09-27T17:32:01.860Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 26,
+          "identifier": "Can furniture be made to exact room dimensions?",
+          "updatedAt": "2026-09-27T17:32:01.894Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 27,
+          "identifier": "What information is required for a custom furniture quote?",
+          "updatedAt": "2026-09-27T17:32:01.936Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 28,
+          "identifier": "How is a custom sofa different from sofa upholstery?",
+          "updatedAt": "2026-09-27T17:32:01.980Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 29,
+          "identifier": "Can I choose the sofa firmness?",
+          "updatedAt": "2026-09-27T17:32:02.016Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 30,
+          "identifier": "Can Majlis seating follow an entire wall?",
+          "updatedAt": "2026-09-27T17:32:02.058Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 31,
+          "identifier": "Can an existing Majlis be reupholstered?",
+          "updatedAt": "2026-09-27T17:32:02.109Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 32,
+          "identifier": "How are Majlis corners measured?",
+          "updatedAt": "2026-09-27T17:32:02.145Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 33,
+          "identifier": "What is the difference between sheer and blackout curtains?",
+          "updatedAt": "2026-09-27T17:32:02.163Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 34,
+          "identifier": "Can sheer and blackout curtain layers be combined?",
+          "updatedAt": "2026-09-27T17:32:02.197Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 35,
+          "identifier": "Do you supply and fit roller blinds?",
+          "updatedAt": "2026-09-27T17:32:02.241Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 36,
+          "identifier": "Can a sofa be repaired without replacing the fabric?",
+          "updatedAt": "2026-09-27T17:32:02.293Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 37,
+          "identifier": "How do you assess a sofa repair from photos?",
+          "updatedAt": "2026-09-27T17:32:02.336Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 38,
+          "identifier": "Should I choose sliding or hinged wardrobe doors?",
+          "updatedAt": "2026-09-27T17:32:02.417Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 39,
+          "identifier": "Can the internal wardrobe layout be customized?",
+          "updatedAt": "2026-09-27T17:32:02.481Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 40,
+          "identifier": "Can a wardrobe fit around columns or bulkheads?",
+          "updatedAt": "2026-09-27T17:32:02.516Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 41,
+          "identifier": "Can a headboard be mounted to the wall?",
+          "updatedAt": "2026-09-27T17:32:02.539Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 42,
+          "identifier": "What measurements are needed for a custom bed quote?",
+          "updatedAt": "2026-09-27T17:32:02.562Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 43,
+          "identifier": "Can cable management be built into office desks?",
+          "updatedAt": "2026-09-27T17:32:02.583Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 44,
+          "identifier": "What do you need to quote custom office furniture?",
+          "updatedAt": "2026-09-27T17:32:02.609Z"
+        }
+      ]
+    },
+    {
+      "batchId": "seed-2026-09-27T17-33-21-724Z",
+      "createdAt": "2026-09-27T17:33:34.607Z",
+      "records": [
+        {
+          "collection": "media",
+          "id": 13,
+          "identifier": "service-sofa-upholstery-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:21.789Z"
+        },
+        {
+          "collection": "media",
+          "id": 14,
+          "identifier": "service-custom-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:21.838Z"
+        },
+        {
+          "collection": "media",
+          "id": 15,
+          "identifier": "service-custom-sofa-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:21.889Z"
+        },
+        {
+          "collection": "media",
+          "id": 16,
+          "identifier": "service-majlis-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:21.948Z"
+        },
+        {
+          "collection": "media",
+          "id": 17,
+          "identifier": "service-curtains-blinds-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:21.984Z"
+        },
+        {
+          "collection": "media",
+          "id": 18,
+          "identifier": "service-sofa-repair-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.022Z"
+        },
+        {
+          "collection": "media",
+          "id": 19,
+          "identifier": "service-custom-wardrobes-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.055Z"
+        },
+        {
+          "collection": "media",
+          "id": 20,
+          "identifier": "service-custom-beds-headboards-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.091Z"
+        },
+        {
+          "collection": "media",
+          "id": 21,
+          "identifier": "service-office-furniture-detail-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.127Z"
+        },
+        {
+          "collection": "media",
+          "id": 22,
+          "identifier": "service-sofa-upholstery-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.165Z"
+        },
+        {
+          "collection": "media",
+          "id": 23,
+          "identifier": "service-custom-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.199Z"
+        },
+        {
+          "collection": "media",
+          "id": 24,
+          "identifier": "service-custom-sofa-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.233Z"
+        },
+        {
+          "collection": "media",
+          "id": 25,
+          "identifier": "service-majlis-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.272Z"
+        },
+        {
+          "collection": "media",
+          "id": 26,
+          "identifier": "service-curtains-blinds-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.304Z"
+        },
+        {
+          "collection": "media",
+          "id": 27,
+          "identifier": "service-sofa-repair-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.334Z"
+        },
+        {
+          "collection": "media",
+          "id": 28,
+          "identifier": "service-custom-wardrobes-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.368Z"
+        },
+        {
+          "collection": "media",
+          "id": 29,
+          "identifier": "service-custom-beds-headboards-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.410Z"
+        },
+        {
+          "collection": "media",
+          "id": 30,
+          "identifier": "service-office-furniture-ai.webp",
+          "updatedAt": "2026-09-27T17:33:22.446Z"
+        },
+        {
+          "collection": "media",
+          "id": 1,
+          "identifier": "hero-living-room.jpg",
+          "updatedAt": "2026-09-27T17:33:22.488Z"
+        },
+        {
+          "collection": "media",
+          "id": 2,
+          "identifier": "service-sofa-upholstery.jpg",
+          "updatedAt": "2026-09-27T17:33:22.521Z"
+        },
+        {
+          "collection": "media",
+          "id": 3,
+          "identifier": "service-custom-furniture.jpg",
+          "updatedAt": "2026-09-27T17:33:22.569Z"
+        },
+        {
+          "collection": "media",
+          "id": 4,
+          "identifier": "service-custom-sofa.jpg",
+          "updatedAt": "2026-09-27T17:33:22.600Z"
+        },
+        {
+          "collection": "media",
+          "id": 5,
+          "identifier": "service-majlis-furniture.jpg",
+          "updatedAt": "2026-09-27T17:33:22.643Z"
+        },
+        {
+          "collection": "media",
+          "id": 6,
+          "identifier": "service-curtains-blinds.jpg",
+          "updatedAt": "2026-09-27T17:33:22.672Z"
+        },
+        {
+          "collection": "media",
+          "id": 7,
+          "identifier": "service-sofa-repair.jpg",
+          "updatedAt": "2026-09-27T17:33:22.699Z"
+        },
+        {
+          "collection": "media",
+          "id": 8,
+          "identifier": "service-custom-wardrobes.jpg",
+          "updatedAt": "2026-09-27T17:33:22.731Z"
+        },
+        {
+          "collection": "media",
+          "id": 9,
+          "identifier": "service-custom-beds-headboards.jpg",
+          "updatedAt": "2026-09-27T17:33:22.779Z"
+        },
+        {
+          "collection": "media",
+          "id": 10,
+          "identifier": "service-office-furniture.jpg",
+          "updatedAt": "2026-09-27T17:33:22.817Z"
+        },
+        {
+          "collection": "media",
+          "id": 11,
+          "identifier": "about-workshop.jpg",
+          "updatedAt": "2026-09-27T17:33:22.848Z"
+        },
+        {
+          "collection": "media",
+          "id": 12,
+          "identifier": "og-default.jpg",
+          "updatedAt": "2026-09-27T17:33:22.886Z"
+        },
+        {
+          "collection": "areas",
+          "id": 1,
+          "identifier": "palm-jumeirah",
+          "updatedAt": "2026-09-27T17:33:22.928Z"
+        },
+        {
+          "collection": "areas",
+          "id": 2,
+          "identifier": "dubai-marina",
+          "updatedAt": "2026-09-27T17:33:22.995Z"
+        },
+        {
+          "collection": "areas",
+          "id": 3,
+          "identifier": "jumeirah-beach-residence",
+          "updatedAt": "2026-09-27T17:33:23.057Z"
+        },
+        {
+          "collection": "areas",
+          "id": 4,
+          "identifier": "emirates-hills",
+          "updatedAt": "2026-09-27T17:33:23.108Z"
+        },
+        {
+          "collection": "areas",
+          "id": 5,
+          "identifier": "jumeirah-village-circle",
+          "updatedAt": "2026-09-27T17:33:23.153Z"
+        },
+        {
+          "collection": "areas",
+          "id": 6,
+          "identifier": "dubai-hills-estate",
+          "updatedAt": "2026-09-27T17:33:23.202Z"
+        },
+        {
+          "collection": "areas",
+          "id": 7,
+          "identifier": "arabian-ranches",
+          "updatedAt": "2026-09-27T17:33:23.247Z"
+        },
+        {
+          "collection": "areas",
+          "id": 8,
+          "identifier": "business-bay",
+          "updatedAt": "2026-09-27T17:33:23.282Z"
+        },
+        {
+          "collection": "areas",
+          "id": 9,
+          "identifier": "arjan",
+          "updatedAt": "2026-09-27T17:33:23.321Z"
+        },
+        {
+          "collection": "areas",
+          "id": 10,
+          "identifier": "murjan-jbr",
+          "updatedAt": "2026-09-27T17:33:23.362Z"
+        },
+        {
+          "collection": "areas",
+          "id": 11,
+          "identifier": "al-barsha",
+          "updatedAt": "2026-09-27T17:33:23.407Z"
+        },
+        {
+          "collection": "areas",
+          "id": 12,
+          "identifier": "downtown-dubai",
+          "updatedAt": "2026-09-27T17:33:23.456Z"
+        },
+        {
+          "collection": "areas",
+          "id": 13,
+          "identifier": "jumeirah-lakes-towers",
+          "updatedAt": "2026-09-27T17:33:23.505Z"
+        },
+        {
+          "collection": "areas",
+          "id": 14,
+          "identifier": "mirdif",
+          "updatedAt": "2026-09-27T17:33:23.545Z"
+        },
+        {
+          "collection": "areas",
+          "id": 15,
+          "identifier": "nad-al-hamar",
+          "updatedAt": "2026-09-27T17:33:23.586Z"
+        },
+        {
+          "collection": "areas",
+          "id": 16,
+          "identifier": "nad-al-sheba",
+          "updatedAt": "2026-09-27T17:33:23.621Z"
+        },
+        {
+          "collection": "areas",
+          "id": 17,
+          "identifier": "the-greens",
+          "updatedAt": "2026-09-27T17:33:23.662Z"
+        },
+        {
+          "collection": "areas",
+          "id": 18,
+          "identifier": "meydan",
+          "updatedAt": "2026-09-27T17:33:23.704Z"
+        },
+        {
+          "collection": "areas",
+          "id": 19,
+          "identifier": "palm-jebel-ali",
+          "updatedAt": "2026-09-27T17:33:23.755Z"
+        },
+        {
+          "collection": "areas",
+          "id": 20,
+          "identifier": "difc",
+          "updatedAt": "2026-09-27T17:33:23.801Z"
+        },
+        {
+          "collection": "areas",
+          "id": 21,
+          "identifier": "damac-hills",
+          "updatedAt": "2026-09-27T17:33:23.846Z"
+        },
+        {
+          "collection": "areas",
+          "id": 22,
+          "identifier": "damac-hills-2",
+          "updatedAt": "2026-09-27T17:33:23.895Z"
+        },
+        {
+          "collection": "areas",
+          "id": 23,
+          "identifier": "al-yalayis-2",
+          "updatedAt": "2026-09-27T17:33:23.956Z"
+        },
+        {
+          "collection": "areas",
+          "id": 24,
+          "identifier": "remraam",
+          "updatedAt": "2026-09-27T17:33:23.999Z"
+        },
+        {
+          "collection": "areas",
+          "id": 25,
+          "identifier": "zabeel",
+          "updatedAt": "2026-09-27T17:33:24.058Z"
+        },
+        {
+          "collection": "areas",
+          "id": 26,
+          "identifier": "mudon",
+          "updatedAt": "2026-09-27T17:33:24.099Z"
+        },
+        {
+          "collection": "areas",
+          "id": 27,
+          "identifier": "al-waha",
+          "updatedAt": "2026-09-27T17:33:24.139Z"
+        },
+        {
+          "collection": "areas",
+          "id": 28,
+          "identifier": "dubai-sports-city",
+          "updatedAt": "2026-09-27T17:33:24.186Z"
+        },
+        {
+          "collection": "areas",
+          "id": 29,
+          "identifier": "jumeirah-golf-estates",
+          "updatedAt": "2026-09-27T17:33:24.225Z"
+        },
+        {
+          "collection": "areas",
+          "id": 30,
+          "identifier": "the-springs",
+          "updatedAt": "2026-09-27T17:33:24.271Z"
+        },
+        {
+          "collection": "areas",
+          "id": 31,
+          "identifier": "al-furjan",
+          "updatedAt": "2026-09-27T17:33:24.305Z"
+        },
+        {
+          "collection": "areas",
+          "id": 32,
+          "identifier": "dubai-internet-city",
+          "updatedAt": "2026-09-27T17:33:24.358Z"
+        },
+        {
+          "collection": "areas",
+          "id": 33,
+          "identifier": "bluewaters-island",
+          "updatedAt": "2026-09-27T17:33:24.406Z"
+        },
+        {
+          "collection": "areas",
+          "id": 34,
+          "identifier": "old-dubai",
+          "updatedAt": "2026-09-27T17:33:24.472Z"
+        },
+        {
+          "collection": "areas",
+          "id": 35,
+          "identifier": "dubailand-residence-complex",
+          "updatedAt": "2026-09-27T17:33:24.510Z"
+        },
+        {
+          "collection": "areas",
+          "id": 36,
+          "identifier": "the-villa",
+          "updatedAt": "2026-09-27T17:33:24.570Z"
+        },
+        {
+          "collection": "areas",
+          "id": 37,
+          "identifier": "wadi-al-safa",
+          "updatedAt": "2026-09-27T17:33:24.623Z"
+        },
+        {
+          "collection": "areas",
+          "id": 38,
+          "identifier": "dubai-creek-harbour",
+          "updatedAt": "2026-09-27T17:33:24.669Z"
+        },
+        {
+          "collection": "areas",
+          "id": 39,
+          "identifier": "al-aweer",
+          "updatedAt": "2026-09-27T17:33:24.720Z"
+        },
+        {
+          "collection": "areas",
+          "id": 40,
+          "identifier": "al-khawaneej",
+          "updatedAt": "2026-09-27T17:33:24.757Z"
+        },
+        {
+          "collection": "areas",
+          "id": 41,
+          "identifier": "dubai-harbour",
+          "updatedAt": "2026-09-27T17:33:24.799Z"
+        },
+        {
+          "collection": "areas",
+          "id": 42,
+          "identifier": "dubai-festival-city",
+          "updatedAt": "2026-09-27T17:33:24.835Z"
+        },
+        {
+          "collection": "areas",
+          "id": 43,
+          "identifier": "dubai-silicon-oasis",
+          "updatedAt": "2026-09-27T17:33:24.876Z"
+        },
+        {
+          "collection": "areas",
+          "id": 44,
+          "identifier": "saih-shuaib-1",
+          "updatedAt": "2026-09-27T17:33:24.921Z"
+        },
+        {
+          "collection": "areas",
+          "id": 45,
+          "identifier": "saih-shuaib-2",
+          "updatedAt": "2026-09-27T17:33:24.965Z"
+        },
+        {
+          "collection": "areas",
+          "id": 46,
+          "identifier": "sharjah",
+          "updatedAt": "2026-09-27T17:33:25.009Z"
+        },
+        {
+          "collection": "areas",
+          "id": 47,
+          "identifier": "ras-al-khaimah",
+          "updatedAt": "2026-09-27T17:33:25.059Z"
+        },
+        {
+          "collection": "areas",
+          "id": 48,
+          "identifier": "al-marjan-island",
+          "updatedAt": "2026-09-27T17:33:25.103Z"
+        },
+        {
+          "collection": "areas",
+          "id": 49,
+          "identifier": "mina-al-arab",
+          "updatedAt": "2026-09-27T17:33:25.145Z"
+        },
+        {
+          "collection": "areas",
+          "id": 50,
+          "identifier": "al-hamra-village",
+          "updatedAt": "2026-09-27T17:33:25.185Z"
+        },
+        {
+          "collection": "areas",
+          "id": 51,
+          "identifier": "al-jazirah-al-hamra",
+          "updatedAt": "2026-09-27T17:33:25.224Z"
+        },
+        {
+          "collection": "areas",
+          "id": 52,
+          "identifier": "ajman",
+          "updatedAt": "2026-09-27T17:33:25.263Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 1,
+          "identifier": "How do I get a price for upholstery work?",
+          "updatedAt": "2026-09-27T17:33:25.321Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 2,
+          "identifier": "Do you collect and deliver furniture?",
+          "updatedAt": "2026-09-27T17:33:25.470Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 3,
+          "identifier": "Can I supply my own fabric?",
+          "updatedAt": "2026-09-27T17:33:25.567Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 4,
+          "identifier": "Can you re-upholster a sofa without replacing the frame?",
+          "updatedAt": "2026-09-27T17:33:25.680Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 5,
+          "identifier": "Can a sagging sofa seat be repaired?",
+          "updatedAt": "2026-09-27T17:33:25.782Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 6,
+          "identifier": "Can you repair a recliner mechanism?",
+          "updatedAt": "2026-09-27T17:33:25.866Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 7,
+          "identifier": "Does a repair cost less than re-upholstery?",
+          "updatedAt": "2026-09-27T17:33:25.949Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 8,
+          "identifier": "Can you build a sofa to my exact dimensions?",
+          "updatedAt": "2026-09-27T17:33:26.026Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 9,
+          "identifier": "What custom furniture can you build?",
+          "updatedAt": "2026-09-27T17:33:26.111Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 10,
+          "identifier": "How long does a custom furniture project take?",
+          "updatedAt": "2026-09-27T17:33:26.200Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 11,
+          "identifier": "How long does a custom sofa take?",
+          "updatedAt": "2026-09-27T17:33:26.307Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 12,
+          "identifier": "How is majlis seating built and installed?",
+          "updatedAt": "2026-09-27T17:33:26.395Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 13,
+          "identifier": "Can you match the fabric to my existing majlis?",
+          "updatedAt": "2026-09-27T17:33:26.493Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 14,
+          "identifier": "Do you measure windows before making curtains?",
+          "updatedAt": "2026-09-27T17:33:26.585Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 15,
+          "identifier": "Which curtain linings are available?",
+          "updatedAt": "2026-09-27T17:33:26.684Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 16,
+          "identifier": "How do you plan a fitted wardrobe layout?",
+          "updatedAt": "2026-09-27T17:33:26.775Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 17,
+          "identifier": "Do you build sliding door wardrobes?",
+          "updatedAt": "2026-09-27T17:33:26.855Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 18,
+          "identifier": "Can you build a bed for a non-standard mattress?",
+          "updatedAt": "2026-09-27T17:33:26.931Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 19,
+          "identifier": "Do you make upholstered headboards?",
+          "updatedAt": "2026-09-27T17:33:27.004Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 20,
+          "identifier": "Can you fit out an office to our floor plan?",
+          "updatedAt": "2026-09-27T17:33:27.102Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 21,
+          "identifier": "Do you make reception desks and meeting tables?",
+          "updatedAt": "2026-09-27T17:33:27.183Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 23,
+          "identifier": "Can you upholster an L-shaped sofa?",
+          "updatedAt": "2026-09-27T17:33:27.262Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 24,
+          "identifier": "Can the sofa foam be replaced during upholstery?",
+          "updatedAt": "2026-09-27T17:33:27.340Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 25,
+          "identifier": "Can you build custom furniture from a reference photo?",
+          "updatedAt": "2026-09-27T17:33:27.407Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 26,
+          "identifier": "Can furniture be made to exact room dimensions?",
+          "updatedAt": "2026-09-27T17:33:27.475Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 27,
+          "identifier": "What information is required for a custom furniture quote?",
+          "updatedAt": "2026-09-27T17:33:27.545Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 28,
+          "identifier": "How is a custom sofa different from sofa upholstery?",
+          "updatedAt": "2026-09-27T17:33:27.609Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 29,
+          "identifier": "Can I choose the sofa firmness?",
+          "updatedAt": "2026-09-27T17:33:27.678Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 30,
+          "identifier": "Can Majlis seating follow an entire wall?",
+          "updatedAt": "2026-09-27T17:33:27.760Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 31,
+          "identifier": "Can an existing Majlis be reupholstered?",
+          "updatedAt": "2026-09-27T17:33:27.839Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 32,
+          "identifier": "How are Majlis corners measured?",
+          "updatedAt": "2026-09-27T17:33:27.910Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 33,
+          "identifier": "What is the difference between sheer and blackout curtains?",
+          "updatedAt": "2026-09-27T17:33:27.988Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 34,
+          "identifier": "Can sheer and blackout curtain layers be combined?",
+          "updatedAt": "2026-09-27T17:33:28.072Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 35,
+          "identifier": "Do you supply and fit roller blinds?",
+          "updatedAt": "2026-09-27T17:33:28.153Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 36,
+          "identifier": "Can a sofa be repaired without replacing the fabric?",
+          "updatedAt": "2026-09-27T17:33:28.239Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 37,
+          "identifier": "How do you assess a sofa repair from photos?",
+          "updatedAt": "2026-09-27T17:33:28.314Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 38,
+          "identifier": "Should I choose sliding or hinged wardrobe doors?",
+          "updatedAt": "2026-09-27T17:33:28.390Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 39,
+          "identifier": "Can the internal wardrobe layout be customized?",
+          "updatedAt": "2026-09-27T17:33:28.479Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 40,
+          "identifier": "Can a wardrobe fit around columns or bulkheads?",
+          "updatedAt": "2026-09-27T17:33:28.549Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 41,
+          "identifier": "Can a headboard be mounted to the wall?",
+          "updatedAt": "2026-09-27T17:33:28.630Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 42,
+          "identifier": "What measurements are needed for a custom bed quote?",
+          "updatedAt": "2026-09-27T17:33:28.712Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 43,
+          "identifier": "Can cable management be built into office desks?",
+          "updatedAt": "2026-09-27T17:33:28.807Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 44,
+          "identifier": "What do you need to quote custom office furniture?",
+          "updatedAt": "2026-09-27T17:33:28.900Z"
+        },
+        {
+          "collection": "faqs",
+          "id": 22,
+          "identifier": "Where is the workshop and when is it open?",
+          "updatedAt": "2026-09-27T17:33:28.977Z"
+        },
+        {
+          "collection": "services",
+          "id": 1,
+          "identifier": "sofa-upholstery",
+          "updatedAt": "2026-09-27T17:33:31.947Z"
+        },
+        {
+          "collection": "services",
+          "id": 2,
+          "identifier": "custom-furniture",
+          "updatedAt": "2026-09-27T17:33:32.221Z"
+        },
+        {
+          "collection": "services",
+          "id": 3,
+          "identifier": "custom-sofa",
+          "updatedAt": "2026-09-27T17:33:32.473Z"
+        },
+        {
+          "collection": "services",
+          "id": 4,
+          "identifier": "majlis-furniture",
+          "updatedAt": "2026-09-27T17:33:32.727Z"
+        },
+        {
+          "collection": "services",
+          "id": 5,
+          "identifier": "curtains-blinds",
+          "updatedAt": "2026-09-27T17:33:32.984Z"
+        },
+        {
+          "collection": "services",
+          "id": 6,
+          "identifier": "sofa-repair",
+          "updatedAt": "2026-09-27T17:33:33.271Z"
+        },
+        {
+          "collection": "services",
+          "id": 7,
+          "identifier": "custom-wardrobes",
+          "updatedAt": "2026-09-27T17:33:33.574Z"
+        },
+        {
+          "collection": "services",
+          "id": 8,
+          "identifier": "custom-beds-headboards",
+          "updatedAt": "2026-09-27T17:33:33.837Z"
+        },
+        {
+          "collection": "services",
+          "id": 9,
+          "identifier": "office-furniture",
+          "updatedAt": "2026-09-27T17:33:34.159Z"
+        }
+      ]
+    }
+  ]
+}

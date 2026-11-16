@@ -1,0 +1,345 @@
+{
+  "generatedAt": "2026-11-05T11:24:16.133Z",
+  "sourceSite": "curtainsandblind.ae",
+  "sourceAPI": "https://curtainsandblind.ae/wp-json/wc/store/v1",
+  "pagesCrawled": 5,
+  "categoriesDiscovered": 37,
+  "productsDiscovered": 402,
+  "imageReferences": 952,
+  "uniqueUsableImageURLs": 946,
+  "categories": [
+    {
+      "id": 70,
+      "name": "Balcony Curtains",
+      "parent": 40,
+      "slug": "balcony-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 39,
+      "name": "Bamboo Blinds",
+      "parent": 27,
+      "slug": "bamboo-blinds",
+      "type": "blind",
+      "count": 6,
+      "featuredOnShop": false
+    },
+    {
+      "id": 72,
+      "name": "Bedroom Curtains",
+      "parent": 40,
+      "slug": "bedroom-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 67,
+      "name": "Beige Curtains",
+      "parent": 40,
+      "slug": "beige-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 76,
+      "name": "Black Color",
+      "parent": 73,
+      "slug": "black-color",
+      "type": "curtain",
+      "count": 7,
+      "featuredOnShop": false
+    },
+    {
+      "id": 37,
+      "name": "BlackOut Blinds",
+      "parent": 27,
+      "slug": "blackout-blinds",
+      "type": "blind",
+      "count": 26,
+      "featuredOnShop": true
+    },
+    {
+      "id": 45,
+      "name": "Blackout Curtains",
+      "parent": 40,
+      "slug": "blackout-curtains",
+      "type": "curtain",
+      "count": 16,
+      "featuredOnShop": true
+    },
+    {
+      "id": 27,
+      "name": "Blinds",
+      "parent": 0,
+      "slug": "blinds",
+      "type": "blind",
+      "count": 185,
+      "featuredOnShop": false
+    },
+    {
+      "id": 75,
+      "name": "Blue Color",
+      "parent": 73,
+      "slug": "blue-color",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 47,
+      "name": "Chiffon Curtains",
+      "parent": 40,
+      "slug": "chiffon-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": true
+    },
+    {
+      "id": 79,
+      "name": "Cream Color",
+      "parent": 73,
+      "slug": "cream-color",
+      "type": "curtain",
+      "count": 5,
+      "featuredOnShop": false
+    },
+    {
+      "id": 73,
+      "name": "Curtain Colors",
+      "parent": 40,
+      "slug": "curtain-colors",
+      "type": "curtain",
+      "count": 38,
+      "featuredOnShop": false
+    },
+    {
+      "id": 40,
+      "name": "Curtains",
+      "parent": 0,
+      "slug": "curtains",
+      "type": "curtain",
+      "count": 209,
+      "featuredOnShop": false
+    },
+    {
+      "id": 42,
+      "name": "Eyelet Curtains",
+      "parent": 40,
+      "slug": "eyelet-curtains",
+      "type": "curtain",
+      "count": 9,
+      "featuredOnShop": true
+    },
+    {
+      "id": 78,
+      "name": "Gray Color",
+      "parent": 73,
+      "slug": "gray-color",
+      "type": "curtain",
+      "count": 6,
+      "featuredOnShop": false
+    },
+    {
+      "id": 69,
+      "name": "Hospital Curtains",
+      "parent": 40,
+      "slug": "hospital-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 35,
+      "name": "Motorized Blinds",
+      "parent": 27,
+      "slug": "motorized-blinds",
+      "type": "blind",
+      "count": 24,
+      "featuredOnShop": true
+    },
+    {
+      "id": 48,
+      "name": "Motorized Curtains",
+      "parent": 40,
+      "slug": "motorized-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": true
+    },
+    {
+      "id": 71,
+      "name": "Office Blinds",
+      "parent": 27,
+      "slug": "office-blinds",
+      "type": "blind",
+      "count": 24,
+      "featuredOnShop": false
+    },
+    {
+      "id": 68,
+      "name": "Office Curtains",
+      "parent": 40,
+      "slug": "office-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": false
+    },
+    {
+      "id": 36,
+      "name": "Outdoor Blinds",
+      "parent": 27,
+      "slug": "outdoor-blinds",
+      "type": "blind",
+      "count": 24,
+      "featuredOnShop": false
+    },
+    {
+      "id": 111,
+      "name": "Outdoor Curtains",
+      "parent": 40,
+      "slug": "outdoor-curtains",
+      "type": "curtain",
+      "count": 12,
+      "featuredOnShop": false
+    },
+    {
+      "id": 44,
+      "name": "Pencil Pleat Curtains",
+      "parent": 40,
+      "slug": "pencil-pleat-curtains",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": true
+    },
+    {
+      "id": 41,
+      "name": "Pinch Pleat Curtains",
+      "parent": 40,
+      "slug": "pinch-pleat-curtains",
+      "type": "curtain",
+      "count": 9,
+      "featuredOnShop": false
+    },
+    {
+      "id": 74,
+      "name": "Red Color",
+      "parent": 73,
+      "slug": "red-color",
+      "type": "curtain",
+      "count": 6,
+      "featuredOnShop": false
+    },
+    {
+      "id": 38,
+      "name": "Roller Blinds",
+      "parent": 27,
+      "slug": "roller-blinds",
+      "type": "blind",
+      "count": 25,
+      "featuredOnShop": true
+    },
+    {
+      "id": 28,
+      "name": "Roman Blinds",
+      "parent": 27,
+      "slug": "roman-blinds",
+      "type": "blind",
+      "count": 6,
+      "featuredOnShop": true
+    },
+    {
+      "id": 66,
+      "name": "Sheer Curtains",
+      "parent": 40,
+      "slug": "sheer",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": true
+    },
+    {
+      "id": 65,
+      "name": "Silk Curtains",
+      "parent": 40,
+      "slug": "silk-curtains",
+      "type": "curtain",
+      "count": 23,
+      "featuredOnShop": true
+    },
+    {
+      "id": 49,
+      "name": "Soundproof Curtains",
+      "parent": 40,
+      "slug": "soundproof-crutains",
+      "type": "curtain",
+      "count": 15,
+      "featuredOnShop": false
+    },
+    {
+      "id": 64,
+      "name": "Velvet Curtains",
+      "parent": 40,
+      "slug": "velvet",
+      "type": "curtain",
+      "count": 8,
+      "featuredOnShop": true
+    },
+    {
+      "id": 32,
+      "name": "Venetian Blinds",
+      "parent": 27,
+      "slug": "venetian-blinds",
+      "type": "blind",
+      "count": 16,
+      "featuredOnShop": true
+    },
+    {
+      "id": 31,
+      "name": "Vertical Blinds",
+      "parent": 27,
+      "slug": "vertical-blinds",
+      "type": "blind",
+      "count": 24,
+      "featuredOnShop": true
+    },
+    {
+      "id": 43,
+      "name": "Wave Curtains",
+      "parent": 40,
+      "slug": "wave-curtains",
+      "type": "curtain",
+      "count": 7,
+      "featuredOnShop": true
+    },
+    {
+      "id": 77,
+      "name": "White Color",
+      "parent": 73,
+      "slug": "white-color",
+      "type": "curtain",
+      "count": 6,
+      "featuredOnShop": false
+    },
+    {
+      "id": 34,
+      "name": "Wooden Blinds",
+      "parent": 27,
+      "slug": "wooden-bliends",
+      "type": "blind",
+      "count": 9,
+      "featuredOnShop": true
+    },
+    {
+      "id": 33,
+      "name": "Zebra Blinds",
+      "parent": 27,
+      "slug": "zebra-blinds",
+      "type": "blind",
+      "count": 8,
+      "featuredOnShop": true
+    }
+  ]
+}

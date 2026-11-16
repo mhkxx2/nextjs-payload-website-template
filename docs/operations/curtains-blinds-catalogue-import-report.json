@@ -1,0 +1,223 @@
+{
+  "completedAt": "2026-11-05T11:43:28.773Z",
+  "createdCategories": 0,
+  "createdMedia": 842,
+  "createdProducts": 378,
+  "failedImages": [
+    {
+      "product": "Berry Pink Venetian",
+      "reason": "Image is suspiciously small (7786 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/BT-Madiba-Fuschia-Al-P.webp"
+    },
+    {
+      "product": "Pearl White Venetian",
+      "reason": "Image is suspiciously small (6098 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/BT-Madiba-Glacier-Al-P.webp"
+    },
+    {
+      "product": "Ivory Pearl Silk Drape",
+      "reason": "Image is suspiciously small (7880 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/AK-Silky-Satin-Sr-5-P.webp"
+    },
+    {
+      "product": "Cobalt Plain Blind",
+      "reason": "Image is suspiciously small (2150 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/BT-Anycolour-Essen-AC0648-Vt-P.webp"
+    },
+    {
+      "product": "Outdoor Plum Haven",
+      "reason": "Image is suspiciously small (7530 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/CT-Fluff-4232-OT-P.webp"
+    },
+    {
+      "product": "Motorized Deep Plum",
+      "reason": "Image is suspiciously small (5102 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/CT-Fluff-4232-MRM-T.webp"
+    },
+    {
+      "product": "Slate Mist Motorized",
+      "reason": "Image is suspiciously small (4222 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/CT-Mimosa-3745-MTR-T.webp"
+    },
+    {
+      "product": "Blackout Forest Teal",
+      "reason": "Image is suspiciously small (4062 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/10/BT-DARBY-TEAL-Hc-P.webp"
+    },
+    {
+      "product": "Artistic Gold Panel",
+      "reason": "Image dimensions are below 400px (306x242)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/09/3138.jpeg"
+    },
+    {
+      "product": "Cream Quiet Curtain",
+      "reason": "Image is suspiciously small (5156 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/09/3118.jpeg"
+    },
+    {
+      "product": "2 Panels Country Vintage Sheer Lace Curtains",
+      "reason": "Image is suspiciously small (3258 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/2-Panels-Country-Vintage-Sheer-Lace-Curtains-for-Bedroom5.jpg"
+    },
+    {
+      "product": "2 Panels Country Vintage Sheer Lace Curtains",
+      "reason": "Image is suspiciously small (3208 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/2-Panels-Country-Vintage-Sheer-Lace-Curtains-for-Bedroom4.jpg"
+    },
+    {
+      "product": "2 Panels Country Vintage Sheer Lace Curtains",
+      "reason": "Image is suspiciously small (4060 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/2-Panels-Country-Vintage-Sheer-Lace-Curtains-for-Bedroom3.jpg"
+    },
+    {
+      "product": "2 Panels Country Vintage Sheer Lace Curtains",
+      "reason": "Image is suspiciously small (3944 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/2-Panels-Country-Vintage-Sheer-Lace-Curtains-for-Bedroom2.jpg"
+    },
+    {
+      "product": "Double Layer Bedroom Curtains Fashion Portable Blackout Curtain",
+      "reason": "Image dimensions are below 400px (350x350)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Double-Layer-Bedroom-Curtains-Fashion-Portable-Blackout-Curtain4.jpg"
+    },
+    {
+      "product": "European Embroidered Shading Curtain",
+      "reason": "Image dimensions are below 400px (350x350)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/European-Embroidered-Curtain-Shading7.jpg"
+    },
+    {
+      "product": "ChadMade 8ft Wide x 7ft Tall Flat Hook Panel Drapes Divider",
+      "reason": "Image dimensions are below 400px (330x479)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/ChadMade-8ft-Wide-x-7ft-Tall-Flat-Hook-Panel-Drapes-Divider.jpg"
+    },
+    {
+      "product": "Antibacterial Flame Retardant Nonwoven Medical Curtain",
+      "reason": "Image is suspiciously small (6023 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Antibacterial-Flame-Retardant-Nonwoven-Medical-Curtain4.jpg"
+    },
+    {
+      "product": "Antibacterial Flame Retardant Nonwoven Medical Curtain",
+      "reason": "Image is suspiciously small (6060 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Antibacterial-Flame-Retardant-Nonwoven-Medical-Curtain3.jpg"
+    },
+    {
+      "product": "Antibacterial Flame Retardant Nonwoven Medical Curtain",
+      "reason": "Image dimensions are below 400px (300x225)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Antibacterial-Flame-Retardant-Nonwoven-Medical-Curtain2.jpg"
+    },
+    {
+      "product": "Innermor Luxury Modern Fashion Curtain",
+      "reason": "Image dimensions are below 400px (350x350)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Innermor-Luxury-Modern-Fashion-Curtain6.jpg"
+    },
+    {
+      "product": "Partition Office Curtains",
+      "reason": "Image dimensions are below 400px (350x350)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2026/01/Partition-Office-Curtains-2.png"
+    },
+    {
+      "product": "Beige Eyelet Curtain",
+      "reason": "Image is suspiciously small (2434 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/cambridge-velvet-natural-36-fabric-3.webp"
+    },
+    {
+      "product": "Mickey Spots Pinch Pleat Curtains",
+      "reason": "Image is suspiciously small (4650 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/mickey-spots-mink-36-fabric-3.webp"
+    },
+    {
+      "product": "Premium Sapphire Pinch Pleat Curtain",
+      "reason": "Image is suspiciously small (5598 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/canterbury-velvet-storm-blue-36-fabric-3.webp"
+    },
+    {
+      "product": "Brown fine bamboo roller blind",
+      "reason": "fetch failed",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/Brown-fine-bamboo-roller-blind8.jpg"
+    },
+    {
+      "product": "Grey Thermal Blackout Roller Blinds",
+      "reason": "Image is suspiciously small (5138 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/Grey-Thermal-Blackout-Roller-Blinds3.webp"
+    },
+    {
+      "product": "Grey Thermal Blackout Roller Blinds",
+      "reason": "Image is suspiciously small (7568 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/Grey-Thermal-Blackout-Roller-Blinds2.webp"
+    },
+    {
+      "product": "FURNISHED Day and Night Roller Blinds &#8211; White Striped Roller Shades",
+      "reason": "Image is suspiciously small (6488 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/FURNISHED-Day-and-Night-Roller-Blinds-White-Striped-Roller-Shades3.webp"
+    },
+    {
+      "product": "The Iconic Seven,Printed Photo Roller Blind &#8211;",
+      "reason": "Image dimensions are below 400px (416x330)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/The-Iconic-SevenPrinted-Photo-Roller-Blind-1.jpg"
+    },
+    {
+      "product": "The Iconic Seven,Printed Photo Roller Blind &#8211;",
+      "reason": "Image dimensions are below 400px (416x337)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/The-Iconic-SevenPrinted-Photo-Roller-Blind-2.jpg"
+    },
+    {
+      "product": "The Iconic Seven,Printed Photo Roller Blind &#8211;",
+      "reason": "Image dimensions are below 400px (416x255)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/The-Iconic-SevenPrinted-Photo-Roller-Blind-3.jpg"
+    },
+    {
+      "product": "Blackout Temporary Pleated Blind",
+      "reason": "Image is suspiciously small (6522 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/30764271_alt01.webp"
+    },
+    {
+      "product": "Glow in the Dark Stars Cordless Blackout Roller Blind",
+      "reason": "Image is suspiciously small (7796 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/30672562_alt01.webp"
+    },
+    {
+      "product": "SwitchBot Blind Tilt &#8211; Automatic Smart Window Blinds with Remote Control",
+      "reason": "Image dimensions are below 400px (345x345)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/SwitchBot-Blind-Tilt-Automatic-Smart-Window-Blinds-with-Remote-Control1.jpg"
+    },
+    {
+      "product": "SwitchBot Blind Tilt &#8211; Automatic Smart Window Blinds with Remote Control",
+      "reason": "Image dimensions are below 400px (345x345)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/SwitchBot-Blind-Tilt-Automatic-Smart-Window-Blinds-with-Remote-Control2.jpg"
+    },
+    {
+      "product": "SwitchBot Blind Tilt &#8211; Automatic Smart Window Blinds with Remote Control",
+      "reason": "Image dimensions are below 400px (345x345)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/SwitchBot-Blind-Tilt-Automatic-Smart-Window-Blinds-with-Remote-Control3.jpg"
+    },
+    {
+      "product": "Brilliant White &#038; Fresh White Faux Wood Blind",
+      "reason": "Image dimensions are below 400px (707x398)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/Brilliant-White-Fresh-White-Faux-Wood-Blind-50mm-Slat3.jpg"
+    },
+    {
+      "product": "Dimout Gold Zebra Blinds",
+      "reason": "Image is suspiciously small (3092 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/enjoy-dimout-gold-36-enjoy-roller-blind-3.webp"
+    },
+    {
+      "product": "Enjoy Soft White Zebra Blinds",
+      "reason": "Image is suspiciously small (5080 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/enjoy-vision-soft-white-36-enjoy-roller-blind-3.webp"
+    },
+    {
+      "product": "Cirrus-Voile-Roman-Blinds",
+      "reason": "Image is suspiciously small (5912 bytes)",
+      "url": "https://curtainsandblind.ae/wp-content/uploads/2025/11/cirrus-voile-cotton-white-36-fabric-3.webp"
+    }
+  ],
+  "hashDuplicatesRemoved": 8,
+  "reusedMedia": 12,
+  "skippedExistingCategories": 37,
+  "skippedExistingProducts": 8,
+  "skippedProducts": 16,
+  "totalCategories": 37,
+  "totalImportedMedia": 858,
+  "totalProducts": 386,
+  "updatedCategories": 0,
+  "updatedProducts": 0
+}
