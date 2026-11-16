@@ -8,11 +8,12 @@ import { JsonLd } from '@/components/JsonLd'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import type { Post } from '@/payload-types'
-import { archiveCopy, POSTS_PER_PAGE } from '@/data/launch-copy'
+import { cmsFallbacks, POSTS_PER_PAGE } from '@/data/cmsFallbacks'
 import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { queryPublicList } from '@/lib/publicQueries'
 import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
 import { buildMetadata, getSeoDefaults } from '@/lib/seo'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 type Args = {
   params: Promise<{
@@ -27,13 +28,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   // Invalid page numbers are a 404 in the page body, so they carry no metadata.
   if (!Number.isInteger(parsed) || parsed < 2 || String(parsed) !== pageNumber) return {}
 
-  const defaults = await getSeoDefaults()
+  const [defaults, archives] = await Promise.all([
+    getSeoDefaults(),
+    getCachedGlobal('archive-settings', 1)(),
+  ])
+  const archive = archives.blogArchive
 
-  return buildMetadata(null, {
+  return buildMetadata({ seo: archive?.seo }, {
     ...defaults,
-    descriptionFallback: archiveCopy.blog.intro,
+    descriptionFallback: archive?.introduction || cmsFallbacks.archives.blog.intro,
     path: `/blog/page/${parsed}/`,
-    titleFallback: `${archiveCopy.blog.heading} — Page ${parsed}`,
+    titleFallback: `${archive?.heading || cmsFallbacks.archives.blog.heading} — Page ${parsed}`,
   })
 }
 
@@ -44,7 +49,7 @@ export default async function BlogPageNumbered({ params: paramsPromise }: Args) 
   // Only whole page numbers above the first one have a canonical URL of their own.
   if (!Number.isInteger(parsed) || parsed < 2 || String(parsed) !== pageNumber) notFound()
 
-  const [{ docs, page, totalDocs, totalPages }, globals] = await Promise.all([
+  const [{ docs, page, totalDocs, totalPages }, globals, archives] = await Promise.all([
     queryPublicList<Post>({
       collection: 'posts',
       depth: 1,
@@ -53,7 +58,9 @@ export default async function BlogPageNumbered({ params: paramsPromise }: Args) 
       sort: '-publishedAt',
     }),
     getSchemaGlobals(),
+    getCachedGlobal('archive-settings', 1)(),
   ])
+  const archive = archives.blogArchive
 
   if (parsed > totalPages) notFound()
 
@@ -72,9 +79,9 @@ export default async function BlogPageNumbered({ params: paramsPromise }: Args) 
         <Breadcrumbs items={breadcrumbs} />
         <header className="max-w-3xl py-6">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
-            {archiveCopy.blog.heading}
+            {archive?.heading || cmsFallbacks.archives.blog.heading}
           </h1>
-          <p className="text-neutral-600">{archiveCopy.blog.intro}</p>
+          <p className="text-neutral-600">{archive?.introduction || cmsFallbacks.archives.blog.intro}</p>
         </header>
         <PageRange
           collection="posts"
@@ -88,7 +95,7 @@ export default async function BlogPageNumbered({ params: paramsPromise }: Args) 
         <CollectionArchive posts={docs} />
       ) : (
         <div className="container mx-auto px-4 py-10">
-          <p className="text-neutral-600">{archiveCopy.blog.emptyMessage}</p>
+          <p className="text-neutral-600">{archive?.emptyState || cmsFallbacks.archives.blog.emptyMessage}</p>
         </div>
       )}
 

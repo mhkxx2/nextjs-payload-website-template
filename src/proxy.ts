@@ -25,6 +25,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse | Respon
 
 export const config = {
   matcher: [
-    '/((?!admin(?:/|$)|api(?:/|$)|assets(?:/|$)|graphql(?:/|$)|health(?:/|$)|internal(?:/|$)|media(?:/|$)|next(?:/|$)|static(?:/|$)|system(?:/|$)|uploads(?:/|$)|_next(?:/|$)|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$).*)',
+    '/((?!admin(?:/|$)|api(?:/|$)|assets(?:/|$)|graphql(?:/|$)|health(?:/|$)|internal(?:/|$)|media(?:/|$)|next(?:/|$)|static(?:/|$)|system(?:/|$)|uploads(?:/|$)|_next(?:/|$)|favicon\\.ico$|icon\\.png$|apple-touch-icon\\.png$|robots\\.txt$|sitemap\\.xml$).*)',
   ],
 }

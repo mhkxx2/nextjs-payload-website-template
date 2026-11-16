@@ -23,12 +23,12 @@ function runValidation(field: NamedField, value: unknown): unknown {
 describe('reusable SEO fields', () => {
   it('provides the complete typed editor contract with bounded metadata', () => {
     expect(byName(fields, 'title')).toMatchObject({ type: 'text', maxLength: 60 })
-    expect(byName(fields, 'description')).toMatchObject({ type: 'textarea', maxLength: 160 })
+    expect(byName(fields, 'description')).toMatchObject({ type: 'textarea', maxLength: 180 })
     expect(byName(fields, 'canonicalURL')).toMatchObject({ type: 'text', required: true })
     expect(byName(fields, 'openGraphTitle')).toMatchObject({ type: 'text', maxLength: 60 })
     expect(byName(fields, 'openGraphDescription')).toMatchObject({
       type: 'textarea',
-      maxLength: 160,
+      maxLength: 180,
     })
     expect(byName(fields, 'openGraphImage')).toMatchObject({
       type: 'upload',

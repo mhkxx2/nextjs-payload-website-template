@@ -36,6 +36,7 @@ const option = (name: string): string | undefined => {
 }
 
 const force = flag('force') || process.env.SEED_FORCE === 'true'
+const servicesOnly = flag('services-only')
 const rollback = option('rollback')
 
 const resolveUploader = async (payload: Payload): Promise<number> => {
@@ -95,6 +96,7 @@ try {
     const result = await seedAlRukn(payload, {
       uploadedBy: await resolveUploader(payload),
       force,
+      servicesOnly,
     })
 
     payload.logger.info(

@@ -35,7 +35,7 @@ const FIXED_SERVICE_SLUGS = [
 ]
 
 // Structural routes: always 200, independent of which records are published.
-const STRUCTURAL_ROUTES = ['/services/', '/projects/', '/blog/', '/about-us/', '/contact/']
+const STRUCTURAL_ROUTES = ['/services/', '/portfolio/', '/projects/', '/blog/', '/about-us/', '/contact/']
 
 // Paths that must be hard 404s: unknown, reserved, retired, and generic service paths.
 const NOT_FOUND_ROUTES = [

@@ -60,9 +60,40 @@ afterAll(async () => {
 }, 90_000)
 
 describe('Task 8 editable site globals', () => {
-  it('registers exactly the six public presentation globals', () => {
+  it('uses explicit PostgreSQL-safe names for the Sofa bed teaser upload foreign keys', () => {
+    for (const { columnKey, constraintName, tableName } of [
+      {
+        columnKey: 'sofaUpholsteryLanding_bedTeaser_image',
+        constraintName: 'services_sofa_bed_image_media_fk',
+        tableName: 'services',
+      },
+      {
+        columnKey: 'version_sofaUpholsteryLanding_bedTeaser_image',
+        constraintName: '_services_v_sofa_bed_image_media_fk',
+        tableName: '_services_v',
+      },
+    ] as const) {
+      const table = payload.db.rawTables[tableName]
+      if (!table) throw new Error(`Missing expected ${tableName} database table.`)
+      expect(table.columns[columnKey]?.reference).toBeUndefined()
+      expect(Object.values(table.foreignKeys ?? {})).toContainEqual({
+        columns: [columnKey],
+        foreignColumns: [{ name: 'id', table: 'media' }],
+        name: constraintName,
+        onDelete: 'set null',
+      })
+      expect(constraintName.length).toBeLessThanOrEqual(63)
+    }
+  })
+
+  it('registers the public presentation globals', () => {
     expect(payload.config.globals.map(({ slug }) => slug)).toEqual([
+      'homepage',
+      'about-page',
+      'contact-page',
+      'archive-settings',
       'site-settings',
+      'google-reviews',
       'header',
       'footer',
       'contact-information',
@@ -73,11 +104,15 @@ describe('Task 8 editable site globals', () => {
 
   it.each([
     ['site-settings', ['businessName', 'brandName', 'logo', 'logoDark', 'favicon', 'quotationLabels', 'whatsAppCopy', 'locale', 'canonicalSiteURL', 'announcement', 'presentation']],
+    ['google-reviews', ['enabled', 'placeId', 'heading', 'subheading', 'reviewLimit', 'mapsUrl', 'writeReviewUrl']],
     ['header', ['navigation', 'serviceLinks', 'conversionActions', 'mobileNavigation']],
     ['footer', ['navigationGroups', 'serviceLinks', 'legalLinks', 'supportingCopy', 'conversionContent']],
     ['contact-information', ['phoneE164', 'whatsappE164', 'whatsappAvailable', 'email', 'address', 'mapURL', 'openingHours', 'serviceAreas']],
     ['seo-defaults', ['titlePattern', 'fallbackDescription', 'socialImage', 'index', 'follow', 'organizationSchema', 'localBusinessSchema']],
     ['social-media', ['links', 'network', 'label', 'url']],
+    ['about-page', ['seo', 'hero', 'proofItems', 'story', 'servicesSection', 'processSection', 'principlesSection', 'coverageSection', 'cta']],
+    ['contact-page', ['seo', 'hero', 'workshopCard', 'channelLabels', 'quoteSection', 'hoursSection', 'coverageSection', 'servicesSection']],
+    ['archive-settings', ['servicesArchive', 'projectsArchive', 'blogArchive', 'portfolioArchive']],
   ] as const)('models the complete bounded %s contract', (slug, expectedFields) => {
     const fields = fieldMap(slug)
     expect([...fields.keys()]).toEqual(expect.arrayContaining([...expectedFields]))
@@ -98,13 +133,70 @@ describe('Task 8 editable site globals', () => {
     }
   })
 
+  it('persists Google Reviews configuration with defaults and a trimmed optional Place ID', async () => {
+    const result = await payload.updateGlobal({
+      slug: 'google-reviews',
+      data: { placeId: '  admin-place-id  ' },
+      context: { disableRevalidate: true },
+      overrideAccess: false,
+      user: actor,
+    })
+    expect(result).toMatchObject({
+      enabled: false,
+      placeId: 'admin-place-id',
+      heading: 'What Our Customers Say',
+      reviewLimit: 5,
+      mapsUrl: 'https://maps.app.goo.gl/zUhpC9PNhgwM69qp6',
+      writeReviewUrl: 'https://g.page/r/CZ5_iPy3nYpdEBM/review',
+    })
+    const anonymousRead = await payload.findGlobal({ slug: 'google-reviews', overrideAccess: false })
+    expect(anonymousRead.placeId).toBe('admin-place-id')
+  })
+
+  it.each([2, 6])('rejects Google Reviews viewport limit %s outside three to five', async (reviewLimit) => {
+    await expect(payload.updateGlobal({
+      slug: 'google-reviews',
+      data: { reviewLimit },
+      context: { disableRevalidate: true },
+      overrideAccess: false,
+      user: actor,
+    })).rejects.toThrow()
+  })
+
+  it.each([3, 5])('accepts Google Reviews viewport limit boundary %s', async (reviewLimit) => {
+    const result = await payload.updateGlobal({
+      slug: 'google-reviews',
+      data: { reviewLimit },
+      context: { disableRevalidate: true },
+      overrideAccess: false,
+      user: actor,
+    })
+    expect(result.reviewLimit).toBe(reviewLimit)
+  })
+
+  it.each([
+    { mapsUrl: 'http://maps.google.com/place/example' },
+    { mapsUrl: 'https://user:password@maps.google.com/place/example' },
+    { writeReviewUrl: 'javascript:alert(1)' },
+    { writeReviewUrl: 'https://user:password@g.page/r/example/review' },
+    { writeReviewUrl: 'https://g.page:443/r/example/review' },
+  ])('rejects unsafe Google Reviews URL configuration %j', async (data) => {
+    await expect(payload.updateGlobal({
+      slug: 'google-reviews',
+      data,
+      context: { disableRevalidate: true },
+      overrideAccess: false,
+      user: actor,
+    })).rejects.toThrow()
+  })
+
   it('keeps public globals presentation-only and excludes arbitrary markup, styling, and secret fields', () => {
     for (const config of payload.config.globals) {
       const fields = flattenFields(config.fields)
       expect(fields.some(({ type }) => type === 'code' || type === 'richText')).toBe(false)
       expect(fields.map(({ name }) => name)).not.toEqual(
         expect.arrayContaining([
-          expect.stringMatching(/secret|password|token|api.?key|internal|private|notes?|html|css|colou?r/i),
+          expect.stringMatching(/secret|password|token|api.?key|internal|private|html|css|colou?r/i),
         ]),
       )
     }

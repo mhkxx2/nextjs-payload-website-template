@@ -11,6 +11,7 @@ import type { CollectionBeforeValidateHook, CollectionConfig } from 'payload'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { validateAndRandomizeMediaUpload } from './media/validateUpload'
+import { revalidateMediaAfterChange, revalidateMediaAfterDelete } from '@/hooks/revalidateMedia'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -112,6 +113,42 @@ export const Media: CollectionConfig = {
       },
     },
     {
+      name: 'sourceSite',
+      type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
+      hooks: { beforeValidate: [trim] },
+    },
+    {
+      name: 'sourceCategory',
+      type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
+      hooks: { beforeValidate: [trim] },
+    },
+    {
+      name: 'sourceFilename',
+      type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
+      hooks: { beforeValidate: [trim] },
+    },
+    {
+      name: 'sourceHash',
+      type: 'text',
+      access: { read: ({ req }) => Boolean(req.user) },
+      admin: { description: 'SHA-256 of the optimized import; used to prevent duplicate media.' },
+      index: true,
+      hooks: { beforeValidate: [trim] },
+      validate: (value: unknown) =>
+        value == null || value === '' || (typeof value === 'string' && /^sha256:[a-f0-9]{64}$/.test(value))
+          ? true
+          : 'Use a sha256: digest.',
+    },
+    {
+      name: 'importNote',
+      type: 'textarea',
+      access: { read: ({ req }) => Boolean(req.user) },
+      hooks: { beforeValidate: [trim] },
+    },
+    {
       name: 'license',
       type: 'text',
       access: { read: ({ req }) => Boolean(req.user) },
@@ -135,6 +172,8 @@ export const Media: CollectionConfig = {
     },
   ],
   hooks: {
+    afterChange: [revalidateMediaAfterChange],
+    afterDelete: [revalidateMediaAfterDelete],
     beforeOperation: [validateAndRandomizeMediaUpload],
     beforeValidate: [validateMediaSemantics],
   },

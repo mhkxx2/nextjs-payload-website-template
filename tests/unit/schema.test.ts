@@ -12,6 +12,7 @@ import {
   buildFaqSchema,
   buildLocalBusinessSchema,
   buildOrganizationSchema,
+  buildWebsiteSchema,
   buildSchemas,
   resolveSchemaClaims,
   selectSchemaEligibleFaqs,
@@ -39,9 +40,9 @@ const globals: SchemaGlobals = {
       { closed: true, day: 'friday' },
       { closes: '18:00', day: 'funday', opens: '09:00' },
     ],
-    phoneE164: '+971501234567',
+    phoneE164: '+971551224902',
   },
-  localBusiness: { businessType: 'FurnitureStore', priceRange: 'moderate' },
+  localBusiness: { businessType: 'LocalBusiness' },
   organization: {
     description: 'Upholstery and custom furniture made in Ajman.',
     logo: { alt: 'Al Rukn Furniture', height: 200, url: '/media/logo.png', width: 600 },
@@ -98,7 +99,7 @@ describe('Organization and LocalBusiness', () => {
       '@type': 'ContactPoint',
       contactType: 'customer service',
       email: 'info@alruknfurniture.ae',
-      telephone: '+971501234567',
+      telephone: '+971551224902',
       url: `${ORIGIN}/contact/`,
     })
   })
@@ -119,7 +120,7 @@ describe('Organization and LocalBusiness', () => {
   it('only claims a LocalBusiness when the contact global holds a postal address', () => {
     const localBusiness = buildLocalBusinessSchema(globals, ORIGIN)
 
-    expect(localBusiness?.['@type']).toBe('FurnitureStore')
+    expect(localBusiness?.['@type']).toBe('LocalBusiness')
     expect(localBusiness?.name).toBe('Al Rukn Furniture')
     expect(localBusiness?.url).toBe(`${ORIGIN}/`)
     expect(localBusiness?.address).toEqual({
@@ -129,9 +130,9 @@ describe('Organization and LocalBusiness', () => {
       addressRegion: 'Ajman',
       streetAddress: 'Shop 5, Al Jerf 1',
     })
-    expect(localBusiness?.telephone).toBe('+971501234567')
+    expect(localBusiness?.telephone).toBe('+971551224902')
     expect(localBusiness?.email).toBe('info@alruknfurniture.ae')
-    expect(localBusiness?.priceRange).toBe('moderate')
+    expect(localBusiness?.priceRange).toBeUndefined()
     // Closed days and unknown days are dropped instead of being guessed at.
     expect(localBusiness?.openingHoursSpecification).toEqual([
       {
@@ -382,6 +383,17 @@ describe('BreadcrumbList', () => {
 })
 
 describe('buildSchemas', () => {
+  it('publishes a WebSite entity for the canonical homepage', () => {
+    expect(buildWebsiteSchema(globals, ORIGIN)).toEqual({
+      '@context': SCHEMA_CONTEXT,
+      '@id': `${ORIGIN}/#website`,
+      '@type': 'WebSite',
+      name: 'Al Rukn Furniture',
+      publisher: { '@id': `${ORIGIN}/#organization` },
+      url: `${ORIGIN}/`,
+    })
+  })
+
   it('publishes the site identity on the home page and the contact page', () => {
     const home = buildSchemas({
       globals,
@@ -390,7 +402,7 @@ describe('buildSchemas', () => {
       path: '/',
     })
 
-    expect(home.map((schema) => schema['@type'])).toEqual(['Organization', 'FurnitureStore'])
+    expect(home.map((schema) => schema['@type'])).toEqual(['Organization', 'LocalBusiness', 'WebSite'])
 
     const contact = buildSchemas({
       breadcrumbs: buildBreadcrumbs('/contact/', null),
@@ -402,7 +414,7 @@ describe('buildSchemas', () => {
 
     expect(contact.map((schema) => schema['@type'])).toEqual([
       'Organization',
-      'FurnitureStore',
+      'LocalBusiness',
       'BreadcrumbList',
     ])
   })
@@ -428,6 +440,20 @@ describe('buildSchemas', () => {
     })
 
     expect(schemas.map((schema) => schema['@type'])).toEqual(['Organization'])
+  })
+
+  it('can omit the top-level organization for a dedicated service while retaining the provider', () => {
+    const schemas = buildSchemas({
+      breadcrumbs: buildBreadcrumbs('/sofa-upholstery/', { title: 'Sofa Upholstery' }),
+      globals,
+      includeOrganization: false,
+      kind: 'service',
+      path: '/sofa-upholstery/',
+      record: published({ title: 'Sofa Upholstery' }),
+      visibleFaqs: [faq()],
+    })
+    expect(schemas.map((schema) => schema['@type'])).toEqual(['Service', 'FAQPage', 'BreadcrumbList'])
+    expect(schemas[0]?.provider).toMatchObject({ '@type': 'Organization', name: 'Al Rukn Furniture' })
   })
 
   it('assembles the full service page graph in a stable order', () => {

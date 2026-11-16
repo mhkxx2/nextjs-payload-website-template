@@ -49,7 +49,12 @@ describe('core Payload collections', () => {
       expect.arrayContaining(['pages', 'posts', 'redirects', 'forms', 'form-submissions', 'search']),
     )
     expect(payload.config.globals.map(({ slug }) => slug)).toEqual([
+      'homepage',
+      'about-page',
+      'contact-page',
+      'archive-settings',
       'site-settings',
+      'google-reviews',
       'header',
       'footer',
       'contact-information',

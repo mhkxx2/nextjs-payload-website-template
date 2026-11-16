@@ -2,6 +2,7 @@ import { isSafeSlug, normalizeSlug } from './slug'
 
 export const FIXED_SERVICE_SLUGS = [
   'sofa-upholstery',
+  'bed-upholstery',
   'custom-furniture',
   'custom-sofa',
   'majlis-furniture',
@@ -17,6 +18,7 @@ export const RESERVED_EXACT_ROUTES = [
   'api',
   'services',
   'projects',
+  'portfolio',
   'blog',
   'about',
   'about-us',
@@ -47,6 +49,7 @@ export const APPLICATION_OWNED_PATHS = [
   '/blog/',
   '/contact/',
   '/projects/',
+  '/portfolio/',
   '/robots.txt/',
   '/search/',
   '/services/',

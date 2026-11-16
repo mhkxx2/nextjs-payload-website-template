@@ -34,19 +34,8 @@ export const SEODefaults: GlobalConfig = {
         {
           name: 'businessType',
           type: 'select',
-          defaultValue: 'FurnitureStore',
-          options: [
-            { label: 'Furniture store', value: 'FurnitureStore' },
-            { label: 'Local business', value: 'LocalBusiness' },
-          ],
-        },
-        {
-          name: 'priceRange',
-          type: 'select',
-          options: [
-            { label: 'Moderate', value: 'moderate' },
-            { label: 'Premium', value: 'premium' },
-          ],
+          defaultValue: 'LocalBusiness',
+          options: [{ label: 'Local business', value: 'LocalBusiness' }],
         },
       ],
     },

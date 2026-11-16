@@ -49,6 +49,14 @@ const twitterImage = (meta: Metadata): unknown => {
 }
 
 describe('buildMetadata', () => {
+  it('preserves a complete approved 180-character description across search and social metadata', () => {
+    const description = 'Professional sofa upholstery in Dubai for fabric replacement, foam renewal, corner sofas, chairs and Majlis seating. Serving Dubai from our Ajman workshop. Send photos for a quote.'
+    const meta = buildMetadata({ seo: { description } }, defaults({ path: '/sofa-upholstery/' }))
+    expect(meta.description).toBe(description)
+    expect(meta.openGraph?.description).toBe(description)
+    expect(meta.twitter?.description).toBe(description)
+    expect(buildMetadata({ seo: { description: 'x'.repeat(181) } }, defaults()).description).toHaveLength(180)
+  })
   const cases: [string, SeoRecord, string][] = [
     [
       'service',

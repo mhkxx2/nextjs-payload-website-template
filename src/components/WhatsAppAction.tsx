@@ -1,25 +1,32 @@
 import React from 'react'
 
+import { TrackedContactLink } from '@/components/TrackedContactLink'
+import type { AnalyticsParameters } from '@/lib/analytics'
+
 export interface WhatsAppActionProps {
   href?: string | null
   label?: string
   className?: string
+  analytics?: AnalyticsParameters
 }
 
 export const WhatsAppAction: React.FC<WhatsAppActionProps> = ({
   href,
   label = 'Chat on WhatsApp',
   className = '',
+  analytics,
 }) => {
   if (!href) return null
 
   return (
-    <a
+    <TrackedContactLink
+      analytics={analytics}
+      eventName="whatsapp_click"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className={`fixed bottom-4 end-4 z-40 flex items-center gap-2 bg-[#25D366] text-white font-medium px-4 py-3 rounded-full shadow-lg hover:bg-[#20ba5a] focus:outline-none focus:ring-4 focus:ring-[#25D366]/40 transition-all duration-200 active:scale-95 group focus-within:z-30 print:hidden ${className}`}
+      className={`fixed bottom-4 end-4 z-40 flex items-center gap-2 bg-[#14733f] text-white font-medium px-4 py-3 rounded-full shadow-lg hover:bg-[#105d33] focus:outline-none focus:ring-4 focus:ring-[#14733f]/40 transition-all duration-200 active:scale-95 group focus-within:z-30 print:hidden ${className}`}
     >
       <svg
         className="w-6 h-6 fill-current"
@@ -32,6 +39,6 @@ export const WhatsAppAction: React.FC<WhatsAppActionProps> = ({
       <span className="hidden sm:inline text-xs sm:text-sm font-semibold tracking-wide">
         {label}
       </span>
-    </a>
+    </TrackedContactLink>
   )
 }

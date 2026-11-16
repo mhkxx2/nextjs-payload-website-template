@@ -10,6 +10,7 @@ import {
 } from './business'
 import { bulletList, heading, paragraph, richText, type SeedRichText } from './richtext'
 import { SERVICE_SEEDS } from './services'
+import { SOFA_FAQS } from './sofaUpholsteryContent'
 
 /** Pages that must exist once the launch content is seeded. */
 export interface PageSeed {
@@ -135,7 +136,12 @@ export const FAQ_SEEDS: FaqSeed[] = [
     group: 'process',
     order: 10,
     schemaEligible: true,
-    serviceSlugs: ['custom-furniture', 'custom-wardrobes', 'custom-beds-headboards', 'office-furniture'],
+    serviceSlugs: [
+      'custom-furniture',
+      'custom-wardrobes',
+      'custom-beds-headboards',
+      'office-furniture',
+    ],
   },
   {
     question: 'How long does a custom sofa take?',
@@ -237,14 +243,127 @@ export const FAQ_SEEDS: FaqSeed[] = [
     serviceSlugs: ['office-furniture'],
   },
   {
+    question: 'Can you upholster an L-shaped sofa?',
+    answer: 'Yes. Each section is photographed and measured before stripping so the new fabric direction, seams and joins remain consistent across the corner and return. Send one full-room photo plus close views of every section for the first assessment.',
+    group: 'services', order: 22, schemaEligible: true, serviceSlugs: ['sofa-upholstery'],
+  },
+  {
+    question: 'Can the sofa foam be replaced during upholstery?',
+    answer: 'Yes. Once the covers are removed, seat and back foam can be measured and replaced where it has compressed or lost shape. The foam grade and any fibre wrap are agreed before cutting so the finished seat has the firmness you expect.',
+    group: 'materials-care', order: 23, schemaEligible: true, serviceSlugs: ['sofa-upholstery'],
+  },
+  {
+    question: 'Can you build custom furniture from a reference photo?',
+    answer: 'Yes. A reference photo is useful for proportion, finish and functional details, but the final drawing is adapted to your room measurements, available materials and practical construction. We do not copy another maker’s protected branding or claim their project as ours.',
+    group: 'process', order: 24, schemaEligible: true, serviceSlugs: ['custom-furniture'],
+  },
+  {
+    question: 'Can furniture be made to exact room dimensions?',
+    answer: 'Yes. The wall, floor, ceiling, skirting, sockets and nearby door clearances are measured before the drawing is confirmed. Allowances are included where walls or floors are not perfectly square so the finished piece can be levelled and fitted correctly.',
+    group: 'services', order: 25, schemaEligible: true, serviceSlugs: ['custom-furniture'],
+  },
+  {
+    question: 'What information is required for a custom furniture quote?',
+    answer: 'Send a room photo, approximate width, height and depth, a reference image if you have one, and a list of what the piece must store or support. We will tell you if a site measurement or drawing is needed before a firm quotation can be prepared.',
+    group: 'pricing-quotations', order: 26, schemaEligible: true, serviceSlugs: ['custom-furniture'],
+  },
+  {
+    question: 'How is a custom sofa different from sofa upholstery?',
+    answer: 'A custom sofa is completely new: the frame, suspension, cushions and covers are built to your chosen dimensions. Sofa upholstery keeps an existing frame and renews its fabric and worn padding. The two services are measured and quoted differently.',
+    group: 'services', order: 27, schemaEligible: true, serviceSlugs: ['custom-sofa'],
+  },
+  {
+    question: 'Can I choose the sofa firmness?',
+    answer: 'Yes. Seat height, foam density, layered fill and fibre wrap can be adjusted to create a firmer or softer feel. We discuss who will use the sofa and how it will be used before confirming the cushion specification.',
+    group: 'materials-care', order: 28, schemaEligible: true, serviceSlugs: ['custom-sofa'],
+  },
+  {
+    question: 'Can Majlis seating follow an entire wall?',
+    answer: 'Yes. Each wall run and corner is measured as part of one layout. Long benches are divided into sections that can pass through the door, then joined and levelled on site so the seating reads as a continuous run.',
+    group: 'services', order: 29, schemaEligible: true, serviceSlugs: ['majlis-furniture'],
+  },
+  {
+    question: 'Can an existing Majlis be reupholstered?',
+    answer: 'Yes, if the bases and frames remain sound. We assess the existing benches, cushions, foam and covers separately, then quote the fabric and padding that actually need renewal. Structural repairs are identified before new covers are made.',
+    group: 'services', order: 30, schemaEligible: true, serviceSlugs: ['majlis-furniture'],
+  },
+  {
+    question: 'How are Majlis corners measured?',
+    answer: 'We record both wall runs, the corner angle, skirting, columns, sockets and any door swing that affects the seating. Cushion joins and bench modules are then planned together so the corner closes neatly without blocking circulation.',
+    group: 'process', order: 31, schemaEligible: true, serviceSlugs: ['majlis-furniture'],
+  },
+  {
+    question: 'What is the difference between sheer and blackout curtains?',
+    answer: 'Sheer curtains soften daylight and provide daytime screening while still allowing light into the room. Blackout fabric or lining gives much stronger light control when closed. The result also depends on track position and gaps around the opening.',
+    group: 'materials-care', order: 32, schemaEligible: true, serviceSlugs: ['curtains-blinds'],
+  },
+  {
+    question: 'Can sheer and blackout curtain layers be combined?',
+    answer: 'Yes. A double track can carry a sheer layer for daytime light and a heavier blackout-lined layer for privacy and stronger light control. Both drops and stack positions are measured together so the layers move without catching.',
+    group: 'services', order: 33, schemaEligible: true, serviceSlugs: ['curtains-blinds'],
+  },
+  {
+    question: 'Do you supply and fit roller blinds?',
+    answer: 'Roller blinds can be supplied and fitted where they suit the opening and are included in the agreed specification. We first measure the recess or face-fix area and confirm that handles, balcony doors and nearby furniture will not obstruct operation.',
+    group: 'services', order: 34, schemaEligible: true, serviceSlugs: ['curtains-blinds'],
+  },
+  {
+    question: 'Can a sofa be repaired without replacing the fabric?',
+    answer: 'Often, yes. If the cover is still usable and the failed frame, webbing, spring or cushion can be accessed without damaging it, the original fabric can stay. We explain any access risk before opening the affected area.',
+    group: 'services', order: 35, schemaEligible: true, serviceSlugs: ['sofa-repair'],
+  },
+  {
+    question: 'How do you assess a sofa repair from photos?',
+    answer: 'Send one photo of the whole sofa, close views of the fault and a short video if something moves or makes noise. Photos help us narrow the cause and transport needs, although a final structural diagnosis may require opening the base in the workshop.',
+    group: 'process', order: 36, schemaEligible: true, serviceSlugs: ['sofa-repair'],
+  },
+  {
+    question: 'Should I choose sliding or hinged wardrobe doors?',
+    answer: 'Sliding doors use no floor space when opening and suit rooms where a bed sits close to the wardrobe. Hinged doors give access to the full compartment at once but need a clear opening arc. Room width and storage habits decide the better option.',
+    group: 'services', order: 37, schemaEligible: true, serviceSlugs: ['custom-wardrobes'],
+  },
+  {
+    question: 'Can the internal wardrobe layout be customized?',
+    answer: 'Yes. Hanging drops, shelves, drawers and upper storage are placed around what you own rather than a fixed package. Share the balance of long garments, short garments, folded clothes and accessories during the design stage.',
+    group: 'services', order: 38, schemaEligible: true, serviceSlugs: ['custom-wardrobes'],
+  },
+  {
+    question: 'Can a wardrobe fit around columns or bulkheads?',
+    answer: 'Yes. Columns, ceiling bulkheads, skirting and uneven returns are measured into the plan. The carcass and fillers are divided so doors and drawers still operate correctly and the visible lines remain deliberate.',
+    group: 'process', order: 39, schemaEligible: true, serviceSlugs: ['custom-wardrobes'],
+  },
+  {
+    question: 'Can a headboard be mounted to the wall?',
+    answer: 'Yes. Wall-mounted upholstered panels can be sized wider than the bed and aligned with bedside tables, sockets and switches. The wall type and fixing position must be checked before manufacture so the mounting method is suitable.',
+    group: 'services', order: 40, schemaEligible: true, serviceSlugs: ['custom-beds-headboards'],
+  },
+  {
+    question: 'What measurements are needed for a custom bed quote?',
+    answer: 'Send the mattress width, length and depth, the desired finished bed height and the available wall width for the headboard. A room photo showing sockets, bedside tables and access helps us identify what must be measured on site.',
+    group: 'pricing-quotations', order: 41, schemaEligible: true, serviceSlugs: ['custom-beds-headboards'],
+  },
+  {
+    question: 'Can cable management be built into office desks?',
+    answer: 'Yes. Cable ports, under-desk trays and routes between workstations can be planned before panels are cut. Send the screen, power and data layout so openings are placed for the actual equipment rather than added after installation.',
+    group: 'services', order: 42, schemaEligible: true, serviceSlugs: ['office-furniture'],
+  },
+  {
+    question: 'What do you need to quote custom office furniture?',
+    answer: 'Send the floor plan, workstation count, furniture list, room photos and preferred finish. Note any reception, meeting, storage and cable requirements, plus lift or access limits. We will confirm what needs a site visit before final pricing.',
+    group: 'pricing-quotations', order: 43, schemaEligible: true, serviceSlugs: ['office-furniture'],
+  },
+  {
     question: 'Where is the workshop and when is it open?',
-    answer: `${BUSINESS.brandName} is based in ${BUSINESS.address.line1}, ${BUSINESS.address.city}. The workshop opens at 8 am, and ${BUSINESS.hoursLabel.toLowerCase()} applies from Sunday to Saturday. Call or message ${BUSINESS.phoneDisplay} before travelling so someone is free to look at your piece.`,
+    answer: `${BUSINESS.brandName} is based in ${BUSINESS.address.line1}, ${BUSINESS.address.city}. The workshop is open ${BUSINESS.hoursLabel} from Saturday to Thursday and closed on Friday. Call or message ${BUSINESS.phoneDisplay} before travelling so someone is free to look at your piece.`,
     group: 'general',
-    order: 22,
+    order: 50,
     schemaEligible: true,
     serviceSlugs: [],
   },
 ]
+
+// Append sofa-only FAQs after existing launch FAQs so homepage selections retain their order.
+FAQ_SEEDS.push(...SOFA_FAQS.map(([question, answer], index): FaqSeed => ({ question, answer, group: 'services', order: 100 + index, schemaEligible: true, serviceSlugs: ['sofa-upholstery'] })))
 
 export interface HomepageBlockContext {
   faqIds: number[]
@@ -422,6 +541,13 @@ export const PAGE_SEEDS: PageSeed[] = [
             'We do not sell or rent contact details to other businesses',
             'Measurements and photographs are used for the quoted work only',
           ]),
+          heading('Cookies and measurement'),
+          paragraph(
+            'We use Google Analytics and Google Tag Manager to understand website usage and manage measurement tags. Optional analytics and advertising measurement is controlled by your cookie preferences; necessary website functions remain available if you reject optional cookies.',
+          ),
+          paragraph(
+            'You can accept, reject or choose optional categories when the cookie notice appears. Use Cookie Settings in the website footer at any time to review or change that consent.',
+          ),
           heading('Contact about your information'),
           paragraph(
             `To ask what we hold about you, or to have it corrected or deleted, email ${BUSINESS.email} or call ${BUSINESS.phoneDisplay}.`,
@@ -505,9 +631,9 @@ export const GLOBAL_SEEDS = {
     mapURL: BUSINESS.mapURL,
     openingHours: OPENING_HOURS.map((day) => ({
       day,
-      closed: false,
-      opens: BUSINESS.opensAt,
-      displayLabel: BUSINESS.hoursLabel,
+      closed: day === 'friday',
+      ...(day === 'friday' ? {} : { closes: BUSINESS.closesAt, opens: BUSINESS.opensAt }),
+      displayLabel: day === 'friday' ? 'Closed' : BUSINESS.hoursLabel,
     })),
     serviceAreas: SERVICE_AREAS.map((area) => ({ area })),
   },
@@ -516,12 +642,16 @@ export const GLOBAL_SEEDS = {
       { label: 'Home', destination: 'home' as const },
       { label: 'Services', destination: 'services' as const },
       { label: 'Projects', destination: 'projects' as const },
-      { label: 'Blog', destination: 'blog' as const },
-      { label: 'About', destination: 'about' as const },
-      { label: 'Contact', destination: 'contact' as const },
+      { label: 'Areas We Serve', destination: 'areas' as const },
+      { label: 'Collection', destination: 'portfolio' as const },
+      { label: 'Contact Us', destination: 'contact' as const },
     ],
     conversionActions: [
-      { action: 'quotation' as const, label: 'Request a quotation', appearance: 'primary' as const },
+      {
+        action: 'quotation' as const,
+        label: 'Request a quotation',
+        appearance: 'primary' as const,
+      },
       { action: 'whatsapp' as const, label: 'WhatsApp', appearance: 'secondary' as const },
       { action: 'phone' as const, label: 'Call the workshop', appearance: 'secondary' as const },
     ],
@@ -534,18 +664,14 @@ export const GLOBAL_SEEDS = {
   footer: {
     navigationGroups: [
       {
-        heading: 'Company',
+        heading: 'Navigation',
         items: [
-          { label: 'About the workshop', destination: 'about' as const },
-          { label: 'Contact', destination: 'contact' as const },
-        ],
-      },
-      {
-        heading: 'Browse',
-        items: [
-          { label: 'All services', destination: 'services' as const },
-          { label: 'Workshop work', destination: 'projects' as const },
-          { label: 'Notes', destination: 'blog' as const },
+          { label: 'Home', destination: 'home' as const },
+          { label: 'Services', destination: 'services' as const },
+          { label: 'Projects', destination: 'projects' as const },
+          { label: 'Areas We Serve', destination: 'areas' as const },
+          { label: 'Collection', destination: 'portfolio' as const },
+          { label: 'Contact Us', destination: 'contact' as const },
         ],
       },
     ],
@@ -571,8 +697,7 @@ export const GLOBAL_SEEDS = {
       description: `${BUSINESS.category} and upholstery workshop in ${BUSINESS.address.city}, ${BUSINESS.address.country}.`,
     },
     localBusinessSchema: {
-      businessType: 'FurnitureStore' as const,
-      priceRange: 'moderate' as const,
+      businessType: 'LocalBusiness' as const,
     },
   },
   socialMedia: {

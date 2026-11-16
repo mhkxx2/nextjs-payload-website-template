@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 
@@ -14,10 +14,11 @@ let isolated: IsolatedPayload
 let registryPath: string
 let uploaderId: number
 let firstRun: SeedResult
+let ownedMediaId: number
 
 const EDITOR_SUMMARY = 'Editor-written summary kept for the upholstery service.'
 
-/** A full seed run uploads 12 images, so the default 5s budget is far too small. */
+/** A full seed run uploads 30 images, so the default 5s budget is far too small. */
 const SEED_TIMEOUT = 180_000
 
 beforeAll(async () => {
@@ -34,6 +35,15 @@ beforeAll(async () => {
   })
 
   uploaderId = uploader.id
+  const owned = await isolated.payload.create({
+    collection: 'media',
+    filePath: path.join(process.cwd(), 'src/seed/assets/sofa-eco-nivo.webp'),
+    data: { alt: 'Existing owned Nivo corner sofa catalogue inspiration', decorative: false, sourceURL: 'https://eco-furniture.ae/wp-content/uploads/2026/01/Nivo-Modern-Corner-Sofa-main-front-view.jpg', sourceSite: 'eco-furniture.ae', license: 'Company-owned source asset', sourceNotes: 'Existing imported company catalogue asset; editor-owned.', uploadedBy: uploaderId },
+    user: uploader,
+    context: { disableRevalidate: true },
+    overrideAccess: true,
+  })
+  ownedMediaId = owned.id
   registryPath = path.join(mkdtempSync(path.join(tmpdir(), 'alrukn-seed-')), 'seed-batches.json')
 }, 180_000)
 
@@ -69,6 +79,10 @@ describe('seedAlRukn', () => {
       expect(service._status, `${service.slug} _status`).toBe('published')
       expect(service.hero?.image, `${service.slug} hero image`).toBeTruthy()
       expect(service.seo?.title, `${service.slug} seo title`).toBeTruthy()
+      expect(service.visualVariant, `${service.slug} visual variant`).toBeTruthy()
+      expect(service.serviceOptions?.items?.length ?? 0, `${service.slug} options`).toBeGreaterThanOrEqual(4)
+      expect(service.gallery?.length ?? 0, `${service.slug} gallery`).toBeGreaterThanOrEqual(3)
+      expect(service.relatedServices?.length ?? 0, `${service.slug} related services`).toBeGreaterThanOrEqual(2)
     }
   }, SEED_TIMEOUT)
 
@@ -83,8 +97,38 @@ describe('seedAlRukn', () => {
     expect(second.pages.home).toBe(firstRun.pages.home)
     expect(second.services['sofa-upholstery']).toBe(firstRun.services['sofa-upholstery'])
 
-    const media = await isolated.payload.find({ collection: 'media', limit: 30, overrideAccess: true })
-    expect(media.totalDocs).toBe(12)
+    const media = await isolated.payload.find({ collection: 'media', limit: 40, overrideAccess: true })
+    expect(media.totalDocs).toBe(38)
+  }, SEED_TIMEOUT)
+
+  it('populates sofa landing media relations, FAQs and distinct CTAs without changing other services', async () => {
+    const service = await isolated.payload.findByID({ collection: 'services', id: firstRun.services['sofa-upholstery']!, depth: 2, overrideAccess: true })
+    expect(service.hero?.heading).toBe('Sofa Upholstery in Dubai')
+    expect(service.gallery).toHaveLength(8)
+    expect(service.sofaUpholsteryLanding?.popularServices).toHaveLength(9)
+    expect(service.sofaUpholsteryLanding?.fabricCards).toHaveLength(5)
+    for (const row of [...(service.gallery ?? []), ...(service.sofaUpholsteryLanding?.popularServices ?? []), ...(service.sofaUpholsteryLanding?.fabricCards ?? [])]) {
+      expect(row.image).toEqual(expect.objectContaining({ alt: expect.any(String), width: expect.any(Number), height: expect.any(Number), url: expect.stringMatching(/^(https:\/\/alruknfurniture\.ae)?\/api\/media\//) }))
+    }
+    expect(service.faqs).toHaveLength(13)
+    expect(service.relatedServices?.map((related) => typeof related === 'object' ? related.slug : related)).toEqual(['custom-furniture', 'custom-sofa', 'sofa-repair', 'curtains-blinds'])
+    expect(service.sofaUpholsteryLanding?.popularServices?.at(-1)?.href).toBeFalsy()
+    expect(service.quotationContext?.buttonLabel).toBe('Request My Sofa Quote')
+    expect(service.presentationLabels).toMatchObject({ heroQuoteLabel: 'Get Free Quote', processCtaLabel: 'Get Your Sofa Quote', quoteWhatsAppLabel: 'WhatsApp Your Photos' })
+    const other = await isolated.payload.findByID({ collection: 'services', id: firstRun.services['custom-sofa']!, depth: 0, overrideAccess: true })
+    expect(other.sofaUpholsteryLanding?.popularServices ?? []).toHaveLength(0)
+    expect(other.gallery).toHaveLength(3)
+    const reviews = await isolated.payload.findGlobal({ slug: 'google-reviews', overrideAccess: true })
+    expect(reviews.enabled).toBe(false)
+  }, SEED_TIMEOUT)
+
+  it('reuses company-owned Media by source URL without overwriting or claiming rollback ownership', async () => {
+    expect(firstRun.media['sofa-eco-nivo.webp']).toBe(ownedMediaId)
+    const media = await isolated.payload.findByID({ collection: 'media', id: ownedMediaId, overrideAccess: true })
+    expect(media.sourceNotes).toBe('Existing imported company catalogue asset; editor-owned.')
+    expect(media.alt).toBe('Existing owned Nivo corner sofa catalogue inspiration')
+    const registry = JSON.parse(readFileSync(registryPath, 'utf8')) as { batches: { records: { collection: string; id: number }[] }[] }
+    expect(registry.batches.flatMap(({ records }) => records).some(({ collection, id }) => collection === 'media' && id === ownedMediaId)).toBe(false)
   }, SEED_TIMEOUT)
 
   it('publishes the homepage layout in the owned order', async () => {
@@ -154,7 +198,7 @@ describe('seedAlRukn', () => {
     })
 
     expect(forced.updated).toBeGreaterThan(0)
-    expect(forced.skipped).toBe(0)
+    expect(forced.skipped).toBe(1) // Reused catalogue Media remains editor-owned even during force.
 
     const service = await isolated.payload.findByID({
       collection: 'services',
@@ -188,5 +232,7 @@ describe('seedAlRukn', () => {
     })
 
     expect(services.totalDocs).toBe(0)
+    const owned = await isolated.payload.findByID({ collection: 'media', id: ownedMediaId, overrideAccess: true })
+    expect(owned.sourceNotes).toBe('Existing imported company catalogue asset; editor-owned.')
   }, SEED_TIMEOUT)
 })

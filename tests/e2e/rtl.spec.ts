@@ -9,10 +9,10 @@ test.describe('Locale & RTL Direction', () => {
     await expect(html).toHaveAttribute('dir', 'ltr')
   })
 
-  test('supports ?dir=rtl searchParam override in non-production mode', async ({ page }) => {
+  test('keeps the English launch experience left-to-right when query parameters are present', async ({ page }) => {
     await page.goto('/?dir=rtl')
 
     const html = page.locator('html')
-    await expect(html).toHaveAttribute('dir', 'rtl')
+    await expect(html).toHaveAttribute('dir', 'ltr')
   })
 })

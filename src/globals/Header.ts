@@ -11,7 +11,9 @@ const destinationFields: Field[] = [
     options: [
       { label: 'Home', value: 'home' },
       { label: 'Services', value: 'services' },
+      { label: 'Portfolio', value: 'portfolio' },
       { label: 'Projects', value: 'projects' },
+      { label: 'Areas We Serve', value: 'areas' },
       { label: 'Blog', value: 'blog' },
       { label: 'About', value: 'about' },
       { label: 'Contact', value: 'contact' },

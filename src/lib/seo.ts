@@ -19,7 +19,7 @@ export const DEFAULT_TITLE_PATTERN = '{title} | {brand}'
 export const FALLBACK_SOCIAL_IMAGE = '/al-rukn-social-card.svg'
 
 export const MAX_META_TITLE = 60
-export const MAX_META_DESCRIPTION = 160
+export const MAX_META_DESCRIPTION = 180
 
 /** Utility and admin areas that must never be advertised to crawlers. */
 export const PRIVATE_PATH_DISALLOW = [
@@ -36,6 +36,7 @@ export const STRUCTURAL_SITEMAP_PATHS: { changeFrequency: 'monthly' | 'weekly'; 
   { changeFrequency: 'weekly', path: '/', priority: 1 },
   { changeFrequency: 'monthly', path: '/services/', priority: 0.9 },
   { changeFrequency: 'monthly', path: '/projects/', priority: 0.8 },
+  { changeFrequency: 'weekly', path: '/portfolio/', priority: 0.85 },
   { changeFrequency: 'monthly', path: '/blog/', priority: 0.8 },
   { changeFrequency: 'monthly', path: '/about-us/', priority: 0.7 },
   { changeFrequency: 'monthly', path: '/contact/', priority: 0.7 },
@@ -585,9 +586,31 @@ export async function getSitemapEntries(
 
   const postEntries = toSitemapEntries(posts, (slug) => (slug ? canonicalPath('post', slug) : null), origin, 0.5, now)
 
+  const curtainProducts = await readDocs(
+    await payload.find({
+      collection: 'curtain-blind-products' as 'pages',
+      depth: 0,
+      draft: false,
+      limit: 0,
+      overrideAccess: false,
+      pagination: false,
+      sort: 'slug',
+      where: { active: { equals: true } },
+    } as unknown as Parameters<Payload['find']>[0]),
+  )
+
+  const curtainProductEntries = curtainProducts
+    .map((doc) => safeText(doc.slug))
+    .filter((slug): slug is string => Boolean(slug))
+    .map((slug) => ({
+      changeFrequency: 'weekly' as const,
+      priority: 0.65,
+      url: canonicalURL(`/curtains-blinds/product/${slug}/`, origin),
+    }))
+
   const seen = new Set<string>()
 
-  return [...structural, ...serviceEntries, ...pageEntries, ...projectEntries, ...postEntries].filter((entry) => {
+  return [...structural, ...serviceEntries, ...pageEntries, ...projectEntries, ...postEntries, ...curtainProductEntries].filter((entry) => {
     if (seen.has(entry.url)) return false
     seen.add(entry.url)
 

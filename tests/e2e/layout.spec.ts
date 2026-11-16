@@ -2,9 +2,12 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Layout & Responsive Viewports', () => {
   const viewports = [
-    { width: 320, height: 640, name: 'Mobile Small' },
+    { width: 375, height: 812, name: 'Mobile' },
+    { width: 430, height: 932, name: 'Mobile Large' },
     { width: 768, height: 1024, name: 'Tablet' },
+    { width: 1024, height: 768, name: 'Desktop' },
     { width: 1440, height: 900, name: 'Desktop Large' },
+    { width: 1920, height: 1080, name: 'Desktop XL' },
   ]
 
   for (const vp of viewports) {

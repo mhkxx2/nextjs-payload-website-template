@@ -11,7 +11,7 @@ import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { homeCopy } from '@/data/launch-copy'
+import { cmsFallbacks } from '@/data/cmsFallbacks'
 import type { Media as MediaType, Project } from '@/payload-types'
 import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { serviceHref } from '@/lib/contentLinks'
@@ -19,6 +19,7 @@ import { canonicalPath } from '@/lib/routes'
 import { queryPublicDocBySlug, queryPublicSlugs } from '@/lib/publicQueries'
 import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
 import { buildMetadata, getSeoDefaults } from '@/lib/seo'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateStaticParams() {
   const slugs = await queryPublicSlugs('projects')
@@ -49,13 +50,18 @@ export default async function ProjectDetail({ params: paramsPromise }: Args) {
     .filter((image): image is MediaType => image !== null)
   const narrative = Array.isArray(project.narrative) ? project.narrative : []
   const breadcrumbs = buildBreadcrumbs(url, project)
+  const [schemaGlobals, archives] = await Promise.all([
+    getSchemaGlobals(),
+    getCachedGlobal('archive-settings', 1)(),
+  ])
   const schemas = buildSchemas({
     breadcrumbs,
-    globals: await getSchemaGlobals(),
+    globals: schemaGlobals,
     kind: 'project',
     path: url,
     record: project,
   })
+  const archive = archives.projectsArchive
 
   return (
     <article className="pt-16 pb-16">
@@ -144,10 +150,10 @@ export default async function ProjectDetail({ params: paramsPromise }: Args) {
       </div>
 
       <CallToActionBlockComponent
-        buttonLink={homeCopy.finalCta.buttonLink}
-        buttonText={homeCopy.finalCta.buttonText}
-        description={homeCopy.finalCta.description}
-        heading={homeCopy.finalCta.heading}
+        buttonLink="/contact/"
+        buttonText={archive?.cta?.primaryLabel || cmsFallbacks.archives.projects.cta.buttonText}
+        description={archive?.cta?.description || cmsFallbacks.archives.projects.cta.description}
+        heading={archive?.cta?.heading || cmsFallbacks.archives.projects.cta.heading}
       />
     </article>
   )

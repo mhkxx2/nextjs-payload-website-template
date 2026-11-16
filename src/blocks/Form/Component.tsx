@@ -10,6 +10,7 @@ import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
+import { trackGenerateLead } from '@/lib/analytics'
 
 export type FormBlockType = {
   blockName?: string
@@ -89,6 +90,10 @@ export const FormBlock: React.FC<
             return
           }
 
+          trackGenerateLead({
+            cta_location: 'payload_form',
+            lead_type: 'form_submission',
+          })
           setIsLoading(false)
           setHasSubmitted(true)
 

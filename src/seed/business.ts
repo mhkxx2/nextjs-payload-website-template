@@ -17,30 +17,25 @@ export const BUSINESS = {
   email: 'info@alruknfurniture.ae',
   phoneE164: '+971551224902',
   phoneDisplay: '+971 55 122 4902',
-  whatsappE164: '+971551224902',
+  whatsappE164: '+971507008903',
   address: {
     line1: 'CGMC+486, Al Jerf 1',
-    line2: 'Al Jerf 1',
+    line2: '',
     city: 'Ajman',
     emirate: 'Ajman',
     country: 'United Arab Emirates',
   },
-  /** Verified from the Maps listing: the workshop opens at 8 am. */
-  opensAt: '08:00',
-  hoursLabel: 'Opens 8 am',
+  /** Current business hours supplied by the client on 2026-09-27. */
+  opensAt: '09:00',
+  closesAt: '23:00',
+  hoursLabel: '9:00 AM–11:00 PM',
   mapURL: 'https://www.google.com/maps?cid=6740373205854748574&hl=en',
   coordinates: { latitude: 25.432793, longitude: 55.5207684 },
   category: 'Furniture manufacturer',
 } as const
 
 export type OpeningDay =
-  | 'monday'
-  | 'tuesday'
-  | 'wednesday'
-  | 'thursday'
-  | 'friday'
-  | 'saturday'
-  | 'sunday'
+  'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
 
 export const OPENING_HOURS: OpeningDay[] = [
   'monday',
@@ -53,12 +48,7 @@ export const OPENING_HOURS: OpeningDay[] = [
 ]
 
 /** Districts we can state without inventing coverage outside Ajman. */
-export const SERVICE_AREAS = [
-  'Ajman',
-  'Al Jerf 1',
-  'Al Nuaimiya',
-  'Al Rashidiya',
-] as const
+export const SERVICE_AREAS = ['Ajman', 'Al Jerf 1', 'Al Nuaimiya', 'Al Rashidiya'] as const
 
 export const FAQ_GROUPS: Faq['group'][] = [
   'general',

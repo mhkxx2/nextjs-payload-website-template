@@ -1,6 +1,6 @@
 import type { Access, FieldHook, GlobalAfterChangeHook, TextFieldValidation } from 'payload'
 
-import { revalidateTag } from 'next/cache'
+import { invalidateGlobalContent } from './hooks/revalidateGlobalContent'
 
 export const CANONICAL_PUBLIC_ORIGIN = 'https://alruknfurniture.ae'
 
@@ -20,7 +20,7 @@ export const isValidE164 = (value: unknown): value is string =>
   typeof value === 'string' && e164Pattern.test(value)
 
 export const validateOptionalE164: TextFieldValidation = (value) =>
-  value == null || value === '' || isValidE164(value) || 'Enter a valid E.164 number, for example +971501234567.'
+  value == null || value === '' || isValidE164(value) || 'Enter a valid E.164 number, for example +971551224902.'
 
 const explicitPort = /^https:\/\/[^/?#]*:\d+(?:[/?#]|$)/i
 const mapHosts = new Set(['google.com', 'maps.app.goo.gl', 'maps.google.com', 'www.google.com'])
@@ -46,9 +46,9 @@ export const validateMapURL: TextFieldValidation = (value) => {
 }
 
 export const revalidateGlobal: GlobalAfterChangeHook = ({ doc, global, req }) => {
-  if (!req.context.disableRevalidate) {
-    req.payload.logger.info(`Revalidating ${global.slug}`)
-    revalidateTag(`global_${global.slug}`, 'max')
-  }
+  invalidateGlobalContent(
+    global.slug,
+    req as unknown as Parameters<typeof invalidateGlobalContent>[1],
+  )
   return doc
 }

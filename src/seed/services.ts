@@ -1,7 +1,12 @@
 import { BUSINESS, SERVICE_AREAS } from './business'
 import { bulletList, heading, paragraph, richText, type SeedRichText } from './richtext'
+import { SERVICE_ENHANCEMENTS, SERVICE_FAQ_QUESTIONS, type ServiceEnhancement } from './serviceEnhancements'
+import { SOFA_BENEFITS, SOFA_FAQS, SOFA_GALLERY_FILES, SOFA_LANDING_SEED, SOFA_PROCESS, type SofaLandingSeed } from './sofaUpholsteryContent'
+import type { Service } from '@/payload-types'
 
 export interface ServiceSeed {
+  sofaUpholsteryLanding?: SofaLandingSeed
+  presentationLabels?: Service['presentationLabels']
   slug: string
   title: string
   summary: string
@@ -18,9 +23,23 @@ export interface ServiceSeed {
   faqQuestions: string[]
   serviceAreas: string[]
   galleryFiles: string[]
-  quotationContext: { heading: string; message: string }
   whatsAppContext: { label: string; message: string }
   relatedSlugs: string[]
+  visualVariant: ServiceEnhancement['visualVariant']
+  trustItems: string[]
+  serviceOptions: ServiceEnhancement['serviceOptions']
+  featureSections: ServiceEnhancement['featureSections']
+  materialsHeading: string
+  processHeading: string
+  comparison?: ServiceEnhancement['comparison']
+  galleryHeading: string
+  galleryIntro: string
+  serviceAreaHeading: string
+  serviceAreaCopy: string
+  areaLinkLabel: string
+  relatedHeading: string
+  seo: ServiceEnhancement['seo']
+  quotationContext: ServiceEnhancement['quotationContext']
 }
 
 const SHARED_ASSETS = new Set(['about-workshop', 'hero-living-room', 'og-default'])
@@ -36,7 +55,7 @@ const gallery = (primary: string, supporting: string): string[] => [
 
 const areas = [...SERVICE_AREAS]
 
-export const SERVICE_SEEDS: ServiceSeed[] = [
+const BASE_SERVICE_SEEDS = [
   {
     slug: 'sofa-upholstery',
     title: 'Sofa Upholstery',
@@ -70,7 +89,7 @@ export const SERVICE_SEEDS: ServiceSeed[] = [
       {
         title: 'Keep a frame that still works',
         description:
-          'If the timber and springs are sound, re-covering costs less than replacing the sofa and keeps a piece you already know.',
+          'If the timber and springs are sound, re-covering lets you retain a piece you already know. Compare the quotation with replacement before deciding.',
       },
       {
         title: 'Fabric you choose',
@@ -92,12 +111,12 @@ export const SERVICE_SEEDS: ServiceSeed[] = [
       {
         title: 'Upholstery weaves',
         description:
-          'Chenille, linen blends, boucle, velvet and outdoor-rated fabrics held in the workshop range.',
+          'Chenille, linen blends, boucle, velvet and suitable woven fabrics, with current samples confirmed before ordering.',
       },
       {
         title: 'Foam grades',
         description:
-          'Standard and high-density seat foam, memory layers for back cushions and soft wrap for armrests.',
+          'Seat and back foam, cushion filling and padding discussed according to the existing construction and required firmness.',
       },
       {
         title: 'Trims and fittings',
@@ -913,6 +932,42 @@ export const SERVICE_SEEDS: ServiceSeed[] = [
     relatedSlugs: ['custom-furniture', 'custom-wardrobes', 'sofa-repair'],
   },
 ]
+
+export const SERVICE_SEEDS: ServiceSeed[] = BASE_SERVICE_SEEDS.map((service) => {
+  const enhancement = SERVICE_ENHANCEMENTS[service.slug]
+  if (!enhancement) throw new Error(`Missing service enhancement for ${service.slug}`)
+
+  return {
+    ...service,
+    ...enhancement,
+    hero: { ...service.hero, ...enhancement.hero, imageFile: `service-${service.slug}-ai.webp` },
+    galleryFiles: [
+      `service-${service.slug}-detail-ai.webp`,
+      service.galleryFiles[0]!,
+      `service-${service.slug}-ai.webp`,
+    ],
+    faqQuestions: SERVICE_FAQ_QUESTIONS[service.slug] || service.faqQuestions,
+    quotationContext: enhancement.quotationContext,
+    serviceAreas: enhancement.serviceAreas,
+    ...(service.slug === 'sofa-upholstery' ? {
+      hero: { ...service.hero, ...enhancement.hero, imageFile: 'sofa-eco-nivo.webp' },
+      galleryFiles: SOFA_GALLERY_FILES,
+      sofaUpholsteryLanding: SOFA_LANDING_SEED,
+      process: SOFA_PROCESS,
+      benefits: SOFA_BENEFITS,
+      faqQuestions: SOFA_FAQS.map(([question]) => question),
+      relatedSlugs: ['custom-furniture', 'custom-sofa', 'sofa-repair', 'curtains-blinds'],
+      whatsAppContext: { label: 'WhatsApp Your Sofa Photo', message: "Hi Al Rukn, I want a quote for sofa upholstery. Area: ___. I'll send sofa photos and approximate size." },
+      presentationLabels: {
+        heroQuoteLabel: 'Get Free Quote', processCtaLabel: 'Get Your Sofa Quote', quoteWhatsAppLabel: 'WhatsApp Your Photos',
+        workshopNote: 'Serving Dubai from our Ajman workshop.', benefitsHeading: 'Why Choose Al Rukn', benefitsEyebrow: 'Workshop approach',
+        materialsEyebrow: 'Fabric guidance · catalogue and AI inspiration', processEyebrow: 'From photos to handover', galleryEyebrow: 'Catalogue inspiration',
+        areasEyebrow: 'Local service', faqEyebrow: 'Your questions', faqHeading: 'Sofa Upholstery FAQs', faqIntroduction: 'Practical answers about upholstery, repairs, fabric choices and quotations.',
+        relatedEyebrow: 'AI-generated furniture design inspiration', quoteEyebrow: 'Start with your sofa photos',
+      },
+    } : {}),
+  }
+})
 
 export const SERVICE_SLUGS = SERVICE_SEEDS.map((service) => service.slug)
 

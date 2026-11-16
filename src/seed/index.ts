@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url'
 
 import type { Document, Payload } from 'payload'
 
-import type { Faq, Media, Page, Service } from '@/payload-types'
+import type { Area, Faq, Homepage, Media, Page, Service } from '@/payload-types'
+import { HOME_BENEFITS, HOME_META, HOME_PROCESS, HOME_TRUST_ITEMS, SERVICE_LINKS } from '@/data/homepage'
+import { AREA_SEEDS } from '@/data/serviceAreas'
 
 import { BUSINESS, CANONICAL_ORIGIN, MEDIA_USAGE } from './business'
 import { heading, paragraph, richText } from './richtext'
@@ -50,6 +52,8 @@ export interface SeedOptions {
   uploadedBy: number
   /** Overwrite records that changed since the last seed run (non-production only). */
   force?: boolean
+  /** Stop after media, areas, FAQs and services; leave pages and globals untouched. */
+  servicesOnly?: boolean
   /** Stable identifier for this batch, used for rollback. Defaults to a timestamp. */
   batchId?: string
   /** Where the batch registry is written. Defaults to `docs/operations/seed-batches.json`. */
@@ -64,11 +68,15 @@ export interface SeedResult {
   skipped: number
   media: Record<string, number>
   services: Record<string, number>
+  areas: Record<string, number>
   faqs: number[]
   pages: Record<string, number>
 }
 
 interface ManifestEntry {
+  placeholder?: boolean
+  sourceSite?: string
+  sourceFilename?: string
   key: string
   filename: string
   localPath: string
@@ -169,6 +177,7 @@ export const seedAlRukn = async (
     skipped: 0,
     media: {},
     services: {},
+    areas: {},
     faqs: [],
     pages: {},
   }
@@ -203,7 +212,7 @@ export const seedAlRukn = async (
   }
 
   const findOne = async (
-    collection: 'services' | 'pages' | 'media' | 'faqs',
+    collection: 'areas' | 'services' | 'pages' | 'media' | 'faqs',
     where: Record<string, unknown>,
   ) => {
     const found = await payload.find({
@@ -232,9 +241,21 @@ export const seedAlRukn = async (
     // Match on the seed marker rather than the filename: Payload may add a
     // suffix when a file of the same name already exists in the uploads folder.
     const marker = `seed-asset:${entry.key}`
-    const existing = (await findOne('media', { sourceNotes: { contains: marker } })) as
-      | { id: number; updatedAt: string }
+    // Include the separator so `service-sofa-upholstery` cannot accidentally
+    // match `service-sofa-upholstery-ai`.
+    const existing = (await findOne('media', entry.sourceSite === 'eco-furniture.ae'
+      ? { sourceURL: { equals: entry.sourcePageURL }, sourceSite: { equals: entry.sourceSite }, license: { equals: 'Company-owned source asset' } }
+      : { sourceNotes: { contains: `${marker} ·` } })) as
+      | { id: number; updatedAt: string; sourceNotes?: string | null }
       | undefined
+
+    // Imported company catalogue records are borrowed references. A seed must
+    // never overwrite them, even under force, or register them for rollback.
+    if (existing && entry.sourceSite === 'eco-furniture.ae' && !existing.sourceNotes?.includes(`${marker} ·`)) {
+      result.media[entry.filename] = existing.id
+      result.skipped += 1
+      continue
+    }
 
     if (existing && !force) {
       result.media[entry.filename] = existing.id
@@ -245,11 +266,13 @@ export const seedAlRukn = async (
 
     const data = compact({
       alt: entry.alt ?? `Placeholder photograph: ${entry.filename}`,
-      caption: entry.caption,
+      caption: entry.caption ? richText(paragraph(entry.caption)) : undefined,
       decorative: entry.decorative ?? false,
       focalX: entry.focalPoint?.x,
       focalY: entry.focalPoint?.y,
       license: entry.licenseName,
+      sourceSite: entry.sourceSite,
+      sourceFilename: entry.sourceFilename,
       licenseURL: entry.licenseURL,
       sourceURL: entry.sourcePageURL ?? entry.downloadURL,
       sourceNotes: [
@@ -257,7 +280,7 @@ export const seedAlRukn = async (
         `Seed batch ${batchId}`,
         `Creator: ${entry.creator}`,
         `Checksum (sha256): ${entry.sha256 ?? 'recorded in media-manifest.json'}`,
-        'Royalty-free placeholder imagery — replace with own photography through the Media collection.',
+        entry.placeholder === false ? 'Company-owned catalogue inspiration; not completed Al Rukn customer work.' : 'Royalty-free placeholder imagery — replace with own photography through the Media collection.',
       ].join(' · '),
       uploadedBy: options.uploadedBy,
     }) as unknown as Media
@@ -297,6 +320,43 @@ export const seedAlRukn = async (
       )
     }
     return id
+  }
+
+  // --------------------------------------------------------------- areas ---
+  const areaIds: number[] = []
+  for (const area of AREA_SEEDS) {
+    const slug = area.name
+      .toLowerCase()
+      .replace(/\([^)]*\)/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+    const existing = (await findOne('areas', { slug: { equals: slug } })) as
+      | { id: number; updatedAt: string }
+      | undefined
+    const data = {
+      _status: 'published' as const,
+      featured: area.order < 8,
+      group: area.group,
+      name: area.name,
+      order: area.order,
+      publishedAt: new Date().toISOString(),
+      slug,
+      status: 'published' as const,
+    } as unknown as Area
+
+    if (existing && !writable('areas', existing.id, existing.updatedAt)) {
+      result.areas[slug] = existing.id
+      areaIds.push(existing.id)
+      result.skipped += 1
+      continue
+    }
+    const saved = existing
+      ? await write.update({ collection: 'areas', id: existing.id, data, draft: false, overrideAccess: true })
+      : await write.create({ collection: 'areas', data, draft: false, overrideAccess: true })
+    result.areas[slug] = saved.id
+    areaIds.push(saved.id)
+    existing ? result.updated += 1 : result.created += 1
+    record('areas', saved.id, slug, saved.updatedAt)
   }
 
   // ----------------------------------------------------------------- faqs ---
@@ -361,18 +421,49 @@ export const seedAlRukn = async (
   const serviceData = (service: ServiceSeed): Service =>
     compact({
       title: service.title,
+      presentationLabels: service.presentationLabels,
+      sofaUpholsteryLanding: service.sofaUpholsteryLanding ? {
+        ...service.sofaUpholsteryLanding,
+        popularServices: service.sofaUpholsteryLanding.popularServices.map(({ imageFile, ...card }) => ({ ...card, image: requireMedia(imageFile) })),
+        fabricCards: service.sofaUpholsteryLanding.fabricCards.map(({ imageFile, ...card }) => ({ ...card, image: requireMedia(imageFile) })),
+        bedTeaser: (({ imageFile, ...card }) => ({ ...card, image: requireMedia(imageFile) }))(service.sofaUpholsteryLanding.bedTeaser),
+      } : undefined,
     slug: service.slug,
-    summary: service.summary,
+      summary: service.summary,
+    visualVariant: service.visualVariant,
     hero: {
       eyebrow: service.hero.eyebrow,
       heading: service.hero.heading,
       copy: service.hero.copy,
       image: service.hero.imageFile ? requireMedia(service.hero.imageFile) : undefined,
     },
+    trustItems: service.trustItems.map((label) => ({ label })),
     details: service.details,
+    serviceOptions: {
+      eyebrow: service.serviceOptions.eyebrow,
+      heading: service.serviceOptions.heading,
+      intro: service.serviceOptions.intro,
+      items: service.serviceOptions.items,
+    },
+    featureSections: service.featureSections.map((section, index) => ({
+      ...section,
+      bullets: section.bullets.map((text) => ({ text })),
+      image: service.galleryFiles[index]
+        ? requireMedia(service.galleryFiles[index])
+        : requireMedia(service.hero.imageFile),
+    })),
     benefits: service.benefits,
     materialsCapabilities: service.materialsCapabilities,
+    materialsHeading: service.materialsHeading,
     process: service.process,
+    processHeading: service.processHeading,
+    comparison: service.comparison
+      ? {
+          ...service.comparison,
+          leftItems: service.comparison.leftItems.map((text) => ({ text })),
+          rightItems: service.comparison.rightItems.map((text) => ({ text })),
+        }
+      : undefined,
     faqs: service.faqQuestions
       .map((question) => faqIdByQuestion.get(question))
       .filter(exists),
@@ -380,14 +471,24 @@ export const seedAlRukn = async (
     gallery: service.galleryFiles
       .filter((filename) => exists(result.media[filename]))
       .map((filename) => ({ image: requireMedia(filename) })),
+    galleryHeading: service.galleryHeading,
+    galleryIntro: service.galleryIntro,
+    serviceAreaHeading: service.serviceAreaHeading,
+    serviceAreaCopy: service.serviceAreaCopy,
+    areaLinkLabel: service.areaLinkLabel,
     quotationContext: service.quotationContext,
     whatsAppContext: service.whatsAppContext,
+    relatedHeading: service.relatedHeading,
     seo: {
-      title: `${service.title} in ${BUSINESS.address.city}`,
-      description: service.summary.slice(0, 160),
+      title: service.seo.title,
+      description: service.seo.description,
       canonicalURL: `${CANONICAL_ORIGIN}/${service.slug}/`,
+      openGraphTitle: service.seo.title,
+      openGraphDescription: service.seo.description,
+      openGraphImage: requireMedia(service.hero.imageFile),
       index: true,
       follow: true,
+      schemaTypes: ['Service', 'BreadcrumbList', 'FAQPage'],
     },
     status: 'published' as const,
     // See the FAQ note above: publishing through the local API needs `_status`.
@@ -492,6 +593,33 @@ export const seedAlRukn = async (
       data: { services: serviceIds },
       overrideAccess: true,
     })
+  }
+
+  // Versioned relationship writes can finalize their database timestamp after
+  // the update result is materialized. Refresh the service stamps so the batch
+  // registry can distinguish untouched seed content from later editor changes.
+  for (const { slug, id } of writtenServices) {
+    const current = (await payload.findByID({
+      collection: 'services',
+      id,
+      depth: 0,
+      overrideAccess: true,
+    })) as { updatedAt: string }
+    replaceRecord('services', id, slug, current.updatedAt)
+  }
+
+  if (options.servicesOnly) {
+    registry.batches = registry.batches.filter((batch) => batch.batchId !== batchId)
+    registry.batches.push({ batchId, createdAt: new Date().toISOString(), records: batchRecords })
+
+    const { mkdirSync, writeFileSync } = await import('node:fs')
+    mkdirSync(path.dirname(registryPath), { recursive: true })
+    writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`, 'utf8')
+
+    log(
+      `seed: service-only batch ${batchId} → created ${result.created}, updated ${result.updated}, skipped ${result.skipped}`,
+    )
+    return result
   }
 
   // ---------------------------------------------------------------- pages ---
@@ -631,6 +759,73 @@ export const seedAlRukn = async (
     overrideAccess: true,
   })
 
+  const serviceIds = SERVICE_LINKS
+    .map(({ slug }) => serviceIdBySlug.get(slug))
+    .filter(exists)
+  const homepage: Omit<Homepage, 'id'> = {
+    _status: 'published',
+    hero: {
+      copy: 'Custom-made sofas, Majlis seating, wardrobes, beds, upholstery and furniture restoration designed and built around your space, style and requirements.',
+      enabled: true,
+      eyebrow: 'Made to measure in the UAE',
+      heading: HOME_META.h1,
+      image: requireMedia(MEDIA_USAGE.hero),
+      note: 'Send us your design or furniture photo for a quotation.',
+      primaryLabel: 'Get Free Quote',
+      trustLine: 'Custom Made • Repair • Upholstery • UAE Service',
+      whatsAppLabel: 'WhatsApp Us',
+    },
+    sections: [
+      {
+        blockType: 'services', enabled: true, heading: 'Custom Furniture & Upholstery Services',
+        intro: 'Custom seating, fitted furniture and careful restoration for villas, apartments, offices and commercial spaces.', services: serviceIds,
+      },
+      {
+        blockType: 'customFurniture', enabled: true, eyebrow: 'Bespoke furniture',
+        heading: 'Custom Made Furniture Designed for Your Space',
+        body: 'Our custom made furniture service in Dubai starts with your room, dimensions and preferred design. Choose the fabric, colour, materials and finish for furniture made for villas, apartments, offices and commercial interiors.',
+        image: requireMedia(MEDIA_USAGE.service('custom-furniture')), imagePosition: 'right', ctaLabel: 'Request a Custom Furniture Quote',
+      },
+      {
+        blockType: 'upholstery', enabled: true, eyebrow: 'Repair and reupholstery',
+        heading: 'Sofa Upholstery & Furniture Restoration',
+        body: 'Refresh an existing sofa with new upholstery, replacement fabric and foam where required. We assess damaged seating, repair what can be retained and update the look without claiming work the piece does not need.',
+        image: requireMedia(MEDIA_USAGE.service('sofa-upholstery')), imagePosition: 'left', ctaLabel: 'Send Sofa Photo for a Quote',
+      },
+      {
+        blockType: 'majlis', enabled: true, eyebrow: 'Traditional and modern seating',
+        heading: 'Custom Arabic Majlis Furniture',
+        body: 'Plan traditional or modern Majlis seating to suit the room. Custom dimensions, seating layouts, upholstery and fabric choices are agreed around how the space will be used.',
+        image: requireMedia(MEDIA_USAGE.service('majlis-furniture')), imagePosition: 'right', ctaLabel: 'Explore Majlis Furniture',
+      },
+      { blockType: 'projects', enabled: true, heading: 'Our Furniture & Upholstery Work', intro: 'Verified project photography will appear here after it is approved for publication.', projects: [] },
+      { blockType: 'process', enabled: true, heading: 'From Your Idea to Finished Furniture', steps: HOME_PROCESS.map((step) => ({ ...step })) },
+      {
+        blockType: 'whyChoose', enabled: true, heading: 'Why Choose Al Rukn',
+        intro: 'A practical, made-to-order service focused on your dimensions, materials and intended use.',
+        items: HOME_BENEFITS.map((title) => ({ title })),
+      },
+      {
+        blockType: 'areas', enabled: true, heading: 'Furniture & Upholstery Services Across Dubai & the UAE',
+        intro: 'Al Rukn provides custom furniture, sofa upholstery, furniture repair and related services across Dubai, Sharjah and selected UAE communities.', areas: areaIds,
+      },
+      {
+        blockType: 'localContent', enabled: true, heading: 'Made for UAE Homes and Workplaces',
+        paragraphs: [
+          { text: 'We make and restore furniture for villas and apartments, with dimensions and finishes chosen for the room rather than a standard catalogue size.' },
+          { text: 'For offices and commercial spaces, layouts can be planned around daily use, available floor area and the materials required for the setting.' },
+          { text: 'Share the location when you request a quotation and the team will confirm collection, delivery or installation arrangements that apply to the job.' },
+        ],
+      },
+      { blockType: 'testimonials', enabled: false, heading: 'Customer Feedback', testimonials: [] },
+      { blockType: 'faqs', enabled: true, enableSchema: true, faqs: result.faqs.slice(0, 10), heading: 'Frequently Asked Questions' },
+      { blockType: 'finalCta', enabled: true, heading: 'Have a Furniture Design in Mind?', description: 'Send your furniture photo, design or requirements and request a quotation.', quoteHeading: 'Request a Free Quotation', whatsAppLabel: 'WhatsApp Us' },
+    ],
+    seo: { description: HOME_META.description, image: requireMedia(MEDIA_USAGE.openGraph), title: HOME_META.title },
+    trustItems: HOME_TRUST_ITEMS.map((label) => ({ label })),
+  }
+  await write.updateGlobal({ slug: 'homepage', data: homepage, draft: false, overrideAccess: true })
+
   // No social profiles were supplied by the business, so the global stays empty
   // rather than listing accounts that cannot be verified.
   await write.updateGlobal({
@@ -639,7 +834,7 @@ export const seedAlRukn = async (
     overrideAccess: true,
   })
 
-  log('seed: globals updated (site-settings, contact-information, header, footer, seo-defaults, social-media)')
+  log('seed: globals updated (homepage, site-settings, contact-information, header, footer, seo-defaults, social-media)')
 
   registry.batches = registry.batches.filter((batch) => batch.batchId !== batchId)
   registry.batches.push({ batchId, createdAt: new Date().toISOString(), records: batchRecords })
@@ -677,7 +872,7 @@ export const removeSeedBatch = async (
   const write = writeApi(payload)
 
   for (const record of batch.records) {
-    const collection = record.collection as 'services' | 'pages' | 'media' | 'faqs'
+    const collection = record.collection as 'areas' | 'services' | 'pages' | 'media' | 'faqs'
     try {
       const current = (await payload.findByID({
         collection,

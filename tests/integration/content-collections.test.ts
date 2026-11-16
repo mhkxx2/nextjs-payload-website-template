@@ -3,9 +3,11 @@
 import { randomUUID } from 'node:crypto'
 
 import type { CollectionConfig, Field, Payload } from 'payload'
+import sharp from 'sharp'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { FIXED_SERVICE_SLUGS, RESERVED_EXACT_ROUTES } from '@/lib/routes'
+import type { User } from '@/payload-types'
 
 import { type IsolatedPayload, startIsolatedPayload } from './testPayload'
 
@@ -79,7 +81,12 @@ describe('Task 6 content collection schemas', () => {
       ]),
     )
     expect(payload.config.globals.map(({ slug }) => slug)).toEqual([
+      'homepage',
+      'about-page',
+      'contact-page',
+      'archive-settings',
       'site-settings',
+      'google-reviews',
       'header',
       'footer',
       'contact-information',
@@ -211,6 +218,99 @@ describe('Task 6 content collection schemas', () => {
     expect(fields.get('projects')).toMatchObject({ relationTo: 'projects', type: 'relationship' })
     expect(fields.get('relatedServices')).toMatchObject({ relationTo: 'services', type: 'relationship' })
   })
+
+  it('persists the sofa model with informative Media, bounded arrays, and unlinked coming-soon cards', async () => {
+    const buffer = await sharp({
+      create: { background: '#967259', channels: 3, height: 6, width: 8 },
+    }).png().toBuffer()
+    const upload = (alt: string) => payload.create({
+      collection: 'media',
+      context: { disableRevalidate: true },
+      data: {
+        alt, decorative: false, uploadedBy: auditActor.id,
+        license: 'Locally generated test fixture', sourceURL: 'https://example.invalid/sofa-fixture',
+      },
+      file: { data: buffer, mimetype: 'image/png', name: `sofa-${randomUUID()}.png`, size: buffer.length },
+      overrideAccess: true,
+      user: auditActor as User,
+    })
+    await expect(upload('   ')).rejects.toThrow(/meaningful alt text/)
+    const image = await upload('Upholstered corner sofa')
+    let serviceID: number | undefined
+    const popularServices = Array.from({ length: 8 }, (_, index) => ({
+      description: 'Replace upholstery fabric', image: image.id, title: `Sofa option ${index + 1}`,
+      href: '/sofa-repair/',
+    }))
+    const fabricCards = Array.from({ length: 5 }, (_, index) => ({
+      bestUse: 'Everyday seating', comfort: 'Soft texture', durability: 'Discuss with our team',
+      image: image.id, title: `Fabric ${index + 1}`,
+    }))
+    try {
+      const created = await payload.create({
+        collection: 'services',
+        context: { disableRevalidate: true },
+        data: {
+          title: 'Sofa CMS contract', slug: 'sofa-upholstery', status: 'draft',
+          seo: { canonicalURL: 'https://alruknfurniture.ae/sofa-upholstery/' },
+          sofaUpholsteryLanding: {
+            popularServices: popularServices.map((card, index) => index === 7
+              ? { ...card, comingSoon: true, href: '/bed-upholstery/' }
+              : card),
+            fabricCards,
+            foamComfort: { items: [{ text: 'Renew tired foam' }] },
+            bedTeaser: { title: 'Bed Upholstery', image: image.id },
+          },
+        },
+        depth: 1,
+        draft: false,
+        overrideAccess: true,
+      })
+      serviceID = created.id
+      const cards = created.sofaUpholsteryLanding!.popularServices!
+      expect(cards[0]!.href).toBe('/sofa-repair/')
+      expect(cards[7]!.href).toBeNull()
+      expect(cards[0]!.image).toMatchObject({ alt: 'Upholstered corner sofa' })
+      expect(created.sofaUpholsteryLanding!.bedTeaser).toMatchObject({ label: 'Coming Soon' })
+
+      const update = (sofaUpholsteryLanding: Partial<NonNullable<typeof created.sofaUpholsteryLanding>>) =>
+        payload.update({
+          collection: 'services', context: { disableRevalidate: true }, id: created.id,
+          data: { sofaUpholsteryLanding }, overrideAccess: true,
+        })
+      await expect(update({ popularServices: popularServices.map((card, index) => index === 0
+        ? { ...card, href: 'https://fixtures.example.test/' } : card) })).rejects.toThrow()
+      for (const count of [7, 10]) {
+        await expect(update({ popularServices: Array.from({ length: count }, () => popularServices[0]!) })).rejects.toThrow()
+      }
+      for (const count of [4, 7]) {
+        await expect(update({ fabricCards: Array.from({ length: count }, () => fabricCards[0]!) })).rejects.toThrow()
+      }
+      await expect(update({ foamComfort: { items: Array.from({ length: 7 }, () => ({ text: 'Foam option' })) } })).rejects.toThrow()
+      const upperLimits = await update({
+        popularServices: [...popularServices, popularServices[0]!],
+        fabricCards: [...fabricCards, fabricCards[0]!],
+        foamComfort: { items: Array.from({ length: 6 }, () => ({ text: 'Foam option' })) },
+      })
+      expect(upperLimits.sofaUpholsteryLanding!.popularServices).toHaveLength(9)
+      expect(upperLimits.sofaUpholsteryLanding!.fabricCards).toHaveLength(6)
+      const toggled = await update({ popularServices: upperLimits.sofaUpholsteryLanding!.popularServices!.map(
+        (card, index) => index === 0 ? { ...card, comingSoon: true } : card,
+      ) })
+      expect(toggled.sofaUpholsteryLanding!.popularServices![0]!.href).toBeNull()
+      const partialUpdate = await update({
+        popularServices: toggled.sofaUpholsteryLanding!.popularServices!.map((card, index) => index === 0
+          ? { ...card, comingSoon: undefined, href: '/bed-upholstery/' } : card),
+      })
+      expect(partialUpdate.sofaUpholsteryLanding!.popularServices![0]!.href).toBeNull()
+      const read = await payload.findByID({ collection: 'services', id: created.id, overrideAccess: true })
+      expect(read.sofaUpholsteryLanding!.popularServices![0]!.href).toBeNull()
+    } finally {
+      if (serviceID) await payload.delete({
+        collection: 'services', context: { disableRevalidate: true }, id: serviceID, overrideAccess: true,
+      })
+      await payload.delete({ collection: 'media', context: { disableRevalidate: true }, id: image.id, overrideAccess: true })
+    }
+  }, 30_000)
 
   it('accepts all and only the authoritative fixed service slugs and enforces uniqueness', async () => {
     const created: Array<number | string> = []

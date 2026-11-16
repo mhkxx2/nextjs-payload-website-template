@@ -243,7 +243,7 @@ describe('precise content cache invalidation', () => {
         canonicalPath('service', 'custom-sofa'),
       ]),
     )
-    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', 'max')
+    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', { expire: 0 })
     expect(find).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: 'services',
@@ -279,7 +279,7 @@ describe('precise content cache invalidation', () => {
       req: { context: {}, payload: { find: vi.fn().mockResolvedValue({ docs: [] }), logger } },
     })
 
-    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('collection_services', 'max')
+    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('collection:services', { expire: 0 })
   })
 
   it('does not invalidate public caches for a Payload draft with public custom fields', async () => {
@@ -398,7 +398,7 @@ describe('precise content cache invalidation', () => {
 
     expect(cacheMocks.revalidatePath).toHaveBeenCalledWith(canonicalPath('post', 'article'))
     expect(cacheMocks.revalidatePath).toHaveBeenCalledWith('/blog/')
-    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', 'max')
+    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', { expire: 0 })
   })
 
   it('invalidates published delete paths, affected indexes, featured homepage, and related records', async () => {
@@ -452,7 +452,7 @@ describe('precise content cache invalidation', () => {
       ]),
     )
     expect(find).toHaveBeenCalledTimes(2)
-    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', 'max')
+    expect(cacheMocks.revalidateTag).toHaveBeenCalledWith('sitemap', { expire: 0 })
   })
 
   it('does nothing when revalidation is explicitly disabled', async () => {

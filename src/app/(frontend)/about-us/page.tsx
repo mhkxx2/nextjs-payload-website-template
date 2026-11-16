@@ -1,15 +1,12 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
-import { BenefitsBlockComponent } from '@/blocks/Benefits/Component'
-import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
-import { LocationCoverageBlockComponent } from '@/blocks/LocationCoverage/Component'
-import { ProcessStepsBlockComponent } from '@/blocks/ProcessSteps/Component'
-import { ServiceGridBlockComponent } from '@/blocks/ServiceGrid/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
-import { aboutCopy, homeCopy, processSteps, workingBenefits } from '@/data/launch-copy'
-import type { Service } from '@/payload-types'
+import { cmsFallbacks } from '@/data/cmsFallbacks'
+import type { Area, Media, Service } from '@/payload-types'
 import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { orderFixedServices } from '@/lib/contentLinks'
 import { queryPublicList } from '@/lib/publicQueries'
@@ -18,11 +15,14 @@ import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const defaults = await getSeoDefaults()
+  const [defaults, about] = await Promise.all([
+    getSeoDefaults(),
+    getCachedGlobal('about-page', 1)(),
+  ])
 
-  return buildMetadata(null, {
+  return buildMetadata({ seo: about.seo }, {
     ...defaults,
-    descriptionFallback: aboutCopy.intro,
+    descriptionFallback: about.hero?.introduction || cmsFallbacks.about.intro,
     path: '/about-us/',
     titleFallback: 'About',
   })
@@ -30,58 +30,201 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const breadcrumbs = buildBreadcrumbs('/about-us/')
-  const [{ docs }, contact, globals] = await Promise.all([
+  const [{ docs }, areas, globals, about] = await Promise.all([
     queryPublicList<Service>({ collection: 'services', depth: 1, limit: 20 }),
-    getCachedGlobal('contact-information', 1)(),
+    queryPublicList<Area>({ collection: 'areas', depth: 2, limit: 100, sort: 'order' }),
     getSchemaGlobals(),
+    getCachedGlobal('about-page', 1)(),
   ])
   const schemas = buildSchemas({ breadcrumbs, globals, kind: 'page', path: '/about-us/' })
 
   const services = orderFixedServices(docs)
-  const areas = (contact?.serviceAreas ?? [])
-    .filter((item) => item?.area)
-    .map((item) => ({ name: item.area as string }))
+  const customFurniture = services.find((service) => service.slug === 'custom-furniture')
+  const serviceWithImage =
+    customFurniture ?? services.find((service) => typeof service.hero?.image === 'object')
+  const heroImage = typeof about.hero?.image === 'object'
+    ? about.hero.image
+    : typeof serviceWithImage?.hero?.image === 'object' ? serviceWithImage.hero.image : null
+  const workshopImage =
+    customFurniture?.gallery
+      ?.map(({ image }) => (typeof image === 'object' ? image : null))
+      .find((image): image is Media => Boolean(image?.filename?.includes('about-workshop'))) ??
+    customFurniture?.gallery?.find(({ image }) => typeof image === 'object')?.image
+  const storyImage = typeof about.story?.image === 'object'
+    ? about.story.image
+    : typeof workshopImage === 'object' ? workshopImage : heroImage
+  const proofItems = about.proofItems?.length
+    ? about.proofItems
+    : cmsFallbacks.about.workingBenefits.slice(0, 4).map(({ title }) => ({ label: title }))
+  const process = about.processSection?.steps?.length
+    ? about.processSection.steps
+    : cmsFallbacks.about.processSteps
+  const principles = about.principlesSection?.items?.length
+    ? about.principlesSection.items
+    : cmsFallbacks.about.workingBenefits
+  const storyParagraphs = about.story?.paragraphs?.length
+    ? about.story.paragraphs.map(({ text }) => text).filter(Boolean)
+    : cmsFallbacks.about.story.body
 
   return (
     <>
       <JsonLd schemas={schemas} />
-      <div className="pt-16">
-        <div className="container mx-auto px-4">
-          <Breadcrumbs items={breadcrumbs} />
-          <header className="max-w-3xl py-6">
-            <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
-              {aboutCopy.heading}
-            </h1>
-            <p className="text-neutral-700">{aboutCopy.intro}</p>
-          </header>
+      <section className="about-hero">
+        <div className="site-container about-hero-layout">
+          <div className="about-hero-copy">
+            <div className="about-breadcrumbs">
+              <Breadcrumbs items={breadcrumbs} />
+            </div>
+            <p className="eyebrow">{about.hero?.eyebrow || cmsFallbacks.about.eyebrow}</p>
+            <h1>{about.hero?.heading || cmsFallbacks.about.heading}</h1>
+            <p>{about.hero?.introduction || cmsFallbacks.about.intro}</p>
+            <div className="action-row">
+              <Link className="button button-primary" href="/contact/">
+                {about.hero?.primaryLabel || 'Request a Free Quotation'}
+              </Link>
+              <Link className="button about-button-light" href="/services/">
+                {about.hero?.secondaryLabel || 'Explore Our Services'}
+              </Link>
+            </div>
+          </div>
+          {heroImage && (
+            <div className="about-hero-image">
+              <Image
+                alt={heroImage.alt || 'Custom furniture made for a UAE home'}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 48vw"
+                src={heroImage.url || ''}
+              />
+            </div>
+          )}
         </div>
-      </div>
+      </section>
+
+      <aside aria-label="How Al Rukn works" className="about-proof-strip">
+        <div className="site-container">
+          {proofItems.map((item) => (
+            <span key={item.label}>{item.label}</span>
+          ))}
+        </div>
+      </aside>
+
+      <section className="home-section about-story">
+        <div className="site-container about-story-layout">
+          {storyImage && (
+            <div className="about-story-image">
+              <Image
+                alt={storyImage.alt || 'Workbench inside the Al Rukn furniture workshop'}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                src={storyImage.url || ''}
+              />
+            </div>
+          )}
+          <div className="about-story-copy">
+            <p className="eyebrow">{about.story?.eyebrow || cmsFallbacks.about.story.eyebrow}</p>
+            <h2>{about.story?.heading || cmsFallbacks.about.story.heading}</h2>
+            {storyParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {services.length > 0 && (
-        <ServiceGridBlockComponent
-          heading={aboutCopy.servicesHeading}
-          services={services}
-        />
+        <section className="home-section about-services">
+          <div className="site-container">
+            <header className="section-heading">
+              <p className="eyebrow">{about.servicesSection?.eyebrow || 'Made, repaired and fitted'}</p>
+              <h2>{about.servicesSection?.heading || cmsFallbacks.about.servicesHeading}</h2>
+              <p>{about.servicesSection?.introduction || cmsFallbacks.about.servicesIntro}</p>
+            </header>
+            <div className="about-service-grid">
+              {services.map((service, index) => (
+                <Link href={`/${service.slug}/`} key={service.id}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{service.title}</h3>
+                    <p>{service.summary}</p>
+                  </div>
+                  <b aria-hidden="true">↗</b>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
-      <ProcessStepsBlockComponent heading={aboutCopy.processHeading} steps={processSteps} />
+      <section className="home-section process-section about-process">
+        <div className="site-container">
+          <header className="section-heading">
+            <p className="eyebrow">{about.processSection?.eyebrow || 'A clear four-step approach'}</p>
+            <h2>{about.processSection?.heading || cmsFallbacks.about.processHeading}</h2>
+          </header>
+          <ol className="process-grid">
+            {process.map((step, index) => (
+              <li key={step.title}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-      <BenefitsBlockComponent heading={homeCopy.benefits.heading} items={workingBenefits} />
+      <section className="home-section about-principles">
+        <div className="site-container benefits-layout">
+          <header className="section-heading">
+            <p className="eyebrow">{about.principlesSection?.eyebrow || 'Why the details matter'}</p>
+            <h2>{about.principlesSection?.heading || cmsFallbacks.about.principlesHeading}</h2>
+            <p>{about.principlesSection?.introduction || cmsFallbacks.about.principlesIntro}</p>
+          </header>
+          <div className="benefit-list">
+            {principles.map((item, index) => (
+              <article key={item.title}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {areas.length > 0 && (
-        <LocationCoverageBlockComponent
-          areas={areas}
-          heading={aboutCopy.coverageHeading}
-          subheading={homeCopy.coverage.subheading}
-        />
+      {areas.docs.length > 0 && (
+        <section className="home-section about-coverage">
+          <div className="site-container about-coverage-layout">
+            <header className="section-heading">
+              <p className="eyebrow">{about.coverageSection?.eyebrow || 'Across the UAE'}</p>
+              <h2>{about.coverageSection?.heading || cmsFallbacks.about.coverageHeading}</h2>
+              <p>{about.coverageSection?.introduction || cmsFallbacks.about.coverageIntro}</p>
+            </header>
+            <div className="about-area-list">
+              {areas.docs.map((area) => (
+                <span key={area.name}>{area.name}</span>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
-      <CallToActionBlockComponent
-        buttonLink={aboutCopy.cta.buttonLink}
-        buttonText={aboutCopy.cta.buttonText}
-        description={aboutCopy.cta.description}
-        heading={aboutCopy.cta.heading}
-      />
+      <section className="about-cta">
+        <div className="site-container about-cta-layout">
+          <div>
+            <p className="eyebrow">{about.cta?.eyebrow || 'Start with a photo or idea'}</p>
+            <h2>{about.cta?.heading || cmsFallbacks.about.cta.heading}</h2>
+          </div>
+          <div>
+            <p>{about.cta?.description || cmsFallbacks.about.cta.description}</p>
+            <Link className="button button-dark" href="/contact/">
+              {about.cta?.primaryLabel || cmsFallbacks.about.cta.buttonText}
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

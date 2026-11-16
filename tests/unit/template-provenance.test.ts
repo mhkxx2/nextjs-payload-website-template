@@ -65,12 +65,18 @@ describe('template provenance and cleanup', () => {
     expect(source).not.toMatch(/mongo/i)
   })
 
-  it('references the repository-owned SVG favicon without a missing ICO request', async () => {
+  it('publishes crawlable public favicon paths instead of /api/media URLs', async () => {
     const layout = await readFile(path.join(root, 'src/app/(frontend)/layout.tsx'), 'utf8')
     const favicon = await readFile(path.join(root, 'public/favicon.svg'), 'utf8')
+    const siteIcons = await readFile(path.join(root, 'src/lib/siteIcons.ts'), 'utf8')
 
-    expect(layout).toContain('href="/favicon.svg"')
-    expect(layout).not.toContain('/favicon.ico')
+    // Google cannot use icons under Disallow: /api/ — metadata must point at public routes.
+    expect(layout).toContain('SITE_ICON_PATHS')
+    expect(layout).toContain('/favicon.ico')
+    expect(layout).toContain('/icon.png')
+    expect(layout).not.toContain('resolveMediaURL(settings?.favicon)')
+    expect(siteIcons).toContain("public/favicon.svg")
     expect(favicon).toContain('<svg')
   })
 })
+

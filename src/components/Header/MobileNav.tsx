@@ -1,125 +1,113 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+
 import { FocusTrap } from '@/components/FocusTrap'
-import { FIXED_SERVICE_SLUGS, canonicalPath } from '@/lib/routes'
+import { TrackedContactLink } from '@/components/TrackedContactLink'
+import { phoneHref, whatsappHref } from '@/lib/contactLinks'
+import { canonicalPath } from '@/lib/routes'
+import { presentationPath, type PresentationDestination } from '@/lib/presentationRoutes'
 
-const SERVICE_LABELS: Record<string, string> = {
-  'sofa-upholstery': 'Sofa Upholstery & Re-upholstery',
-  'custom-furniture': 'Custom Furniture Manufacturing',
-  'custom-sofa': 'Custom Sofa Manufacturing',
-  'majlis-furniture': 'Majlis Upholstery & Seating',
-  'curtains-blinds': 'Curtains & Blinds Upholstery',
-  'sofa-repair': 'Sofa & Cushion Repair',
-  'custom-wardrobes': 'Custom Wardrobes & Joinery',
-  'custom-beds-headboards': 'Headboard & Bed Upholstery',
-  'office-furniture': 'Commercial & Office Upholstery',
-}
+// Payload relationship values vary with query depth and are narrowed at use sites.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RecordData = Record<string, any>
 
-export interface MobileNavProps {
-  contactPhone?: string | null
-  contactWhatsApp?: string | null
-}
+const DRAWER_ID = 'mobile-navigation-drawer'
 
-export const MobileNav: React.FC<MobileNavProps> = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const triggerRef = useRef<HTMLButtonElement>(null)
-
-  const toggleMenu = () => {
-    setIsOpen((prev) => !prev)
-  }
-
-  const closeMenu = () => {
-    setIsOpen(false)
-    if (triggerRef.current) {
-      triggerRef.current.focus()
-    }
-  }
+export function MobileNav({ contact = {}, data = {}, settings = {} }: { contact?: RecordData; data?: RecordData; settings?: RecordData }) {
+  const [open, setOpen] = useState(false)
+  const trigger = useRef<HTMLButtonElement>(null)
+  const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
+    if (!open) return
+
+    const scrollY = window.scrollY
+    const previousBodyStyles = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
     }
+    const previousRootOverflow = document.documentElement.style.overflow
+
+    document.body.dataset.mobileNavOpen = 'true'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+
     return () => {
-      document.body.style.overflow = ''
+      delete document.body.dataset.mobileNavOpen
+      document.documentElement.style.overflow = previousRootOverflow
+      document.body.style.overflow = previousBodyStyles.overflow
+      document.body.style.position = previousBodyStyles.position
+      document.body.style.top = previousBodyStyles.top
+      document.body.style.width = previousBodyStyles.width
+      window.scrollTo(0, scrollY)
     }
-  }, [isOpen])
+  }, [open])
 
-  return (
-    <div className="lg:hidden">
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={toggleMenu}
-        aria-expanded={isOpen}
-        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        className="p-2 text-charcoal hover:text-gold-muted focus:outline-none focus:ring-2 focus:ring-gold-muted rounded-md"
+  const call = phoneHref(contact.phoneE164)
+  const whatsapp = contact.whatsappAvailable === false ? null : whatsappHref(contact.whatsappE164, settings.whatsAppCopy?.defaultMessage)
+  const navigation = Array.isArray(data.navigation) ? data.navigation : []
+  const services = Array.isArray(data.serviceLinks) ? data.serviceLinks : []
+
+  const drawer = open && typeof document !== 'undefined' ? createPortal(
+    <FocusTrap active onEscape={close}>
+      <div
+        aria-label="Navigation menu"
+        aria-modal="true"
+        className="mobile-drawer"
+        id={DRAWER_ID}
+        role="dialog"
       >
-        {isOpen ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        )}
-      </button>
-
-      {isOpen ? (
-        <FocusTrap active={isOpen} onEscape={closeMenu} className="fixed inset-0 z-50 bg-charcoal/95 text-ivory flex flex-col p-6 overflow-y-auto">
-          <div className="flex justify-between items-center mb-8">
-            <span className="text-lg font-bold tracking-wider uppercase text-gold-muted">
-              Al Rukn Navigation
-            </span>
-            <button
-              type="button"
-              onClick={closeMenu}
-              aria-label="Close navigation menu"
-              className="p-2 text-ivory hover:text-gold-muted focus:outline-none focus:ring-2 focus:ring-gold-muted rounded-md"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+        <div className="mobile-drawer-scroll">
+          <div className="drawer-head">
+            <span className="drawer-brand">{settings.brandName || 'Al Rukn Furniture'}</span>
+            <button aria-label="Close navigation menu" onClick={close} type="button">×</button>
           </div>
-
-          <nav aria-label="Mobile Navigation" className="flex flex-col gap-6 text-base font-medium">
-            <Link href="/" onClick={closeMenu} className="hover:text-gold-muted transition-colors py-1">
-              Home
-            </Link>
-
-            <div className="flex flex-col gap-2 border-y border-gold-muted/20 py-4 my-2">
-              <span className="text-xs uppercase tracking-widest text-gold-muted font-semibold mb-2">
-                Our Services
-              </span>
-              {FIXED_SERVICE_SLUGS.map((slug) => (
-                <Link
-                  key={slug}
-                  href={canonicalPath('service', slug)}
-                  onClick={closeMenu}
-                  className="text-sm hover:text-gold-muted transition-colors py-1 ps-2 border-s-2 border-transparent hover:border-gold-muted"
-                >
-                  {SERVICE_LABELS[slug] || slug}
-                </Link>
-              ))}
-            </div>
-
-            <Link href="/projects/" onClick={closeMenu} className="hover:text-gold-muted transition-colors py-1">
-              Projects
-            </Link>
-            <Link href="/about-us/" onClick={closeMenu} className="hover:text-gold-muted transition-colors py-1">
-              About Us
-            </Link>
-            <Link href="/contact/" onClick={closeMenu} className="hover:text-gold-muted transition-colors py-1">
-              Contact
-            </Link>
+          <nav aria-label="Mobile navigation">
+            {navigation.map((item: RecordData) => {
+              if (item.destination === 'services') {
+                return <div className="mobile-services" key={item.id || item.label}>
+                  <Link href="/services/" onClick={close}>{item.label || 'Services'}</Link>
+                  {services.map((entry: RecordData) => {
+                    const service = typeof entry.service === 'object' ? entry.service : null
+                    return service?.slug ? <Link href={canonicalPath('service', service.slug)} key={entry.id || service.id} onClick={close}>{entry.label || service.title}</Link> : null
+                  })}
+                </div>
+              }
+              const href = item.destination === 'areas' ? '/#areas-we-serve' : typeof item.destination === 'string' ? presentationPath(item.destination as PresentationDestination) : null
+              return href ? <Link href={href} key={item.id || item.label} onClick={close}>{item.label}</Link> : null
+            })}
           </nav>
-        </FocusTrap>
-      ) : null}
-    </div>
-  )
+          <div className="drawer-actions">
+            {call && <TrackedContactLink analytics={{ cta_location: 'mobile_navigation' }} eventName="phone_call_click" href={call}>Call Now</TrackedContactLink>}
+            {whatsapp && <TrackedContactLink analytics={{ cta_location: 'mobile_navigation' }} eventName="whatsapp_click" href={whatsapp} rel="noopener noreferrer" target="_blank">WhatsApp</TrackedContactLink>}
+            <Link href="/#request-quote" onClick={close}>Get Free Quote</Link>
+          </div>
+        </div>
+      </div>
+    </FocusTrap>,
+    document.body,
+  ) : null
+
+  return <div className="mobile-nav">
+    <button
+      aria-controls={DRAWER_ID}
+      aria-expanded={open}
+      aria-label={open ? 'Navigation menu open' : 'Open navigation menu'}
+      className="menu-trigger"
+      onClick={() => setOpen((value) => !value)}
+      ref={trigger}
+      type="button"
+    >
+      <span /><span /><span />
+    </button>
+    {drawer}
+  </div>
 }

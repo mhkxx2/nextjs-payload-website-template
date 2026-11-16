@@ -67,13 +67,18 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    areas: Area;
     pages: Page;
     posts: Post;
+    'portfolio-items': PortfolioItem;
     projects: Project;
     services: Service;
+    'curtain-blind-categories': CurtainBlindCategory;
+    'curtain-blind-products': CurtainBlindProduct;
     faqs: Faq;
     testimonials: Testimonial;
     leads: Lead;
+    'lead-media': LeadMedia;
     redirects: Redirect;
     users: User;
     media: Media;
@@ -89,13 +94,18 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    areas: AreasSelect<false> | AreasSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    'portfolio-items': PortfolioItemsSelect<false> | PortfolioItemsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    'curtain-blind-categories': CurtainBlindCategoriesSelect<false> | CurtainBlindCategoriesSelect<true>;
+    'curtain-blind-products': CurtainBlindProductsSelect<false> | CurtainBlindProductsSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    'lead-media': LeadMediaSelect<false> | LeadMediaSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -114,7 +124,12 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | 'en' | 'en'[];
   globals: {
+    homepage: Homepage;
+    'about-page': AboutPage;
+    'contact-page': ContactPage;
+    'archive-settings': ArchiveSetting;
     'site-settings': SiteSetting;
+    'google-reviews': GoogleReview;
     header: Header;
     footer: Footer;
     'contact-information': ContactInformation;
@@ -122,7 +137,12 @@ export interface Config {
     'social-media': SocialMedia;
   };
   globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
+    'archive-settings': ArchiveSettingsSelect<false> | ArchiveSettingsSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'google-reviews': GoogleReviewsSelect<false> | GoogleReviewsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'contact-information': ContactInformationSelect<false> | ContactInformationSelect<true>;
@@ -162,6 +182,34 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "areas".
+ */
+export interface Area {
+  id: number;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  group: 'dubai' | 'sharjah' | 'ras-al-khaimah' | 'other-uae';
+  summary?: string | null;
+  featured?: boolean | null;
+  order: number;
+  /**
+   * Optional. The homepage links this area only when the related page is genuinely published.
+   */
+  landingPage?: (number | null) | Page;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -345,6 +393,14 @@ export interface Media {
     [k: string]: unknown;
   } | null;
   sourceURL: string;
+  sourceSite?: string | null;
+  sourceCategory?: string | null;
+  sourceFilename?: string | null;
+  /**
+   * SHA-256 of the optimized import; used to prevent duplicate media.
+   */
+  sourceHash?: string | null;
+  importNote?: string | null;
   license: string;
   sourceNotes?: string | null;
   uploadedBy: number | User;
@@ -468,12 +524,19 @@ export interface Service {
   generateSlug?: boolean | null;
   slug: string;
   summary?: string | null;
+  visualVariant?: ('image-right' | 'full-bleed' | 'editorial' | 'product') | null;
   hero?: {
     eyebrow?: string | null;
     heading?: string | null;
     copy?: string | null;
     image?: (number | null) | Media;
   };
+  trustItems?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   details?: {
     root: {
       type: string;
@@ -489,6 +552,35 @@ export interface Service {
     };
     [k: string]: unknown;
   } | null;
+  serviceOptions?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    intro?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          image?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  featureSections?:
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        copy: string;
+        image?: (number | null) | Media;
+        imagePosition?: ('right' | 'left') | null;
+        bullets?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   benefits?:
     | {
         title: string;
@@ -503,6 +595,7 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
+  materialsHeading?: string | null;
   process?:
     | {
         title: string;
@@ -510,6 +603,25 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
+  processHeading?: string | null;
+  comparison?: {
+    heading?: string | null;
+    intro?: string | null;
+    leftTitle?: string | null;
+    leftItems?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    rightTitle?: string | null;
+    rightItems?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   faqs?: (number | Faq)[] | null;
   serviceAreas?:
     | {
@@ -525,15 +637,152 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
+  galleryHeading?: string | null;
+  galleryIntro?: string | null;
+  serviceAreaHeading?: string | null;
+  serviceAreaCopy?: string | null;
+  areaLinkLabel?: string | null;
   quotationContext?: {
     heading?: string | null;
     message?: string | null;
+    buttonLabel?: string | null;
   };
+  relatedHeading?: string | null;
   whatsAppContext?: {
     label?: string | null;
     message?: string | null;
   };
   relatedServices?: (number | Service)[] | null;
+  /**
+   * Conversion-focused sections used only by the Sofa Upholstery landing page.
+   */
+  sofaUpholsteryLanding?: {
+    popularServices?:
+      | {
+          title: string;
+          description: string;
+          image: number | Media;
+          ctaLabel?: string | null;
+          /**
+           * Optional internal route. Leave empty for Coming Soon cards.
+           */
+          href?: string | null;
+          comingSoon?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    fabricCards?:
+      | {
+          title: string;
+          image: number | Media;
+          bestUse: string;
+          comfort: string;
+          durability: string;
+          id?: string | null;
+        }[]
+      | null;
+    foamComfort?: {
+      heading?: string | null;
+      copy?: string | null;
+      items?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      ctaLabel?: string | null;
+    };
+    bedTeaser?: {
+      title?: string | null;
+      description?: string | null;
+      label?: string | null;
+      /**
+       * Optional internal route when the bed service is live.
+       */
+      href?: string | null;
+      image?: (number | null) | Media;
+    };
+  };
+  /**
+   * Conversion-focused sections used only by the Bed Upholstery landing page.
+   */
+  bedUpholsteryLanding?: {
+    popularServices?:
+      | {
+          title: string;
+          description: string;
+          image: number | Media;
+          ctaLabel?: string | null;
+          /**
+           * Optional internal route. Leave empty for Coming Soon cards.
+           */
+          href?: string | null;
+          comingSoon?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    fabricCards?:
+      | {
+          title: string;
+          image: number | Media;
+          bestUse: string;
+          comfort: string;
+          durability: string;
+          id?: string | null;
+        }[]
+      | null;
+    headboardStyles?:
+      | {
+          title: string;
+          description: string;
+          image: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+    upholsteryTypes?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    paddingComfort?: {
+      heading?: string | null;
+      copy?: string | null;
+      items?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      ctaLabel?: string | null;
+    };
+    beforeAfter?: {
+      heading?: string | null;
+      copy?: string | null;
+      beforeImage?: (number | null) | Media;
+      afterImage?: (number | null) | Media;
+      beforeCaption?: string | null;
+      afterCaption?: string | null;
+    };
+  };
+  presentationLabels?: {
+    heroQuoteLabel?: string | null;
+    processCtaLabel?: string | null;
+    quoteWhatsAppLabel?: string | null;
+    workshopNote?: string | null;
+    benefitsEyebrow?: string | null;
+    benefitsHeading?: string | null;
+    materialsEyebrow?: string | null;
+    processEyebrow?: string | null;
+    galleryEyebrow?: string | null;
+    areasEyebrow?: string | null;
+    faqEyebrow?: string | null;
+    faqHeading?: string | null;
+    faqIntroduction?: string | null;
+    relatedEyebrow?: string | null;
+    quoteEyebrow?: string | null;
+  };
   status: 'draft' | 'published';
   publishedAt?: string | null;
   seo: {
@@ -590,6 +839,8 @@ export interface Project {
   slug: string;
   summary?: string | null;
   cover?: (number | null) | Media;
+  beforeImage?: (number | null) | Media;
+  afterImage?: (number | null) | Media;
   gallery?:
     | {
         image: number | Media;
@@ -607,6 +858,10 @@ export interface Project {
   challenge?: string | null;
   solution?: string | null;
   featured?: boolean | null;
+  /**
+   * Enable only for genuine Al Rukn work with approved project photography.
+   */
+  verified?: boolean | null;
   status: 'draft' | 'published';
   publishedAt?: string | null;
   seo: {
@@ -926,16 +1181,175 @@ export interface QuoteFormBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio-items".
+ */
+export interface PortfolioItem {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  roomCategory: 'bedroom' | 'living-room' | 'kids-room' | 'dining-room' | 'bathroom' | 'office-study' | 'storage';
+  furnitureType:
+    | 'beds'
+    | 'tv-beds'
+    | 'bedside-tables'
+    | 'dressing-tables'
+    | 'chest-of-drawers'
+    | 'headboards'
+    | 'wardrobes'
+    | 'stools'
+    | 'sectional-sofas'
+    | 'sofas'
+    | 'tv-units'
+    | 'coffee-tables'
+    | 'chairs'
+    | 'buffet-tables'
+    | 'chaise-lounges'
+    | 'daybeds'
+    | 'dining-tables'
+    | 'hallway-furniture'
+    | 'love-seats'
+    | 'ottoman-benches'
+    | 'bunk-beds'
+    | 'single-beds'
+    | 'baby-cribs'
+    | 'baby-room-drawers'
+    | 'bookcases'
+    | 'study-tables'
+    | 'storage-furniture'
+    | 'bathroom-furniture';
+  style?: ('Modern' | 'Minimal' | 'Luxury' | 'Classic' | 'Contemporary') | null;
+  coverImage: number | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  shortDescription?: string | null;
+  relatedService: number | Service;
+  featured?: boolean | null;
+  sortOrder: number;
+  published: boolean;
+  sourceSite: string;
+  sourceURL: string;
+  sourceCategory: string;
+  originalFilename: string;
+  /**
+   * Enable only when this is verified completed Al Rukn customer work.
+   */
+  isRealAlRuknProject: boolean;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "curtain-blind-categories".
+ */
+export interface CurtainBlindCategory {
+  id: number;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  type: 'curtain' | 'blind';
+  /**
+   * Optional parent category for nested filters.
+   */
+  parent?: (number | null) | CurtainBlindCategory;
+  shortDescription?: string | null;
+  featuredImage?: (number | null) | Media;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  sortOrder: number;
+  active: boolean;
+  /**
+   * Show this category in the Shop by Category cards near the top of the page.
+   */
+  featuredOnShop?: boolean | null;
+  sourceSite?: string | null;
+  sourceURL?: string | null;
+  sourceId?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "curtain-blind-products".
+ */
+export interface CurtainBlindProduct {
+  id: number;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  categories: (number | CurtainBlindCategory)[];
+  productType: 'curtain' | 'blind';
+  featuredImage: number | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  sku?: string | null;
+  /**
+   * Price in AED.
+   */
+  regularPrice?: number | null;
+  /**
+   * Sale price in AED when discounted.
+   */
+  salePrice?: number | null;
+  /**
+   * Optional unit label such as /sqm.
+   */
+  priceSuffix?: string | null;
+  badge?: ('none' | 'on-sale' | 'new-in' | 'most-selling' | 'hot-selling') | null;
+  shortDescription?: string | null;
+  fullDescription?: string | null;
+  features?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  sortOrder: number;
+  featured?: boolean | null;
+  active: boolean;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  sourceSite: string;
+  sourceURL: string;
+  sourceId?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
  */
 export interface Lead {
   id: number;
   fullName: string;
   phone: string;
+  area: string;
   email?: string | null;
   service: number | Service;
   message: string;
-  referenceMedia?: (number | null) | Media;
+  referenceMedia?: (number | null) | LeadMedia;
+  portfolioItem?: (number | null) | PortfolioItem;
+  portfolioDesignTitle?: string | null;
   consent: boolean;
   consentAt: string;
   sourcePath: string;
@@ -965,6 +1379,36 @@ export interface Lead {
   abuseContextHash?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-media".
+ */
+export interface LeadMedia {
+  id: number;
+  originalName: string;
+  purpose: 'quotation-reference';
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    preview?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1313,6 +1757,10 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'areas';
+        value: number | Area;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -1321,12 +1769,24 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'portfolio-items';
+        value: number | PortfolioItem;
+      } | null)
+    | ({
         relationTo: 'projects';
         value: number | Project;
       } | null)
     | ({
         relationTo: 'services';
         value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'curtain-blind-categories';
+        value: number | CurtainBlindCategory;
+      } | null)
+    | ({
+        relationTo: 'curtain-blind-products';
+        value: number | CurtainBlindProduct;
       } | null)
     | ({
         relationTo: 'faqs';
@@ -1339,6 +1799,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'lead-media';
+        value: number | LeadMedia;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1409,6 +1873,27 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "areas_select".
+ */
+export interface AreasSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  group?: T;
+  summary?: T;
+  featured?: T;
+  order?: T;
+  landingPage?: T;
+  status?: T;
+  publishedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1728,6 +2213,39 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio-items_select".
+ */
+export interface PortfolioItemsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  roomCategory?: T;
+  furnitureType?: T;
+  style?: T;
+  coverImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  shortDescription?: T;
+  relatedService?: T;
+  featured?: T;
+  sortOrder?: T;
+  published?: T;
+  sourceSite?: T;
+  sourceURL?: T;
+  sourceCategory?: T;
+  originalFilename?: T;
+  isRealAlRuknProject?: T;
+  seoTitle?: T;
+  metaDescription?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
@@ -1736,6 +2254,8 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   summary?: T;
   cover?: T;
+  beforeImage?: T;
+  afterImage?: T;
   gallery?:
     | T
     | {
@@ -1761,6 +2281,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   challenge?: T;
   solution?: T;
   featured?: T;
+  verified?: T;
   status?: T;
   publishedAt?: T;
   seo?:
@@ -1817,6 +2338,7 @@ export interface ServicesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   summary?: T;
+  visualVariant?: T;
   hero?:
     | T
     | {
@@ -1825,7 +2347,44 @@ export interface ServicesSelect<T extends boolean = true> {
         copy?: T;
         image?: T;
       };
+  trustItems?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
   details?: T;
+  serviceOptions?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        intro?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+            };
+      };
+  featureSections?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        copy?: T;
+        image?: T;
+        imagePosition?: T;
+        bullets?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   benefits?:
     | T
     | {
@@ -1840,12 +2399,34 @@ export interface ServicesSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  materialsHeading?: T;
   process?:
     | T
     | {
         title?: T;
         description?: T;
         id?: T;
+      };
+  processHeading?: T;
+  comparison?:
+    | T
+    | {
+        heading?: T;
+        intro?: T;
+        leftTitle?: T;
+        leftItems?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        rightTitle?: T;
+        rightItems?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
       };
   faqs?: T;
   serviceAreas?:
@@ -1862,12 +2443,19 @@ export interface ServicesSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  galleryHeading?: T;
+  galleryIntro?: T;
+  serviceAreaHeading?: T;
+  serviceAreaCopy?: T;
+  areaLinkLabel?: T;
   quotationContext?:
     | T
     | {
         heading?: T;
         message?: T;
+        buttonLabel?: T;
       };
+  relatedHeading?: T;
   whatsAppContext?:
     | T
     | {
@@ -1875,6 +2463,135 @@ export interface ServicesSelect<T extends boolean = true> {
         message?: T;
       };
   relatedServices?: T;
+  sofaUpholsteryLanding?:
+    | T
+    | {
+        popularServices?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              ctaLabel?: T;
+              href?: T;
+              comingSoon?: T;
+              id?: T;
+            };
+        fabricCards?:
+          | T
+          | {
+              title?: T;
+              image?: T;
+              bestUse?: T;
+              comfort?: T;
+              durability?: T;
+              id?: T;
+            };
+        foamComfort?:
+          | T
+          | {
+              heading?: T;
+              copy?: T;
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaLabel?: T;
+            };
+        bedTeaser?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              label?: T;
+              href?: T;
+              image?: T;
+            };
+      };
+  bedUpholsteryLanding?:
+    | T
+    | {
+        popularServices?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              ctaLabel?: T;
+              href?: T;
+              comingSoon?: T;
+              id?: T;
+            };
+        fabricCards?:
+          | T
+          | {
+              title?: T;
+              image?: T;
+              bestUse?: T;
+              comfort?: T;
+              durability?: T;
+              id?: T;
+            };
+        headboardStyles?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+            };
+        upholsteryTypes?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        paddingComfort?:
+          | T
+          | {
+              heading?: T;
+              copy?: T;
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaLabel?: T;
+            };
+        beforeAfter?:
+          | T
+          | {
+              heading?: T;
+              copy?: T;
+              beforeImage?: T;
+              afterImage?: T;
+              beforeCaption?: T;
+              afterCaption?: T;
+            };
+      };
+  presentationLabels?:
+    | T
+    | {
+        heroQuoteLabel?: T;
+        processCtaLabel?: T;
+        quoteWhatsAppLabel?: T;
+        workshopNote?: T;
+        benefitsEyebrow?: T;
+        benefitsHeading?: T;
+        materialsEyebrow?: T;
+        processEyebrow?: T;
+        galleryEyebrow?: T;
+        areasEyebrow?: T;
+        faqEyebrow?: T;
+        faqHeading?: T;
+        faqIntroduction?: T;
+        relatedEyebrow?: T;
+        quoteEyebrow?: T;
+      };
   status?: T;
   publishedAt?: T;
   seo?:
@@ -1895,6 +2612,71 @@ export interface ServicesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "curtain-blind-categories_select".
+ */
+export interface CurtainBlindCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  type?: T;
+  parent?: T;
+  shortDescription?: T;
+  featuredImage?: T;
+  seoTitle?: T;
+  metaDescription?: T;
+  sortOrder?: T;
+  active?: T;
+  featuredOnShop?: T;
+  sourceSite?: T;
+  sourceURL?: T;
+  sourceId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "curtain-blind-products_select".
+ */
+export interface CurtainBlindProductsSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  categories?: T;
+  productType?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  sku?: T;
+  regularPrice?: T;
+  salePrice?: T;
+  priceSuffix?: T;
+  badge?: T;
+  shortDescription?: T;
+  fullDescription?: T;
+  features?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  sortOrder?: T;
+  featured?: T;
+  active?: T;
+  seoTitle?: T;
+  metaDescription?: T;
+  sourceSite?: T;
+  sourceURL?: T;
+  sourceId?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1944,10 +2726,13 @@ export interface TestimonialsSelect<T extends boolean = true> {
 export interface LeadsSelect<T extends boolean = true> {
   fullName?: T;
   phone?: T;
+  area?: T;
   email?: T;
   service?: T;
   message?: T;
   referenceMedia?: T;
+  portfolioItem?: T;
+  portfolioDesignTitle?: T;
   consent?: T;
   consentAt?: T;
   sourcePath?: T;
@@ -1974,6 +2759,39 @@ export interface LeadsSelect<T extends boolean = true> {
   abuseContextHash?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-media_select".
+ */
+export interface LeadMediaSelect<T extends boolean = true> {
+  originalName?: T;
+  purpose?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        preview?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2020,6 +2838,11 @@ export interface MediaSelect<T extends boolean = true> {
   decorative?: T;
   caption?: T;
   sourceURL?: T;
+  sourceSite?: T;
+  sourceCategory?: T;
+  sourceFilename?: T;
+  sourceHash?: T;
+  importNote?: T;
   license?: T;
   sourceNotes?: T;
   uploadedBy?: T;
@@ -2368,15 +3191,476 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  seo: {
+    title: string;
+    description: string;
+    image?: (number | null) | Media;
+  };
+  hero: {
+    enabled?: boolean | null;
+    eyebrow?: string | null;
+    heading: string;
+    copy: string;
+    image: number | Media;
+    primaryLabel?: string | null;
+    whatsAppLabel?: string | null;
+    trustLine?: string | null;
+    note?: string | null;
+  };
+  trustItems?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  sharedLabels?: {
+    serviceCardLinkLabel?: string | null;
+    projectCardLinkLabel?: string | null;
+    projectsArchiveLabel?: string | null;
+    finalCtaEyebrow?: string | null;
+    dubaiAreaLabel?: string | null;
+    sharjahAreaLabel?: string | null;
+    ajmanAreaLabel?: string | null;
+    otherEmiratesAreaLabel?: string | null;
+  };
+  quoteForm?: {
+    nameLabel?: string | null;
+    phoneLabel?: string | null;
+    emailLabel?: string | null;
+    serviceLabel?: string | null;
+    servicePlaceholder?: string | null;
+    areaLabel?: string | null;
+    messageLabel?: string | null;
+    portfolioReferenceLabel?: string | null;
+    photoHelp?: string | null;
+    consentLabel?: string | null;
+    privacyLabel?: string | null;
+    submitLabel?: string | null;
+    pendingLabel?: string | null;
+    successMessage?: string | null;
+    errorMessage?: string | null;
+    networkErrorMessage?: string | null;
+  };
+  sections: (
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        intro?: string | null;
+        services?: (number | Service)[] | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'services';
+      }
+    | {
+        enabled?: boolean | null;
+        eyebrow?: string | null;
+        heading: string;
+        body: string;
+        image?: (number | null) | Media;
+        imagePosition?: ('left' | 'right') | null;
+        ctaLabel?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'customFurniture';
+      }
+    | {
+        enabled?: boolean | null;
+        eyebrow?: string | null;
+        heading: string;
+        body: string;
+        image?: (number | null) | Media;
+        imagePosition?: ('left' | 'right') | null;
+        ctaLabel?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'upholstery';
+      }
+    | {
+        enabled?: boolean | null;
+        eyebrow?: string | null;
+        heading: string;
+        body: string;
+        image?: (number | null) | Media;
+        imagePosition?: ('left' | 'right') | null;
+        ctaLabel?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'majlis';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        intro?: string | null;
+        projects?: (number | Project)[] | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'projects';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        steps?:
+          | {
+              title: string;
+              description: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'process';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        intro?: string | null;
+        items?:
+          | {
+              title: string;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'whyChoose';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        intro?: string | null;
+        areas?: (number | Area)[] | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'areas';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        paragraphs?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'localContent';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        testimonials?: (number | Testimonial)[] | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        faqs?: (number | Faq)[] | null;
+        enableSchema?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faqs';
+      }
+    | {
+        enabled?: boolean | null;
+        heading: string;
+        description?: string | null;
+        whatsAppLabel?: string | null;
+        quoteHeading?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'finalCta';
+      }
+  )[];
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
+  hero?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    image?: (number | null) | Media;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  proofItems?:
+    | {
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  story?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    paragraphs?:
+      | {
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    image?: (number | null) | Media;
+  };
+  servicesSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+  };
+  processSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    steps?:
+      | {
+          title?: string | null;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  principlesSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    items?:
+      | {
+          title?: string | null;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  coverageSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    description?: string | null;
+    primaryLabel?: string | null;
+    whatsAppLabel?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: number;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
+  hero?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    primaryLabel?: string | null;
+    whatsAppLabel?: string | null;
+  };
+  workshopCard?: {
+    eyebrow?: string | null;
+    callLabel?: string | null;
+    emailLabel?: string | null;
+    visitLabel?: string | null;
+    hoursLabel?: string | null;
+    mapLabel?: string | null;
+  };
+  channelLabels?: {
+    call?: string | null;
+    whatsApp?: string | null;
+    email?: string | null;
+    visit?: string | null;
+  };
+  quoteSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    checklist?:
+      | {
+          item?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    responseNote?: string | null;
+    formHeading?: string | null;
+  };
+  hoursSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+    openDaysLabel?: string | null;
+    closedDayLabel?: string | null;
+    closedLabel?: string | null;
+  };
+  coverageSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+  };
+  servicesSection?: {
+    eyebrow?: string | null;
+    heading?: string | null;
+    introduction?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-settings".
+ */
+export interface ArchiveSetting {
+  id: number;
+  servicesArchive?: {
+    heading?: string | null;
+    introduction?: string | null;
+    emptyState?: string | null;
+    cta?: {
+      eyebrow?: string | null;
+      heading?: string | null;
+      description?: string | null;
+      primaryLabel?: string | null;
+      whatsAppLabel?: string | null;
+    };
+    seo?: {
+      title?: string | null;
+      description?: string | null;
+      image?: (number | null) | Media;
+    };
+  };
+  projectsArchive?: {
+    heading?: string | null;
+    introduction?: string | null;
+    emptyState?: string | null;
+    cta?: {
+      eyebrow?: string | null;
+      heading?: string | null;
+      description?: string | null;
+      primaryLabel?: string | null;
+      whatsAppLabel?: string | null;
+    };
+    seo?: {
+      title?: string | null;
+      description?: string | null;
+      image?: (number | null) | Media;
+    };
+  };
+  blogArchive?: {
+    heading?: string | null;
+    introduction?: string | null;
+    emptyState?: string | null;
+    cta?: {
+      eyebrow?: string | null;
+      heading?: string | null;
+      description?: string | null;
+      primaryLabel?: string | null;
+      whatsAppLabel?: string | null;
+    };
+    seo?: {
+      title?: string | null;
+      description?: string | null;
+      image?: (number | null) | Media;
+    };
+  };
+  portfolioArchive?: {
+    heading?: string | null;
+    introduction?: string | null;
+    emptyState?: string | null;
+    cta?: {
+      eyebrow?: string | null;
+      heading?: string | null;
+      description?: string | null;
+      primaryLabel?: string | null;
+      whatsAppLabel?: string | null;
+    };
+    seo?: {
+      title?: string | null;
+      description?: string | null;
+      image?: (number | null) | Media;
+    };
+    hero?: {
+      eyebrow?: string | null;
+      heading?: string | null;
+      introduction?: string | null;
+      exploreLabel?: string | null;
+      sendDesignLabel?: string | null;
+    };
+    filterLabels?: {
+      all?: string | null;
+      bedroom?: string | null;
+      livingRoom?: string | null;
+      kidsRoom?: string | null;
+      diningRoom?: string | null;
+      bathroom?: string | null;
+      sofas?: string | null;
+      beds?: string | null;
+      wardrobes?: string | null;
+      officeStudy?: string | null;
+      storage?: string | null;
+    };
+    supportingLabels?: {
+      roomEyebrow?: string | null;
+      roomHeading?: string | null;
+      servicesEyebrow?: string | null;
+      servicesHeading?: string | null;
+      resultsHeading?: string | null;
+      loadMoreLabel?: string | null;
+    };
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Used in the website header and footer.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Browser / Google Search site icon. Use a square PNG at least 48×48 (192×192 preferred). Served publicly at /favicon.ico and /icon.png so crawlers are not blocked by /api/ robots rules.
+   */
+  favicon?: (number | null) | Media;
+  /**
+   * Optional Apple touch icon (recommended 180×180 PNG). Served publicly at /apple-touch-icon.png.
+   */
+  appleTouchIcon?: (number | null) | Media;
+  /**
+   * Optional dark mode / alternate logo variant.
+   */
+  logoDark?: (number | null) | Media;
   businessName: string;
   brandName: string;
-  logo?: (number | null) | Media;
-  logoDark?: (number | null) | Media;
-  favicon?: (number | null) | Media;
   quotationLabels?: {
     primaryLabel?: string | null;
     formHeading?: string | null;
@@ -2406,6 +3690,28 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "google-reviews".
+ */
+export interface GoogleReview {
+  id: number;
+  enabled?: boolean | null;
+  /**
+   * Google Place ID for server-side Places API (New) reviews. Never enter an API key here.
+   */
+  placeId?: string | null;
+  heading?: string | null;
+  subheading?: string | null;
+  /**
+   * Max review cards to show (Google Places returns up to 5).
+   */
+  reviewLimit?: number | null;
+  mapsUrl?: string | null;
+  writeReviewUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
@@ -2413,7 +3719,7 @@ export interface Header {
   navigation?:
     | {
         label: string;
-        destination: 'home' | 'services' | 'projects' | 'blog' | 'about' | 'contact';
+        destination: 'home' | 'services' | 'portfolio' | 'projects' | 'areas' | 'blog' | 'about' | 'contact';
         id?: string | null;
       }[]
     | null;
@@ -2452,7 +3758,17 @@ export interface Footer {
         items?:
           | {
               label: string;
-              destination: 'home' | 'services' | 'projects' | 'blog' | 'about' | 'contact' | 'privacy' | 'terms';
+              destination:
+                | 'home'
+                | 'services'
+                | 'projects'
+                | 'areas'
+                | 'portfolio'
+                | 'blog'
+                | 'about'
+                | 'contact'
+                | 'privacy'
+                | 'terms';
               id?: string | null;
             }[]
           | null;
@@ -2546,8 +3862,7 @@ export interface SeoDefault {
     logo?: (number | null) | Media;
   };
   localBusinessSchema?: {
-    businessType?: ('FurnitureStore' | 'LocalBusiness') | null;
-    priceRange?: ('moderate' | 'premium') | null;
+    businessType?: 'LocalBusiness' | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2571,14 +3886,547 @@ export interface SocialMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  hero?:
+    | T
+    | {
+        enabled?: T;
+        eyebrow?: T;
+        heading?: T;
+        copy?: T;
+        image?: T;
+        primaryLabel?: T;
+        whatsAppLabel?: T;
+        trustLine?: T;
+        note?: T;
+      };
+  trustItems?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  sharedLabels?:
+    | T
+    | {
+        serviceCardLinkLabel?: T;
+        projectCardLinkLabel?: T;
+        projectsArchiveLabel?: T;
+        finalCtaEyebrow?: T;
+        dubaiAreaLabel?: T;
+        sharjahAreaLabel?: T;
+        ajmanAreaLabel?: T;
+        otherEmiratesAreaLabel?: T;
+      };
+  quoteForm?:
+    | T
+    | {
+        nameLabel?: T;
+        phoneLabel?: T;
+        emailLabel?: T;
+        serviceLabel?: T;
+        servicePlaceholder?: T;
+        areaLabel?: T;
+        messageLabel?: T;
+        portfolioReferenceLabel?: T;
+        photoHelp?: T;
+        consentLabel?: T;
+        privacyLabel?: T;
+        submitLabel?: T;
+        pendingLabel?: T;
+        successMessage?: T;
+        errorMessage?: T;
+        networkErrorMessage?: T;
+      };
+  sections?:
+    | T
+    | {
+        services?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              intro?: T;
+              services?: T;
+              id?: T;
+              blockName?: T;
+            };
+        customFurniture?:
+          | T
+          | {
+              enabled?: T;
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              ctaLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+        upholstery?:
+          | T
+          | {
+              enabled?: T;
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              ctaLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+        majlis?:
+          | T
+          | {
+              enabled?: T;
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              ctaLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+        projects?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              intro?: T;
+              projects?: T;
+              id?: T;
+              blockName?: T;
+            };
+        process?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        whyChoose?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        areas?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              intro?: T;
+              areas?: T;
+              id?: T;
+              blockName?: T;
+            };
+        localContent?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              testimonials?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faqs?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              faqs?: T;
+              enableSchema?: T;
+              id?: T;
+              blockName?: T;
+            };
+        finalCta?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              description?: T;
+              whatsAppLabel?: T;
+              quoteHeading?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        image?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  proofItems?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  story?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        paragraphs?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        image?: T;
+      };
+  servicesSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+      };
+  processSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        steps?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  principlesSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  coverageSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        description?: T;
+        primaryLabel?: T;
+        whatsAppLabel?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        primaryLabel?: T;
+        whatsAppLabel?: T;
+      };
+  workshopCard?:
+    | T
+    | {
+        eyebrow?: T;
+        callLabel?: T;
+        emailLabel?: T;
+        visitLabel?: T;
+        hoursLabel?: T;
+        mapLabel?: T;
+      };
+  channelLabels?:
+    | T
+    | {
+        call?: T;
+        whatsApp?: T;
+        email?: T;
+        visit?: T;
+      };
+  quoteSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        checklist?:
+          | T
+          | {
+              item?: T;
+              id?: T;
+            };
+        responseNote?: T;
+        formHeading?: T;
+      };
+  hoursSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+        openDaysLabel?: T;
+        closedDayLabel?: T;
+        closedLabel?: T;
+      };
+  coverageSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+      };
+  servicesSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        introduction?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archive-settings_select".
+ */
+export interface ArchiveSettingsSelect<T extends boolean = true> {
+  servicesArchive?:
+    | T
+    | {
+        heading?: T;
+        introduction?: T;
+        emptyState?: T;
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              primaryLabel?: T;
+              whatsAppLabel?: T;
+            };
+        seo?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+            };
+      };
+  projectsArchive?:
+    | T
+    | {
+        heading?: T;
+        introduction?: T;
+        emptyState?: T;
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              primaryLabel?: T;
+              whatsAppLabel?: T;
+            };
+        seo?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+            };
+      };
+  blogArchive?:
+    | T
+    | {
+        heading?: T;
+        introduction?: T;
+        emptyState?: T;
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              primaryLabel?: T;
+              whatsAppLabel?: T;
+            };
+        seo?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+            };
+      };
+  portfolioArchive?:
+    | T
+    | {
+        heading?: T;
+        introduction?: T;
+        emptyState?: T;
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              primaryLabel?: T;
+              whatsAppLabel?: T;
+            };
+        seo?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+            };
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              introduction?: T;
+              exploreLabel?: T;
+              sendDesignLabel?: T;
+            };
+        filterLabels?:
+          | T
+          | {
+              all?: T;
+              bedroom?: T;
+              livingRoom?: T;
+              kidsRoom?: T;
+              diningRoom?: T;
+              bathroom?: T;
+              sofas?: T;
+              beds?: T;
+              wardrobes?: T;
+              officeStudy?: T;
+              storage?: T;
+            };
+        supportingLabels?:
+          | T
+          | {
+              roomEyebrow?: T;
+              roomHeading?: T;
+              servicesEyebrow?: T;
+              servicesHeading?: T;
+              resultsHeading?: T;
+              loadMoreLabel?: T;
+            };
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  logo?: T;
+  favicon?: T;
+  appleTouchIcon?: T;
+  logoDark?: T;
   businessName?: T;
   brandName?: T;
-  logo?: T;
-  logoDark?: T;
-  favicon?: T;
   quotationLabels?:
     | T
     | {
@@ -2613,6 +4461,22 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         buttonStyle?: T;
         imageShape?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "google-reviews_select".
+ */
+export interface GoogleReviewsSelect<T extends boolean = true> {
+  enabled?: T;
+  placeId?: T;
+  heading?: T;
+  subheading?: T;
+  reviewLimit?: T;
+  mapsUrl?: T;
+  writeReviewUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2760,7 +4624,6 @@ export interface SeoDefaultsSelect<T extends boolean = true> {
     | T
     | {
         businessType?: T;
-        priceRange?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2803,6 +4666,10 @@ export interface TaskSchedulePublish {
     locale?: string | null;
     doc?:
       | ({
+          relationTo: 'areas';
+          value: number | Area;
+        } | null)
+      | ({
           relationTo: 'pages';
           value: number | Page;
         } | null)
@@ -2826,7 +4693,7 @@ export interface TaskSchedulePublish {
           relationTo: 'testimonials';
           value: number | Testimonial;
         } | null);
-    global?: string | null;
+    global?: ('homepage' | 'about-page' | 'contact-page' | 'archive-settings') | null;
     user?: (number | null) | User;
   };
   output?: unknown;

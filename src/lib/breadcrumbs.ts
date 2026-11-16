@@ -20,6 +20,7 @@ const STATIC_TRAILS: Record<string, Breadcrumb[]> = {
   '/blog/': [{ label: 'Blog' }],
   '/contact/': [{ label: 'Contact' }],
   '/projects/': [{ label: 'Projects' }],
+  '/portfolio/': [{ label: 'Portfolio' }],
   '/services/': [{ label: 'Services' }],
 }
 

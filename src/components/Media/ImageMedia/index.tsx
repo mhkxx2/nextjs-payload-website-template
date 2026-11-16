@@ -56,6 +56,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     size: sizeFromProps,
     src: srcFromProps,
     loading: loadingFromProps,
+    unoptimized,
   } = props
 
   let width: number | undefined
@@ -85,7 +86,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .join(', ')
 
   return (
-    <picture className={cn(pictureClassName)}>
+    <picture className={cn(fill && 'relative block h-full w-full', pictureClassName)}>
       <NextImage
         alt={alt || ''}
         className={cn(imgClassName)}
@@ -98,6 +99,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         loading={loading}
         sizes={sizes}
         src={src}
+        unoptimized={unoptimized}
         width={!fill ? width : undefined}
       />
     </picture>

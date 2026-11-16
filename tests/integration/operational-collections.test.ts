@@ -1,6 +1,7 @@
 // @vitest-environment node
 
 import { randomUUID } from 'node:crypto'
+import path from 'node:path'
 
 import type { CollectionConfig, Field, Payload, RequiredDataFromCollectionSlug } from 'payload'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -45,12 +46,13 @@ let serviceID: number
 const leadData = (overrides: Record<string, unknown> = {}): RequiredDataFromCollectionSlug<'leads'> =>
   ({
     abuseContextHash: 'sha256:14b9555ebdf9375668e347216f44e31cd27417bdf4d61bb396275cf6425ed140',
+    area: 'Dubai Marina',
     consent: true,
     consentAt: '2026-09-14T09:00:00.000Z',
     email: 'lead@example.invalid',
     fullName: 'Private Lead',
     message: 'Please contact me about a custom project.',
-    phone: '+971501234567',
+    phone: '+971551224902',
     service: serviceID,
     sourcePath: '/custom-furniture/?campaign=fall',
     sourceTitle: 'Custom Furniture',
@@ -90,14 +92,15 @@ afterAll(async () => {
 }, 90_000)
 
 describe('Task 7 operational collection schemas', () => {
-  it('registers FAQs, testimonials, private leads, and the owned redirects collection', () => {
+  it('registers FAQs, testimonials, private leads, portfolio items, and the owned redirects collection', () => {
     const slugs = payload.config.collections.map(({ slug }) => slug)
-    expect(slugs.filter((slug) => ['faqs', 'testimonials', 'leads', 'redirects'].includes(slug))).toEqual([
+    expect(slugs).toEqual(expect.arrayContaining([
       'faqs',
       'testimonials',
       'leads',
+      'portfolio-items',
       'redirects',
-    ])
+    ]))
     expect(slugs.filter((slug) => slug === 'redirects')).toHaveLength(1)
   })
 
@@ -170,10 +173,13 @@ describe('Task 7 operational collection schemas', () => {
       expect.arrayContaining([
         'fullName',
         'phone',
+        'area',
         'email',
         'service',
         'message',
         'referenceMedia',
+        'portfolioItem',
+        'portfolioDesignTitle',
         'consent',
         'consentAt',
         'sourcePath',
@@ -194,7 +200,8 @@ describe('Task 7 operational collection schemas', () => {
       ]),
     )
     expect(fields.get('service')).toMatchObject({ relationTo: 'services', type: 'relationship' })
-    expect(fields.get('referenceMedia')).toMatchObject({ relationTo: 'media', type: 'upload' })
+    expect(fields.get('referenceMedia')).toMatchObject({ relationTo: 'lead-media', type: 'upload' })
+    expect(fields.get('portfolioItem')).toMatchObject({ relationTo: 'portfolio-items', type: 'relationship' })
     expect(fields.get('changedBy')).toMatchObject({ relationTo: 'users', required: true, type: 'relationship' })
     for (const name of ['submittedAt', 'statusUpdatedAt', 'statusAudit']) {
       const field = fields.get(name)
@@ -202,6 +209,73 @@ describe('Task 7 operational collection schemas', () => {
       expect(access?.create).toBe(denyAuditFieldWrite)
       expect(access?.update).toBe(denyAuditFieldWrite)
     }
+  })
+
+  it('publishes editable portfolio inspiration without treating it as project work', async () => {
+    const source = path.resolve(process.cwd(), 'src/seed/assets/service-custom-furniture.jpg')
+    const media = await payload.create({
+      collection: 'media',
+      data: {
+        alt: 'Neutral custom furniture arrangement in a modern interior',
+        decorative: false,
+        license: 'Company-owned source asset',
+        sourceSite: 'eco-furniture.ae',
+        sourceURL: 'https://eco-furniture.ae/wp-content/uploads/test/portfolio-sample.jpg',
+        uploadedBy: actor.id,
+      },
+      filePath: source,
+      overrideAccess: true,
+      user: actor,
+    })
+    const published = await payload.create({
+      collection: 'portfolio-items',
+      data: {
+        coverImage: media.id,
+        furnitureType: 'sofas',
+        isRealAlRuknProject: false,
+        originalFilename: 'portfolio-sample.jpg',
+        published: true,
+        relatedService: serviceID,
+        roomCategory: 'living-room',
+        sortOrder: 1,
+        slug: `portfolio-published-${randomUUID().slice(0, 8)}`,
+        sourceCategory: 'Sofa',
+        sourceSite: 'eco-furniture.ae',
+        sourceURL: `https://eco-furniture.ae/product/${randomUUID()}/`,
+        title: 'Modern Neutral Sofa',
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+    const unpublished = await payload.create({
+      collection: 'portfolio-items',
+      data: {
+        coverImage: media.id,
+        furnitureType: 'sofas',
+        isRealAlRuknProject: false,
+        originalFilename: 'portfolio-sample.jpg',
+        published: false,
+        relatedService: serviceID,
+        roomCategory: 'living-room',
+        sortOrder: 2,
+        slug: `portfolio-draft-${randomUUID().slice(0, 8)}`,
+        sourceCategory: 'Sofa',
+        sourceSite: 'eco-furniture.ae',
+        sourceURL: `https://eco-furniture.ae/product/${randomUUID()}/`,
+        title: 'Unpublished Sofa Inspiration',
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+
+    const publicItems = await payload.find({ collection: 'portfolio-items', depth: 0, limit: 10, overrideAccess: false })
+    expect(publicItems.docs.map((item) => item.id)).toContain(published.id)
+    expect(publicItems.docs.map((item) => item.id)).not.toContain(unpublished.id)
+    expect(published.isRealAlRuknProject).toBe(false)
+
+    await payload.delete({ collection: 'portfolio-items', id: published.id, overrideAccess: true })
+    await payload.delete({ collection: 'portfolio-items', id: unpublished.id, overrideAccess: true })
+    await payload.delete({ collection: 'media', id: media.id, overrideAccess: true })
   })
 
   it('reuses shared audit write denial for FAQ and testimonial ownership', async () => {
@@ -407,7 +481,7 @@ describe('private controlled Leads and audited status workflow', () => {
       utmTerm: 'custom-sofa',
     })
     expect(relationID(lead.service)).toBe(serviceID)
-    expect(lead.phone).toBe(['+971', '501234567'].join(''))
+    expect(lead.phone).toBe('+971551224902')
     expect(lead.referrer).toBe('https://example.invalid/referral')
     expect(lead.statusAudit).toEqual([])
 

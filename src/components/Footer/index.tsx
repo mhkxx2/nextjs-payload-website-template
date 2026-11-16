@@ -1,113 +1,24 @@
 import Link from 'next/link'
 import React from 'react'
 import { Logo } from '@/components/Logo/Logo'
-import { FIXED_SERVICE_SLUGS, canonicalPath } from '@/lib/routes'
+import { CookieSettingsButton } from '@/components/CookieSettingsButton'
+import { TrackedContactLink } from '@/components/TrackedContactLink'
+import { phoneHref, whatsappHref } from '@/lib/contactLinks'
+import { canonicalPath } from '@/lib/routes'
+import { presentationPath, type PresentationDestination } from '@/lib/presentationRoutes'
 
-const SERVICE_LABELS: Record<string, string> = {
-  'sofa-upholstery': 'Sofa Upholstery & Re-upholstery',
-  'custom-furniture': 'Custom Furniture Manufacturing',
-  'custom-sofa': 'Custom Sofa Manufacturing',
-  'majlis-furniture': 'Majlis Upholstery & Seating',
-  'curtains-blinds': 'Curtains & Blinds Upholstery',
-  'sofa-repair': 'Sofa & Cushion Repair',
-  'custom-wardrobes': 'Custom Wardrobes & Joinery',
-  'custom-beds-headboards': 'Headboard & Bed Upholstery',
-  'office-furniture': 'Commercial & Office Upholstery',
-}
+// Payload relationship values vary with query depth and are narrowed at use sites.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RecordData = Record<string, any>
+export type FooterProps = { contact?: RecordData; data?: RecordData; settings?: RecordData; social?: RecordData }
 
-export const Footer: React.FC = () => {
-  return (
-    <footer className="mt-auto bg-charcoal text-ivory border-t-2 border-gold-muted pt-12 pb-8">
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        {/* Col 1: Brand & Contact */}
-        <div className="flex flex-col gap-4">
-          <Link href="/" aria-label="Al Rukn Furniture Homepage">
-            <Logo />
-          </Link>
-          <p className="text-xs text-ivory/80 leading-relaxed">
-            Premium custom upholstery, sofa manufacturing, majlis seating, and interior fit-out services across Ajman, Sharjah, Dubai, and the UAE.
-          </p>
-          <div className="text-xs text-ivory/90 space-y-1">
-            <p><strong className="text-gold-muted">Phone:</strong> +971 50 123 4567</p>
-            <p><strong className="text-gold-muted">Location:</strong> Industrial Area 2, Ajman, UAE</p>
-            <p><strong className="text-gold-muted">Hours:</strong> Mon – Sat: 8:00 AM – 8:00 PM</p>
-          </div>
-        </div>
-
-        {/* Col 2: Services */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-gold-muted mb-4">
-            Our Services
-          </h3>
-          <ul className="space-y-2 text-xs">
-            {FIXED_SERVICE_SLUGS.map((slug) => (
-              <li key={slug}>
-                <Link
-                  href={canonicalPath('service', slug)}
-                  className="hover:text-gold-muted transition-colors focus:outline-none focus:ring-1 focus:ring-gold-muted rounded px-1"
-                >
-                  {SERVICE_LABELS[slug] || slug}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Col 3: Coverage & Links */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-gold-muted mb-4">
-            Coverage & Navigation
-          </h3>
-          <div className="space-y-4 text-xs">
-            <div>
-              <p className="font-semibold text-ivory mb-1">Service Areas:</p>
-              <p className="text-ivory/80">Ajman, Sharjah, Dubai, Abu Dhabi, Ras Al Khaimah, Fujairah, Umm Al Quwain.</p>
-            </div>
-            <ul className="space-y-2 pt-2 border-t border-ivory/10">
-              <li><Link href="/projects/" className="hover:text-gold-muted transition-colors">Projects & Portfolio</Link></li>
-              <li><Link href="/about-us/" className="hover:text-gold-muted transition-colors">About Al Rukn</Link></li>
-              <li><Link href="/contact/" className="hover:text-gold-muted transition-colors">Contact Us</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Col 4: Social & Legal */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-gold-muted mb-4">
-            Connect & Legal
-          </h3>
-          <div className="space-y-4 text-xs">
-            <div className="flex gap-4">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="hover:text-gold-muted transition-colors"
-              >
-                Instagram
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="hover:text-gold-muted transition-colors"
-              >
-                Facebook
-              </a>
-            </div>
-            <div className="pt-4 border-t border-ivory/10 space-y-1">
-              <p><Link href="/privacy-policy/" className="hover:text-gold-muted transition-colors">Privacy Policy</Link></p>
-              <p><Link href="/terms/" className="hover:text-gold-muted transition-colors">Terms of Service</Link></p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 pt-6 border-t border-ivory/10 text-center text-[11px] text-ivory/60">
-        <p>© {new Date().getFullYear()} Al Rukn Furniture. All rights reserved.</p>
-      </div>
-    </footer>
-  )
+export const Footer: React.FC<FooterProps> = ({ contact = {}, data = {}, settings = {}, social = {} }) => {
+  const call = phoneHref(contact.phoneE164)
+  const whatsapp = contact.whatsappAvailable === false ? null : whatsappHref(contact.whatsappE164, settings.whatsAppCopy?.defaultMessage)
+  const address = [...new Set([contact.address?.line1, contact.address?.line2, contact.address?.city, contact.address?.country].filter(Boolean))]
+  const services = Array.isArray(data.serviceLinks) ? data.serviceLinks : []
+  const groups = Array.isArray(data.navigationGroups) ? data.navigationGroups : []
+  const legal = Array.isArray(data.legalLinks) ? data.legalLinks : []
+  const socialLinks = Array.isArray(social.links) ? social.links : []
+  return <footer className="site-footer"><div className="site-container footer-grid"><div className="footer-brand"><Link aria-label={`${settings.brandName || 'Al Rukn Furniture'} Homepage`} href="/"><Logo brandName={settings.brandName} logo={settings.logo} /></Link>{data.supportingCopy && <p>{data.supportingCopy}</p>}<ul className="footer-contact">{call && <li><TrackedContactLink analytics={{ cta_location: 'footer' }} eventName="phone_call_click" href={call}>{contact.phoneE164}</TrackedContactLink></li>}{whatsapp && <li><TrackedContactLink analytics={{ cta_location: 'footer' }} eventName="whatsapp_click" href={whatsapp} rel="noopener noreferrer" target="_blank">WhatsApp</TrackedContactLink></li>}{contact.email && <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>}{address.length > 0 && <li>{address.join(', ')}</li>}{contact.mapURL && <li><a href={contact.mapURL} rel="noopener noreferrer" target="_blank">Google Maps</a></li>}</ul></div><div><h2>Services</h2><ul>{services.map((entry: RecordData) => { const service = typeof entry.service === 'object' ? entry.service : null; return service?.slug ? <li key={entry.id || service.id}><Link href={canonicalPath('service', service.slug)}>{entry.label || service.title}</Link></li> : null })}</ul></div>{groups.map((group: RecordData) => <div key={group.id || group.heading}><h2>{group.heading}</h2><ul>{(group.items || []).map((item: RecordData) => <li key={item.id || item.label}><Link href={presentationPath(item.destination as PresentationDestination)}>{item.label}</Link></li>)}</ul></div>)}<div><h2>Connect</h2><ul>{socialLinks.map((item: RecordData) => <li key={item.id || item.url}><a href={item.url} rel="noopener noreferrer" target="_blank">{item.label}</a></li>)}</ul></div></div><div className="site-container footer-bottom"><p>© {new Date().getFullYear()} {settings.brandName || 'Al Rukn Furniture'}.</p><nav aria-label="Legal">{legal.map((item: RecordData) => <Link href={presentationPath(item.legalDestination as PresentationDestination)} key={item.id || item.label}>{item.label}</Link>)}<CookieSettingsButton /></nav></div></footer>
 }

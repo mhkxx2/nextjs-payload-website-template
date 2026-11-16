@@ -6,27 +6,32 @@ import React from 'react'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
 import type { Project } from '@/payload-types'
-import { archiveCopy, homeCopy } from '@/data/launch-copy'
+import { cmsFallbacks } from '@/data/cmsFallbacks'
 import { JsonLd } from '@/components/JsonLd'
 import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { projectHref, serviceHref } from '@/lib/contentLinks'
 import { queryPublicList } from '@/lib/publicQueries'
 import { buildSchemas, getSchemaGlobals } from '@/lib/schema'
 import { buildMetadata, getSeoDefaults } from '@/lib/seo'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const defaults = await getSeoDefaults()
+  const [defaults, archives] = await Promise.all([
+    getSeoDefaults(),
+    getCachedGlobal('archive-settings', 1)(),
+  ])
+  const archive = archives.projectsArchive
 
-  return buildMetadata(null, {
+  return buildMetadata({ seo: archive?.seo }, {
     ...defaults,
-    descriptionFallback: archiveCopy.projects.intro,
+    descriptionFallback: archive?.introduction || cmsFallbacks.archives.projects.intro,
     path: '/projects/',
-    titleFallback: archiveCopy.projects.heading,
+    titleFallback: archive?.heading || cmsFallbacks.archives.projects.heading,
   })
 }
 
 export default async function ProjectsIndex() {
-  const [{ docs }, globals] = await Promise.all([
+  const [{ docs }, globals, archives] = await Promise.all([
     queryPublicList<Project>({
       collection: 'projects',
       depth: 1,
@@ -34,7 +39,9 @@ export default async function ProjectsIndex() {
       sort: '-publishedAt',
     }),
     getSchemaGlobals(),
+    getCachedGlobal('archive-settings', 1)(),
   ])
+  const archive = archives.projectsArchive
   const breadcrumbs = buildBreadcrumbs('/projects/')
   const schemas = buildSchemas({ breadcrumbs, globals, kind: 'archive', path: '/projects/' })
 
@@ -51,9 +58,9 @@ export default async function ProjectsIndex() {
         <Breadcrumbs items={breadcrumbs} />
         <header className="max-w-3xl py-6">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
-            {archiveCopy.projects.heading}
+            {archive?.heading || cmsFallbacks.archives.projects.heading}
           </h1>
-          <p className="text-neutral-600">{archiveCopy.projects.intro}</p>
+          <p className="text-neutral-600">{archive?.introduction || cmsFallbacks.archives.projects.intro}</p>
         </header>
       </div>
 
@@ -124,16 +131,16 @@ export default async function ProjectsIndex() {
         </div>
       ) : (
         <div className="container mx-auto px-4 py-10">
-          <p className="text-neutral-600">{archiveCopy.projects.emptyMessage}</p>
+          <p className="text-neutral-600">{archive?.emptyState || cmsFallbacks.archives.projects.emptyMessage}</p>
         </div>
       )}
 
       <div className="mt-4">
         <CallToActionBlockComponent
-          buttonLink={homeCopy.finalCta.buttonLink}
-          buttonText={homeCopy.finalCta.buttonText}
-          description={homeCopy.finalCta.description}
-          heading={homeCopy.finalCta.heading}
+          buttonLink="/contact/"
+          buttonText={archive?.cta?.primaryLabel || cmsFallbacks.archives.projects.cta.buttonText}
+          description={archive?.cta?.description || cmsFallbacks.archives.projects.cta.description}
+          heading={archive?.cta?.heading || cmsFallbacks.archives.projects.cta.heading}
         />
       </div>
     </div>

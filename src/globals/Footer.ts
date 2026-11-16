@@ -10,6 +10,8 @@ const boundedDestination: Field = {
     { label: 'Home', value: 'home' },
     { label: 'Services', value: 'services' },
     { label: 'Projects', value: 'projects' },
+    { label: 'Areas We Serve', value: 'areas' },
+    { label: 'Collection', value: 'portfolio' },
     { label: 'Blog', value: 'blog' },
     { label: 'About', value: 'about' },
     { label: 'Contact', value: 'contact' },

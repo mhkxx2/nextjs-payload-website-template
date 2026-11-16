@@ -145,30 +145,60 @@ export const homeCopy = {
 
 export const aboutCopy = {
   coverageHeading: 'Where We Work',
+  coverageIntro:
+    'Made-to-measure furniture, upholstery, repair and fitting across Dubai, Sharjah, Ajman and selected UAE communities.',
   cta: {
     buttonLink: '/contact/',
-    buttonText: 'Contact Us',
+    buttonText: 'Request a Free Quotation',
     description:
       'Send measurements, a photo of the space, or the piece you want repaired and we will quote the work.',
-    heading: 'Talk to Us About Your Space',
+    heading: 'Have a Furniture Project in Mind?',
   },
+  eyebrow: 'Made to measure in the UAE',
   heading: 'About Al Rukn Furniture',
   intro:
     'Al Rukn Furniture makes and repairs upholstered and wooden furniture. Sofas, majlis seating, wardrobes, beds, curtains, blinds and office furniture are measured, quoted, built and installed by the same team.',
-  processHeading: 'How a Job Runs',
+  processHeading: 'From Your Idea to Finished Furniture',
+  principlesHeading: 'Practical Choices. Careful Work.',
+  principlesIntro:
+    'A clear, made-to-order process focused on your dimensions, approved materials and the way each piece will be used.',
+  servicesIntro:
+    'From a single chair that needs re-covering to complete made-to-measure rooms, the work begins with your space and specification.',
   servicesHeading: 'What We Do',
+  story: {
+    body: [
+      'We work from a furniture workshop rather than a showroom floor. Sofas are stripped on the bench, timber is cut to measured drawings and cushions are stitched for the piece they belong to.',
+      'Before work starts, dimensions, materials, finish, scope and lead time are agreed in writing. The same team carries the job through making, delivery and fitting.',
+    ],
+    eyebrow: 'Inside the workshop',
+    heading: 'A Workshop, Not a Showroom Floor',
+  },
 } as const
 
 export const contactCopy = {
   areasHeading: 'Areas We Cover',
+  areasIntro:
+    'Request custom furniture, upholstery, repair, delivery and fitting across Dubai, Sharjah, Ras Al Khaimah, Ajman and selected UAE communities.',
   detailsHeading: 'Contact Details',
+  eyebrow: 'Furniture quotations across the UAE',
   formDescription:
-    'Share a few details about the job and the team will respond with the next step.',
+    'Share the service, area, measurements and a clear furniture or room photo. The team will review the details and respond with the next step.',
   formHeading: 'Request a Free Quotation',
   heading: 'Contact Al Rukn Furniture',
   hoursHeading: 'Opening Hours',
+  hoursIntro:
+    'Call or message before visiting so the workshop team can make time to review your furniture, drawings or material requirements.',
   intro:
-    'Call, message or send the form below. For quotations, measurements or a photo of the piece help us price the work accurately.',
+    'Contact our Ajman workshop for custom furniture, sofa upholstery, furniture repair, curtains, wardrobes and made-to-measure joinery across the UAE.',
+  metaDescription:
+    'Contact Al Rukn Furniture for custom furniture, upholstery and repair across the UAE. Send requirements, measurements and photos for a free quotation.',
+  metaTitle: 'Contact Al Rukn Furniture UAE | Request a Free Quote',
   noDetailsMessage:
     'Contact details have not been published yet. Send the form below and the team will respond.',
+  quoteChecklist: [
+    'A clear photo of the furniture, room or design',
+    'Approximate dimensions and your UAE service area',
+    'Preferred fabric, finish or material if already chosen',
+    'Any access, lift, delivery or installation details',
+  ],
 } as const

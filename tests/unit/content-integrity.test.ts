@@ -14,11 +14,14 @@ import {
 } from '@/seed/business'
 import { SERVICE_SEEDS } from '@/seed/services'
 import { FAQ_SEEDS, GLOBAL_SEEDS, PAGE_SEEDS, buildHomepageLayout } from '@/seed/site'
+import { AREA_SEEDS } from '@/data/serviceAreas'
 
 const seedDir = path.join(process.cwd(), 'src/seed')
 const manifestPath = path.join(seedDir, 'media-manifest.json')
 
 interface ManifestAsset {
+  sourcePageURL?: string
+  sourceSite?: string
   key: string
   filename: string
   creator: string
@@ -108,6 +111,67 @@ const SEEDED_PROSE: string[] = [
 ]
 
 describe('seeded launch content', () => {
+  describe('approved sofa upholstery landing content', () => {
+    const sofa = SERVICE_SEEDS.find(({ slug }) => slug === 'sofa-upholstery')!
+    const landing = () => (sofa as typeof sofa & { sofaUpholsteryLanding?: { popularServices: { title: string; imageFile: string; comingSoon?: boolean; href?: string }[]; fabricCards: { title: string; imageFile: string; bestUse: string; comfort: string; durability: string }[]; foamComfort: { heading: string; ctaLabel: string }; bedTeaser: { label: string; href?: string } } }).sofaUpholsteryLanding
+
+    it('supplies the approved hero, trust points and Ajman coverage', () => {
+      expect(sofa.hero.heading).toBe('Sofa Upholstery in Dubai')
+      expect(sofa.hero.copy).toBe('Renew worn sofas with new fabric, foam and finishing. We reupholster sofas, L-shaped seating, corner sofas, chairs and Majlis furniture for customers across Dubai, Sharjah and the UAE from our Ajman workshop.')
+      expect(sofa.trustItems).toEqual(['Fabric & Foam Replacement', 'L-Shaped & Corner Sofas', 'Sofa Repair Available', 'Photo Quotation Available'])
+      expect(sofa.serviceAreas).toEqual(['Palm Jumeirah', 'Dubai Marina', 'JBR', 'Emirates Hills', 'Dubai Hills Estate', 'JVC', 'Arabian Ranches', 'Business Bay', 'Downtown Dubai', 'JLT', 'Mirdif', 'Meydan', 'Sharjah', 'Ajman'])
+      expect(sofa.serviceAreaCopy).toContain('Serving Dubai from our Ajman workshop.')
+    })
+
+    it('provides nine visual choices and five verified fabric options without a linked bed service', () => {
+      expect(landing()?.popularServices.map(({ title }) => title)).toEqual(['Full Sofa Reupholstery', 'Fabric Replacement', 'Foam & Cushion Replacement', 'Sofa Repair & Frame Support', 'L-Shaped Sofa Upholstery', 'Corner Sofa Upholstery', 'Chair Upholstery', 'Majlis Cushion Upholstery', 'Bed & Headboard Upholstery'])
+      expect(landing()?.popularServices.at(-1)).toMatchObject({ comingSoon: true })
+      expect(landing()?.popularServices.at(-1)?.href).toBeUndefined()
+      expect(landing()?.bedTeaser.label).toBe('Coming Soon')
+      expect(landing()?.bedTeaser.href).toBeUndefined()
+      expect(landing()?.fabricCards.map(({ title }) => title)).toEqual(['Chenille', 'Velvet', 'Boucle', 'Linen Blends', 'Durable Woven Fabrics'])
+      for (const card of [...(landing()?.popularServices ?? []), ...(landing()?.fabricCards ?? [])]) expect(manifestFiles.has(card.imageFile)).toBe(true)
+      expect(JSON.stringify(sofa)).not.toMatch(/\/bed-upholstery\//)
+    })
+
+    it('provides 8–16 relevant, licensed gallery assets with honest inspiration captions', () => {
+      expect(sofa.galleryFiles.length).toBeGreaterThanOrEqual(8)
+      expect(sofa.galleryFiles.length).toBeLessThanOrEqual(16)
+      expect(new Set(sofa.galleryFiles).size).toBe(sofa.galleryFiles.length)
+      for (const filename of sofa.galleryFiles) {
+        const asset = manifest.assets.find((entry) => entry.filename === filename) as ManifestAsset & { caption: string; sourcePageURL: string; width: number; height: number }
+        expect(asset).toBeDefined()
+        expect(asset.alt?.length).toBeGreaterThan(20)
+        expect(asset.licenseName).toBeTruthy()
+        expect(asset.licenseName).toBe('Company-owned source asset')
+        expect(asset.sourceSite).toBe('eco-furniture.ae')
+        const inventory = JSON.parse(readFileSync(path.join(process.cwd(), 'docs/operations/eco-furniture-portfolio-inventory.json'), 'utf8')) as { categories: { imageURLs: string[] }[] }
+        expect(inventory.categories.flatMap(({ imageURLs }) => imageURLs)).toContain(asset.sourcePageURL)
+        expect(asset.caption).toMatch(/inspiration/i)
+        expect(asset.width).toBeGreaterThan(0)
+        expect(asset.height).toBeGreaterThan(0)
+      }
+      expect(sofa.galleryHeading).toBe('Sofa Upholstery Gallery')
+      expect(JSON.stringify(sofa)).not.toMatch(/before.?after|Dubai workshop|performance fabrics|outdoor-rated|memory layers|costs less/i)
+    })
+
+    it('covers commercial FAQs with original scoped answers and exact process and quote intent', () => {
+      expect(sofa.faqQuestions).toEqual(['Is sofa reupholstery cheaper than buying a new sofa?', 'Can you replace sofa foam?', 'Can you upholster L-shaped sofas?', 'Can you upholster corner sofas?', 'Can I provide my own fabric?', 'Which upholstery fabrics do you offer?', 'Can you repair the frame during upholstery?', 'How can I get a quotation?', 'Do you upholster chairs?', 'Do you upholster Majlis seating?', 'Do you offer bed upholstery?', 'Do you serve Dubai from Ajman?', 'Can I send sofa photos on WhatsApp?'])
+      for (const question of sofa.faqQuestions) {
+        const faq = FAQ_SEEDS.find((entry) => entry.question === question)
+        expect(faq?.schemaEligible).toBe(true)
+        expect(faq?.answer).not.toMatch(/AED|\d+\s*(days|hours)|guarantee|always cheaper/i)
+      }
+      expect(FAQ_SEEDS.find(({ question }) => question === 'Do you offer bed upholstery?')?.answer).toMatch(/coming soon/i)
+      expect(sofa.process.map(({ title }) => title)).toEqual(['Send Sofa Photos', 'Choose Fabric & Foam', 'Strip, Repair & Upholster', 'Final Check & Handover'])
+      expect(landing()?.foamComfort).toMatchObject({ heading: 'Restore Comfort, Not Just the Fabric', ctaLabel: 'Send Sofa Photos for Assessment' })
+      expect(sofa.relatedSlugs).toEqual(['custom-furniture', 'custom-sofa', 'sofa-repair', 'curtains-blinds'])
+      expect(sofa.relatedHeading).toBe('Related Furniture Services')
+      expect(sofa.benefits.map(({ title }) => title)).toEqual(['Made in our Ajman workshop', 'Fabric and foam options', 'Photo quotation available', 'Frame assessment', 'Custom workmanship', 'Serving Dubai, Sharjah and UAE'])
+      expect(sofa.presentationLabels).toMatchObject({ heroQuoteLabel: 'Get Free Quote', processCtaLabel: 'Get Your Sofa Quote', quoteWhatsAppLabel: 'WhatsApp Your Photos' })
+      expect(sofa.quotationContext).toMatchObject({ heading: 'Get a Sofa Upholstery Quote', message: 'Send clear sofa photos, approximate measurements and your preferred fabric/style.', buttonLabel: 'Request My Sofa Quote' })
+    })
+  })
   it('publishes exactly the nine approved service slugs', () => {
     const slugs = SERVICE_SEEDS.map((service) => service.slug).sort()
     expect(slugs).toEqual(APPROVED_SERVICE_SLUGS)
@@ -122,9 +186,10 @@ describe('seeded launch content', () => {
       expect(service.summary.length, `${service.slug} summary`).toBeGreaterThan(80)
       expect(service.hero.heading.length, `${service.slug} hero heading`).toBeGreaterThan(3)
       expect(service.hero.copy.length, `${service.slug} hero copy`).toBeGreaterThan(60)
-      expect(lexicalText(service.details).join(' ').length, `${service.slug} details`).toBeGreaterThan(
-        250,
-      )
+      expect(
+        lexicalText(service.details).join(' ').length,
+        `${service.slug} details`,
+      ).toBeGreaterThan(250)
       expect(service.benefits.length, `${service.slug} benefits`).toBeGreaterThanOrEqual(3)
       expect(
         service.materialsCapabilities.length,
@@ -154,9 +219,17 @@ describe('seeded launch content', () => {
         expect(related).not.toBe(service.slug)
       }
 
+      const configuredAreas = [...AREA_SEEDS.map((area) => area.name), 'JBR', 'JVC', 'JLT']
       for (const area of service.serviceAreas) {
-        expect(SERVICE_AREAS, `${service.slug} area ${area}`).toContain(area)
+        expect(configuredAreas, `${service.slug} area ${area}`).toContain(area)
       }
+
+      expect(service.hero.heading.toLowerCase()).toContain('dubai')
+      expect(service.seo.title.toLowerCase()).toContain('dubai')
+      expect(service.seo.description.length).toBeGreaterThan(120)
+      expect(service.trustItems.length).toBeGreaterThanOrEqual(4)
+      expect(service.serviceOptions.items.length).toBeGreaterThanOrEqual(4)
+      expect(service.featureSections.length).toBeGreaterThanOrEqual(2)
     }
 
     expect(summaries.size).toBe(SERVICE_SEEDS.length)
@@ -224,17 +297,20 @@ describe('seeded launch content', () => {
     expect(split?.media).toBe(12)
   })
 
-  it('only references placeholder media that exists on disk with the recorded checksum', () => {
-    expect(manifest.assets.length).toBe(12)
+  it('only references licensed media that exists on disk with the recorded checksum', () => {
+    expect(manifest.assets.length).toBe(38)
     expect(manifestFiles.size).toBe(manifest.assets.length)
 
     for (const asset of manifest.assets) {
       expect(asset.creator.length, `${asset.filename} creator`).toBeGreaterThan(1)
       expect(asset.licenseName.length, `${asset.filename} license`).toBeGreaterThan(1)
       expect(asset.alt?.length ?? 0, `${asset.filename} alt text`).toBeGreaterThan(10)
-      expect(asset.placeholder, `${asset.filename} placeholder flag`).toBe(true)
+      expect(asset.placeholder, `${asset.filename} placeholder flag`).toBe(!asset.filename.startsWith('sofa-eco-'))
 
-      const absolute = path.join(process.cwd(), asset.localPath ?? path.join('src/seed/assets', asset.filename))
+      const absolute = path.join(
+        process.cwd(),
+        asset.localPath ?? path.join('src/seed/assets', asset.filename),
+      )
       expect(existsSync(absolute), `${asset.filename} is missing on disk`).toBe(true)
 
       const digest = createHash('sha256').update(readFileSync(absolute)).digest('hex')
@@ -253,10 +329,23 @@ describe('seeded launch content', () => {
     }
 
     for (const service of SERVICE_SEEDS) {
-      expect(service.hero.imageFile).toBe(MEDIA_USAGE.service(service.slug))
+      expect(service.hero.imageFile).toBe(service.slug === 'sofa-upholstery' ? 'sofa-eco-nivo.webp' : `service-${service.slug}-ai.webp`)
 
       for (const file of service.galleryFiles) {
         expect(manifestFiles, `${service.slug} gallery file ${file}`).toContain(file)
+      }
+    }
+  })
+
+  it('keeps every service gallery specific to that service', () => {
+    for (const service of SERVICE_SEEDS) {
+      if (service.slug === 'sofa-upholstery') continue // Dedicated gallery is covered above against the owned-media inventory.
+      expect(service.galleryFiles, `${service.slug} gallery count`).toHaveLength(3)
+
+      for (const filename of service.galleryFiles) {
+        expect(filename, `${service.slug} should not show another service`).toContain(
+          `service-${service.slug}`,
+        )
       }
     }
   })
@@ -272,6 +361,14 @@ describe('seeded launch content', () => {
     expect(contactInformation.address.line1).toContain('Al Jerf 1')
     expect(contactInformation.mapURL).toContain('6740373205854748574')
     expect(contactInformation.openingHours).toHaveLength(7)
+    expect(contactInformation.openingHours.find(({ day }) => day === 'monday')).toMatchObject({
+      closed: false,
+      closes: '23:00',
+      opens: '09:00',
+    })
+    expect(contactInformation.openingHours.find(({ day }) => day === 'friday')).toMatchObject({
+      closed: true,
+    })
     expect(contactInformation.serviceAreas.map((entry) => entry.area)).toEqual([...SERVICE_AREAS])
 
     expect(siteSettings.canonicalSiteURL).toBe('https://alruknfurniture.ae')
@@ -298,7 +395,12 @@ describe('seeded launch content', () => {
 
     const privacy = PAGE_SEEDS.find((page) => page.slug === 'privacy')
     expect(privacy?.canonicalPath).toBe('/privacy/')
-    expect(lexicalText(privacy?.layout).join(' ')).toContain(BUSINESS.email)
+    const privacyCopy = lexicalText(privacy?.layout).join(' ')
+    expect(privacyCopy).toContain(BUSINESS.email)
+    expect(privacyCopy).toContain('Google Analytics')
+    expect(privacyCopy).toContain('Google Tag Manager')
+    expect(privacyCopy.toLowerCase()).toContain('optional analytics and advertising measurement')
+    expect(privacyCopy).toContain('Cookie Settings')
   })
 
   it('never claims anything beyond the verified business facts', () => {
@@ -312,16 +414,16 @@ describe('seeded launch content', () => {
   })
 
   it('keeps seeded meta copy inside the character caps the schema enforces', () => {
-    // `seo.description` and `SEODefaults.fallbackDescription` are capped at 160
-    // characters, so over-long seed copy is rejected at create time.
+    // Global fallback copy stays at 160; record search/social descriptions
+    // accept up to 180 so the approved sofa record seeds without truncation.
     expect(GLOBAL_SEEDS.seoDefaults.fallbackDescription.length).toBeLessThanOrEqual(160)
     expect(GLOBAL_SEEDS.seoDefaults.titlePattern.length).toBeLessThanOrEqual(80)
 
     for (const service of SERVICE_SEEDS) {
-      expect(service.title.length, `${service.slug} seo title`).toBeLessThanOrEqual(44)
-      expect(service.summary.slice(0, 160).length, `${service.slug} meta description`).toBeLessThanOrEqual(
-        160,
-      )
+      expect(service.seo.title.length, `${service.slug} seo title`).toBeLessThanOrEqual(60)
+      expect(service.seo.description.length, `${service.slug} meta description`).toBeLessThanOrEqual(180)
+      expect(service.hero.heading.length, `${service.slug} H1`).toBeGreaterThan(10)
+      expect(service.galleryFiles.length, `${service.slug} supporting images`).toBeGreaterThanOrEqual(3)
     }
   })
 })

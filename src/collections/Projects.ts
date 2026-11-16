@@ -45,6 +45,8 @@ export const Projects: CollectionConfig = {
     slugField(),
     { name: 'summary', type: 'textarea', localized: true },
     { name: 'cover', type: 'upload', relationTo: 'media' },
+    { name: 'beforeImage', type: 'upload', relationTo: 'media' },
+    { name: 'afterImage', type: 'upload', relationTo: 'media' },
     {
       name: 'gallery',
       type: 'array',
@@ -70,6 +72,7 @@ export const Projects: CollectionConfig = {
     { name: 'challenge', type: 'textarea', localized: true },
     { name: 'solution', type: 'textarea', localized: true },
     { name: 'featured', type: 'checkbox', defaultValue: false, index: true },
+    { name: 'verified', type: 'checkbox', admin: { description: 'Enable only for genuine Al Rukn work with approved project photography.' }, defaultValue: false, index: true },
     ...publicationFields(),
     { name: 'seo', type: 'group', fields: seoFields() },
     ...contentAuditFields(),

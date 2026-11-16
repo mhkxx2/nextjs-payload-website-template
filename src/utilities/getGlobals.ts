@@ -3,15 +3,26 @@ import type { Config } from 'src/payload-types'
 import configPromise from '@payload-config'
 import { type DataFromGlobalSlug, getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
+
+import { collectionTag, globalTag } from '@/lib/cacheTags'
 
 type Global = keyof Config['globals']
 
 const GLOBAL_SELECTS: Partial<Record<Global, Record<string, unknown>>> = {
-  header: { navItems: true, serviceLinks: true },
-  footer: { navItems: true, serviceLinks: true, copyrightText: true },
+  'google-reviews': {
+    enabled: true,
+    placeId: true,
+    heading: true,
+    subheading: true,
+    reviewLimit: true,
+    mapsUrl: true,
+    writeReviewUrl: true,
+  },
+  header: { navigation: true, serviceLinks: true, conversionActions: true, mobileNavigation: true },
+  footer: { navigationGroups: true, serviceLinks: true, legalLinks: true, supportingCopy: true, conversionContent: true },
   'social-media': { links: true },
 }
-
 const GLOBAL_POPULATE: Partial<Record<Global, Record<string, unknown>>> = {
   header: {
     services: {
@@ -60,13 +71,28 @@ function sanitizeServiceLinks(serviceLinks: unknown): unknown[] {
     .filter(Boolean) as unknown[]
 }
 
-async function getGlobal<T extends Global>(slug: T, depth = 0): Promise<DataFromGlobalSlug<T>> {
+async function isDraftModeEnabled(): Promise<boolean> {
+  try {
+    return (await draftMode()).isEnabled
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('outside a request scope')) return false
+    throw error
+  }
+}
+
+async function getGlobal<T extends Global>(
+  slug: T,
+  depth = 0,
+  draft = false,
+): Promise<DataFromGlobalSlug<T>> {
   const payload = await getPayload({ config: configPromise })
+  const effectiveDepth = slug === 'site-settings' ? Math.max(depth, 1) : depth
 
   const findOptions: Record<string, unknown> = {
     slug,
-    depth,
-    overrideAccess: false,
+    depth: effectiveDepth,
+    draft,
+    overrideAccess: draft,
   }
 
   if (GLOBAL_SELECTS[slug]) {
@@ -94,12 +120,20 @@ async function getGlobal<T extends Global>(slug: T, depth = 0): Promise<DataFrom
  * Returns an unstable_cache function mapped with the cache tags for the slug
  */
 export const getCachedGlobal = <T extends Global>(slug: T, depth = 0) => {
-  const tags = [`global_${slug}`]
+  const effectiveDepth = slug === 'site-settings' ? Math.max(depth, 1) : depth
+  const tags: string[] = [globalTag(slug)]
   if (slug === 'header' || slug === 'footer') {
-    tags.push('collection_services')
+    tags.push(collectionTag('services'))
   }
 
-  return unstable_cache(async () => getGlobal<T>(slug, depth), [slug, String(depth)], {
-    tags,
-  })
+  return async () => {
+    const draft = await isDraftModeEnabled()
+    if (draft) return getGlobal<T>(slug, effectiveDepth, true)
+
+    return unstable_cache(
+      async () => getGlobal<T>(slug, effectiveDepth, false),
+      [slug, String(effectiveDepth)],
+      { tags },
+    )()
+  }
 }

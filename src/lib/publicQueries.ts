@@ -1,10 +1,13 @@
 import configPromise from '@payload-config'
+import { unstable_cache } from 'next/cache'
 import { draftMode } from 'next/headers'
 import { getPayload, type Where } from 'payload'
 
+import { collectionTag, documentTag } from '@/lib/cacheTags'
 import { isPubliclyPublished } from '@/lib/publication'
 
 export type PublicContentCollection =
+  | 'areas'
   | 'pages'
   | 'posts'
   | 'projects'
@@ -88,6 +91,39 @@ const runQuery = async (options: PublicQueryOptions, draft: boolean) => {
   return payload.find(findOptions as Parameters<typeof payload.find>[0])
 }
 
+const stableValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(stableValue)
+  if (!value || typeof value !== 'object') return value
+
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, entry]) => [key, stableValue(entry)]),
+  )
+}
+
+const serializedOptions = (options: PublicQueryOptions): string =>
+  JSON.stringify(stableValue(options))
+
+const runCachedListQuery = (options: PublicQueryOptions) =>
+  unstable_cache(
+    () => runQuery(options, false),
+    ['public-query', options.collection, serializedOptions(options)],
+    { tags: [collectionTag(options.collection)] },
+  )()
+
+const runCachedDocumentQuery = (
+  options: PublicQueryOptions,
+  slug: string,
+) =>
+  unstable_cache(
+    () => runQuery(options, false),
+    ['public-document', options.collection, slug, serializedOptions(options)],
+    {
+      tags: [collectionTag(options.collection), documentTag(options.collection, slug)],
+    },
+  )()
+
 const keepPublic = <T>(docs: T[], draft: boolean, now: Date): T[] => {
   if (draft) return docs
 
@@ -102,15 +138,15 @@ export const queryPublicDocBySlug = async <T>(
 ): Promise<T | null> => {
   const { isEnabled: draft } = await draftMode()
   const now = new Date()
-  const result = await runQuery(
-    {
-      collection,
-      depth,
-      limit: 1,
-      where: { slug: { equals: slug } },
-    },
-    draft,
-  )
+  const options: PublicQueryOptions = {
+    collection,
+    depth,
+    limit: 1,
+    where: { slug: { equals: slug } },
+  }
+  const result = draft
+    ? await runQuery(options, true)
+    : await runCachedDocumentQuery(options, slug)
 
   const docs = (result.docs ?? []) as unknown as T[]
 
@@ -123,7 +159,7 @@ export const queryPublicList = async <T>(
 ): Promise<PublicQueryResult<T>> => {
   const { isEnabled: draft } = await draftMode()
   const now = new Date()
-  const result = await runQuery(options, draft)
+  const result = draft ? await runQuery(options, true) : await runCachedListQuery(options)
 
   return {
     docs: keepPublic((result.docs ?? []) as unknown as T[], draft, now),

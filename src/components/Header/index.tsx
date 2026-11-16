@@ -1,73 +1,24 @@
 import Link from 'next/link'
 import React from 'react'
+
 import { Logo } from '@/components/Logo/Logo'
+import { TrackedContactLink } from '@/components/TrackedContactLink'
+import { phoneHref, whatsappHref } from '@/lib/contactLinks'
+import { canonicalPath } from '@/lib/routes'
+import { presentationPath, type PresentationDestination } from '@/lib/presentationRoutes'
 import { MobileNav } from './MobileNav'
-import { FIXED_SERVICE_SLUGS, canonicalPath } from '@/lib/routes'
 
-const SERVICE_LABELS: Record<string, string> = {
-  'sofa-upholstery': 'Sofa Upholstery & Re-upholstery',
-  'custom-furniture': 'Custom Furniture Manufacturing',
-  'custom-sofa': 'Custom Sofa Manufacturing',
-  'majlis-furniture': 'Majlis Upholstery & Seating',
-  'curtains-blinds': 'Curtains & Blinds Upholstery',
-  'sofa-repair': 'Sofa & Cushion Repair',
-  'custom-wardrobes': 'Custom Wardrobes & Joinery',
-  'custom-beds-headboards': 'Headboard & Bed Upholstery',
-  'office-furniture': 'Commercial & Office Upholstery',
-}
+// Payload relationship values vary with query depth and are narrowed at use sites.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RecordData = Record<string, any>
+export type HeaderProps = { contact?: RecordData; data?: RecordData; settings?: RecordData }
 
-export const Header: React.FC = () => {
-  return (
-    <header className="bg-ivory border-b border-border sticky top-0 z-30 shadow-xs">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" aria-label="Al Rukn Furniture Homepage" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-gold-muted rounded-sm">
-          <Logo />
-        </Link>
+const destinationHref = (destination: unknown) => destination === 'areas' ? '/#areas-we-serve' : typeof destination === 'string' ? presentationPath(destination as PresentationDestination) : null
 
-        {/* Desktop Navigation */}
-        <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-8 font-medium text-sm text-charcoal">
-          <Link href="/" className="hover:text-gold-muted transition-colors focus:outline-none focus:ring-2 focus:ring-gold-muted rounded px-1">
-            Home
-          </Link>
-
-          {/* Services Menu */}
-          <div className="relative group">
-            <Link
-              href={canonicalPath('service', FIXED_SERVICE_SLUGS[0])}
-              className="hover:text-gold-muted transition-colors py-2 flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-gold-muted rounded px-1"
-            >
-              Services
-              <svg className="w-4 h-4 fill-current transition-transform group-hover:rotate-180" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-              </svg>
-            </Link>
-
-            <div className="absolute start-0 top-full hidden group-hover:flex group-focus-within:flex flex-col bg-charcoal text-ivory min-w-[280px] p-4 rounded-b-lg shadow-xl border-t-2 border-gold-muted z-50">
-              {FIXED_SERVICE_SLUGS.map((slug) => (
-                <Link
-                  key={slug}
-                  href={canonicalPath('service', slug)}
-                  className="py-2 px-3 text-xs hover:bg-gold-muted/20 hover:text-gold-muted rounded transition-colors focus:outline-none focus:bg-gold-muted/20 focus:text-gold-muted"
-                >
-                  {SERVICE_LABELS[slug] || slug}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <Link href="/projects/" className="hover:text-gold-muted transition-colors focus:outline-none focus:ring-2 focus:ring-gold-muted rounded px-1">
-            Projects
-          </Link>
-          <Link href="/about-us/" className="hover:text-gold-muted transition-colors focus:outline-none focus:ring-2 focus:ring-gold-muted rounded px-1">
-            About Us
-          </Link>
-          <Link href="/contact/" className="hover:text-gold-muted transition-colors focus:outline-none focus:ring-2 focus:ring-gold-muted rounded px-1">
-            Contact
-          </Link>
-        </nav>
-
-        <MobileNav />
-      </div>
-    </header>
-  )
+export const Header: React.FC<HeaderProps> = ({ contact = {}, data = {}, settings = {} }) => {
+  const navigation = Array.isArray(data.navigation) ? data.navigation : []
+  const serviceLinks = Array.isArray(data.serviceLinks) ? data.serviceLinks : []
+  const call = phoneHref(contact.phoneE164)
+  const whatsapp = contact.whatsappAvailable === false ? null : whatsappHref(contact.whatsappE164, settings.whatsAppCopy?.defaultMessage)
+  return <header className="site-header"><div className="site-container header-inner"><Link aria-label={`${settings.brandName || 'Al Rukn Furniture'} Homepage`} className="brand-link" href="/"><Logo brandName={settings.brandName} loading="eager" logo={settings.logo} priority="high" /></Link><nav aria-label="Main navigation" className="desktop-nav">{navigation.map((item: RecordData) => { if (item.destination === 'services') return <div className="services-menu" key={item.id || item.label}><Link href="/services/">{item.label || 'Services'} <span aria-hidden="true">⌄</span></Link><div className="services-dropdown">{serviceLinks.map((entry: RecordData) => { const service = typeof entry.service === 'object' ? entry.service : null; return service?.slug ? <Link href={canonicalPath('service', service.slug)} key={entry.id || service.id}>{entry.label || service.title}</Link> : null })}</div></div>; const href = destinationHref(item.destination); return href ? <Link href={href} key={item.id || item.label}>{item.label}</Link> : null })}</nav><div className="header-actions">{call && <TrackedContactLink analytics={{ cta_location: 'header' }} className="header-call" eventName="phone_call_click" href={call}>Call Now</TrackedContactLink>}{whatsapp && <TrackedContactLink analytics={{ cta_location: 'header' }} aria-label="WhatsApp Al Rukn" className="header-whatsapp" eventName="whatsapp_click" href={whatsapp} rel="noopener noreferrer" target="_blank">WhatsApp</TrackedContactLink>}<Link className="button button-primary" href="/#request-quote">Get Free Quote</Link></div><MobileNav contact={contact} data={data} settings={settings} /></div></header>
 }

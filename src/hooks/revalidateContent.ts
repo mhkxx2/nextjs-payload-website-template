@@ -1,15 +1,15 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
 import type {
   CollectionAfterChangeHook,
   CollectionAfterDeleteHook,
   CollectionBeforeChangeHook,
 } from 'payload'
 
-import { SITEMAP_CACHE_TAG } from '@/lib/cacheTags'
+import { SITEMAP_CACHE_TAG, collectionTag, documentTag } from '@/lib/cacheTags'
+import { expirePath, expireTag } from '@/lib/cacheInvalidation'
 import { canonicalPath, type CanonicalPathKind } from '@/lib/routes'
 import { isPubliclyPublished } from '@/lib/publication'
 
-type ContentCollection = 'faqs' | 'pages' | 'posts' | 'projects' | 'services' | 'testimonials'
+type ContentCollection = 'areas' | 'faqs' | 'pages' | 'posts' | 'projects' | 'services' | 'testimonials'
 type ContentDocument = Record<string, unknown> & {
   _status?: null | string
   id?: number | string
@@ -17,7 +17,7 @@ type ContentDocument = Record<string, unknown> & {
   slug?: null | string
   status?: null | string
 }
-type RelatedCollection = 'posts' | 'projects' | 'services'
+type RelatedCollection = 'pages' | 'posts' | 'projects' | 'services'
 type RequestLike = {
   context?: Record<string, unknown>
   payload: {
@@ -39,6 +39,7 @@ const collectionRoutes: Record<
   ContentCollection,
   { index?: string; kind?: CanonicalPathKind }
 > = {
+  areas: {},
   faqs: {},
   pages: { kind: 'page' },
   posts: { index: '/blog/', kind: 'post' },
@@ -47,10 +48,19 @@ const collectionRoutes: Record<
   testimonials: {},
 }
 
+const homepageCollections = new Set<ContentCollection>([
+  'areas',
+  'faqs',
+  'projects',
+  'services',
+  'testimonials',
+])
+
 const relationFields: Record<
   ContentCollection,
   Array<{ collection: RelatedCollection; field: string; kind: CanonicalPathKind }>
 > = {
+  areas: [{ collection: 'pages', field: 'landingPage', kind: 'page' }],
   faqs: [{ collection: 'services', field: 'services', kind: 'service' }],
   pages: [],
   posts: [
@@ -171,6 +181,7 @@ export async function revalidateContent({
 
   if (route.index) paths.add(route.index)
   if (
+    homepageCollections.has(collection) ||
     (currentIsPublic && doc.featured === true) ||
     (deletedIsPublic && doc.featured === true) ||
     (previousIsPublic && previousDoc?.featured === true)
@@ -182,27 +193,14 @@ export async function revalidateContent({
 
   for (const path of paths) {
     req.payload.logger.info(`Revalidating content at path: ${path}`)
-    safeRevalidate(req, () => revalidatePath(path), path)
+    expirePath(req, path)
   }
-  safeRevalidate(req, () => revalidateTag(SITEMAP_CACHE_TAG, 'max'), SITEMAP_CACHE_TAG)
-  safeRevalidate(req, () => revalidateTag(`collection_${collection}`, 'max'), `collection_${collection}`)
-}
-
-/**
- * Next.js only registers `revalidatePath`/`revalidateTag` inside a request scope.
- * Writes that arrive through the local API (seed scripts, maintenance jobs) have
- * no store, and that invariant must not fail an otherwise valid write. Any other
- * cache error still surfaces so real revalidation problems stay visible.
- */
-function safeRevalidate(req: RequestLike, run: () => void, target: string): void {
-  try {
-    run()
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-
-    if (!message.includes('static generation store missing')) throw error
-
-    req.payload.logger.warn?.(`Skipped cache revalidation for ${target} outside a request context.`)
+  expireTag(req, SITEMAP_CACHE_TAG)
+  expireTag(req, collectionTag(collection))
+  for (const document of relatedFrom) {
+    if (typeof document.slug === 'string') {
+      expireTag(req, documentTag(collection, document.slug))
+    }
   }
 }
 

@@ -1,12 +1,14 @@
 const presentationPaths = {
   about: '/about-us',
+  areas: '/#areas-we-serve',
   blog: '/blog',
   contact: '/contact',
   home: '/',
-  privacy: '/privacy-policy',
+  privacy: '/privacy',
+  portfolio: '/portfolio',
   projects: '/projects',
   services: '/services',
-  terms: '/terms-and-conditions',
+  terms: '/terms',
 } as const
 
 export type PresentationDestination = keyof typeof presentationPaths

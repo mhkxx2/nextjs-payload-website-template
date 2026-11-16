@@ -48,6 +48,8 @@ export type SchemaContext = {
   breadcrumbs?: Breadcrumb[] | null | undefined
   globals?: SchemaGlobals | null | undefined
   includeLocalBusiness?: boolean
+  /** Dedicated landing pages can publish only their page-specific entities. */
+  includeOrganization?: boolean
   kind: SchemaKind
   now?: Date
   origin?: null | string | undefined
@@ -93,7 +95,7 @@ const DAY_LABELS: Record<string, string> = {
 
 const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/
 
-const ALLOWED_BUSINESS_TYPES = ['FurnitureStore', 'LocalBusiness'] as const
+const ALLOWED_BUSINESS_TYPES = ['LocalBusiness'] as const
 
 /**
  * FAQPage is emitted only for the exact set of FAQs the page renders, and only
@@ -206,6 +208,24 @@ export function buildOrganizationSchema(
   }
 }
 
+/** The canonical site entity is emitted on the homepage only. */
+export function buildWebsiteSchema(
+  globals: SchemaGlobals | null | undefined,
+  origin: string,
+): JsonLdObject | null {
+  const name = organizationName(globals)
+  if (!name) return null
+
+  return {
+    '@context': SCHEMA_CONTEXT,
+    '@id': `${canonicalURL('/', origin)}#website`,
+    '@type': 'WebSite',
+    name,
+    publisher: { '@id': `${canonicalURL('/', origin)}#organization` },
+    url: canonicalURL('/', origin),
+  }
+}
+
 /**
  * LocalBusiness is only claimed when the contact global actually carries a
  * postal address; without one there is nothing truthful to publish.
@@ -224,7 +244,7 @@ export function buildLocalBusinessSchema(
   const line1 = readText(address, 'line1')
   const line2 = readText(address, 'line2')
   const emirate = readText(address, 'emirate')
-  const streetAddress = [line1, line2].filter(Boolean).join(', ') || undefined
+  const streetAddress = [...new Set([line1, line2].filter(Boolean))].join(', ') || undefined
   const declaredType = readText(globals?.localBusiness, 'businessType')
   const businessType =
     declaredType && (ALLOWED_BUSINESS_TYPES as readonly string[]).includes(declaredType)
@@ -232,7 +252,6 @@ export function buildLocalBusinessSchema(
       : 'LocalBusiness'
   const telephone = asText(readField(globals?.contact, 'phoneE164'))
   const email = asText(readField(globals?.contact, 'email'))
-  const priceRange = readText(globals?.localBusiness, 'priceRange')
   const openingHours = buildOpeningHours(globals?.contact)
 
   return {
@@ -249,7 +268,6 @@ export function buildLocalBusinessSchema(
     ...(email ? { email } : {}),
     name,
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
-    ...(priceRange ? { priceRange } : {}),
     ...(telephone ? { telephone } : {}),
     url: canonicalURL('/', origin),
   }
@@ -448,12 +466,17 @@ export function buildSchemas(context: SchemaContext): JsonLdObject[] {
   const globals = context.globals
   const schemas: JsonLdObject[] = []
 
-  const organization = buildOrganizationSchema(globals, origin)
+  const organization = context.includeOrganization === false ? null : buildOrganizationSchema(globals, origin)
   if (organization) schemas.push(organization)
 
   if (context.includeLocalBusiness) {
     const localBusiness = buildLocalBusinessSchema(globals, origin)
     if (localBusiness) schemas.push(localBusiness)
+  }
+
+  if (context.kind === 'home') {
+    const website = buildWebsiteSchema(globals, origin)
+    if (website) schemas.push(website)
   }
 
   const claims = resolveSchemaClaims(context.record, context.kind)

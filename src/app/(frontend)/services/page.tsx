@@ -6,7 +6,7 @@ import { LocationCoverageBlockComponent } from '@/blocks/LocationCoverage/Compon
 import { ServiceGridBlockComponent } from '@/blocks/ServiceGrid/Component'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
-import { archiveCopy, homeCopy } from '@/data/launch-copy'
+import { cmsFallbacks } from '@/data/cmsFallbacks'
 import type { Service } from '@/payload-types'
 import { buildBreadcrumbs } from '@/lib/breadcrumbs'
 import { orderFixedServices } from '@/lib/contentLinks'
@@ -16,23 +16,29 @@ import { buildMetadata, getSeoDefaults } from '@/lib/seo'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const defaults = await getSeoDefaults()
+  const [defaults, archives] = await Promise.all([
+    getSeoDefaults(),
+    getCachedGlobal('archive-settings', 1)(),
+  ])
+  const archive = archives.servicesArchive
 
-  return buildMetadata(null, {
+  return buildMetadata({ seo: archive?.seo }, {
     ...defaults,
-    descriptionFallback: archiveCopy.services.intro,
+    descriptionFallback: archive?.introduction || cmsFallbacks.archives.services.intro,
     path: '/services/',
-    titleFallback: archiveCopy.services.heading,
+    titleFallback: archive?.heading || cmsFallbacks.archives.services.heading,
   })
 }
 
 export default async function ServicesIndex() {
   const breadcrumbs = buildBreadcrumbs('/services/')
-  const [{ docs }, contact, globals] = await Promise.all([
+  const [{ docs }, contact, globals, archives] = await Promise.all([
     queryPublicList<Service>({ collection: 'services', depth: 1, limit: 20 }),
     getCachedGlobal('contact-information', 1)(),
     getSchemaGlobals(),
+    getCachedGlobal('archive-settings', 1)(),
   ])
+  const archive = archives.servicesArchive
   const schemas = buildSchemas({ breadcrumbs, globals, kind: 'archive', path: '/services/' })
 
   const services = orderFixedServices(docs)
@@ -47,9 +53,9 @@ export default async function ServicesIndex() {
         <Breadcrumbs items={breadcrumbs} />
         <header className="max-w-3xl py-6">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-charcoal mb-4">
-            {archiveCopy.services.heading}
+            {archive?.heading || cmsFallbacks.archives.services.heading}
           </h1>
-          <p className="text-neutral-600">{archiveCopy.services.intro}</p>
+          <p className="text-neutral-600">{archive?.introduction || cmsFallbacks.archives.services.intro}</p>
         </header>
       </div>
 
@@ -57,23 +63,23 @@ export default async function ServicesIndex() {
         <ServiceGridBlockComponent services={services} />
       ) : (
         <div className="container mx-auto px-4 py-10">
-          <p className="text-neutral-600">{archiveCopy.services.emptyMessage}</p>
+          <p className="text-neutral-600">{archive?.emptyState || cmsFallbacks.archives.services.emptyMessage}</p>
         </div>
       )}
 
       {areas.length > 0 && (
         <LocationCoverageBlockComponent
           areas={areas}
-          heading={homeCopy.coverage.heading}
-          subheading={homeCopy.coverage.subheading}
+          heading="Where We Work"
+          subheading="Delivery and installation areas are configured by our team."
         />
       )}
 
       <CallToActionBlockComponent
-        buttonLink={homeCopy.finalCta.buttonLink}
-        buttonText={homeCopy.finalCta.buttonText}
-        description={homeCopy.finalCta.description}
-        heading={homeCopy.finalCta.heading}
+        buttonLink="/contact/"
+        buttonText={archive?.cta?.primaryLabel || cmsFallbacks.archives.services.cta.buttonText}
+        description={archive?.cta?.description || cmsFallbacks.archives.services.cta.description}
+        heading={archive?.cta?.heading || cmsFallbacks.archives.services.cta.heading}
       />
     </div>
   )

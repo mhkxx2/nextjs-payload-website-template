@@ -58,7 +58,7 @@ export function seoFields(): Field[] {
       type: 'textarea',
       label: 'Meta description',
       localized: true,
-      maxLength: 160,
+      maxLength: 180,
     },
     {
       name: 'canonicalURL',
@@ -79,7 +79,7 @@ export function seoFields(): Field[] {
       type: 'textarea',
       label: 'Open Graph description',
       localized: true,
-      maxLength: 160,
+      maxLength: 180,
     },
     {
       name: 'openGraphImage',
