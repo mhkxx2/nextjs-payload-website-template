@@ -16,7 +16,7 @@ Developer: [Mudassar — mudassar.net](https://mudassar.net/)
 5. Update image remote allowlist hosts in `next.config.ts` for the new domain.
 6. `pnpm install` → `pnpm payload migrate` → `pnpm template:check` → `pnpm dev`.
 7. Clear or re-seed CMS content; replace `public/` brand assets.
-8. Configure optional GA/GTM, SMTP, and `GOOGLE_PLACES_API_KEY` (server-only).
+8. Configure **GTM** (`NEXT_PUBLIC_GTM_ID`), **GA4** (`NEXT_PUBLIC_GA_ID`), SMTP, and `GOOGLE_PLACES_API_KEY` (server-only for Google Reviews). Set Contact/Google Reviews Maps URLs + Place ID in Payload.
 9. Deploy behind TLS reverse proxy; persist media storage; run `pnpm release:gate` before go-live.
 
 ## Never copy between brands
