@@ -2,7 +2,7 @@
 
 > Built on the official [Payload Website Template](https://github.com/payloadcms/payload/tree/main/templates/website) (Payload `3.89` + Next.js `16`), then production-hardened for real service businesses.
 
-A reusable **Next.js 16 + Payload CMS 3** starter with PostgreSQL, layout builder, SEO, leads, analytics/consent, service landings, portfolio, and Google Reviews — already proven on live sites.
+A reusable **Next.js 16 + Payload CMS 3** starter with PostgreSQL, layout builder, **SEO / AEO / GEO**, **Google Tag Manager + GA4**, Cookie Consent Mode v2, Google Reviews, Google Maps, leads, service landings, and portfolio — already proven on live sites.
 
 ### Live production sites
 
@@ -22,15 +22,16 @@ Built and maintained by **[Mudassar](https://mudassar.net/)** — [mudassar.net]
 - **PostgreSQL first** — `@payloadcms/db-postgres` with migrations and production env checks.
 - **Service-business CMS** — Pages, Posts, Projects, Services, Portfolio, FAQs, Testimonials, private Leads, Redirects, Areas, Categories, plus catalogue collections for product-style service lines.
 - **Rich layout builder** — 20 blocks (Hero, Content, CTA, Forms, Quote, FAQs, Testimonials, Service Grid, Process, Stats, Location Coverage, Project Gallery, and more).
-- **SEO + discovery** — Metadata helpers, JSON-LD schema, sitemap/robots, redirects plugin, 404, trailing-slash canonical URLs.
-- **Growth stack** — GA4 + GTM hooks, Cookie Consent Mode v2, tracked contact CTAs, SMTP lead notifications, Google Places reviews (server-only API key).
+- **SEO + AEO + GEO** — Full metadata/canonical/OG stack, JSON-LD entities, FAQ answer schema, LocalBusiness / area coverage, sitemap & robots, redirects — built for classic search, answer engines, and generative/local discovery.
+- **Google Tag Manager (integrated)** — Production GTM container + GA4 gtag, Consent Mode v2 defaults before tags fire, shared `dataLayer` conversion events.
+- **Google Reviews + Maps** — Places API (New) native reviews, Maps / write-review links, Contact `mapURL`, Place ID via Payload global.
 - **Quality gates** — `template:check`, lint, typecheck, Vitest unit/integration, Playwright e2e/a11y, optional LHCI.
 - **Clean reuse** — Demo Payload artifacts removed; follow [`TEMPLATE.md`](TEMPLATE.md) to rebrand for a new project.
 
 ### Who this is for
 
 - Agencies, studios, and freelancers shipping CMS websites for service brands
-- Teams that need leads, SEO, analytics/consent, and portfolio/service pages out of the box
+- Teams that need **SEO/AEO/GEO**, GTM analytics, Google Reviews/Maps, leads, and portfolio/service pages out of the box
 - Anyone who wants a production Payload + Next baseline stronger than the stock website template
 
 ---
@@ -48,11 +49,9 @@ Built and maintained by **[Mudassar](https://mudassar.net/)** — [mudassar.net]
 ```bash
 git clone https://github.com/mhkxx2/nextjs-payload-website-template.git
 cd nextjs-payload-website-template
-# recommended: work from the full template branch if you cloned default main before merge
-git checkout feature/al-rukn-implementation   # only needed until PR #1 is merged
 ```
 
-Or download the clean release zip from the server export / GitHub source archive (no `node_modules` / secrets).
+Or use **[Use this template](https://github.com/mhkxx2/nextjs-payload-website-template/generate)** on GitHub.
 
 ### Development
 
@@ -77,6 +76,93 @@ Compose starts Postgres 16 and the Next/Payload app on port `3000` with local-on
 
 ---
 
+## SEO, AEO & GEO (detailed)
+
+This template ships a production **search + answer + generative/local** discovery stack — not just a meta title field.
+
+### SEO (classic search engines)
+
+| Capability | What ships |
+| --- | --- |
+| **CMS SEO fields** | Per-document SEO title (≤60), meta description (≤180), required canonical URL, index/follow toggles |
+| **Open Graph & Twitter** | OG title/description/image + Twitter card metadata via Next `Metadata` helpers |
+| **Admin SEO preview** | In-admin search/social preview UI (`SEOPreview`) |
+| **Site-wide defaults** | `SEODefaults` global + `@payloadcms/plugin-seo` |
+| **Canonical policy** | Trailing-slash canonical URLs, origin-safe resolution, drafts/utility paths excluded |
+| **robots.txt** | App Router `robots` route; disallows `/admin/`, `/api/`, `/graphql/`, `/internal/`, `/next/`, `/search/` |
+| **sitemap.xml** | Dynamic sitemap of published, indexable pages/posts/projects/services (+ structural routes & catalogue products) |
+| **Redirects** | Payload redirects plugin + collision-safe public route contract |
+| **404 / soft 404 hygiene** | Dedicated not-found handling; filtered catalogue views can force `noindex` when appropriate |
+| **Site icons for crawlers** | Favicon / apple-touch / icon routes served outside `/api/` so robots are not blocked |
+| **On-demand revalidation** | Cache tags + revalidation hooks so SEO URLs stay fresh after CMS edits |
+
+### AEO (Answer Engine Optimization)
+
+Built so assistants and answer surfaces can extract clear entities and Q&A:
+
+- **JSON-LD schema.org** graph with allowlisted types only: `Organization`, `LocalBusiness`, `Service`, `Article`, `FAQPage`, `BreadcrumbList`
+- **FAQPage** emitted only for FAQs editors mark `schemaEligible` (and that are publicly published)
+- **Service / Article / Breadcrumb** entities for service landings, posts, and navigation trails
+- **Safe serialization** (escaped JSON-LD) so markup cannot break out of the script tag
+- **Structured contact & organization** fields from globals (brand, business name, logo, social) for entity clarity
+- **CMS-controlled schema type selection** on records (`schemaTypes` multi-select)
+
+### GEO (Generative + geographic / local discovery)
+
+- **LocalBusiness** schema with opening hours, contact, and **`areaServed`** when service areas exist
+- **Areas** collection + **Location Coverage** layout block for city/emirate service geography
+- **Google Maps** business URL on Contact (`mapURL`) and Google Reviews (`mapsUrl`) — validated HTTPS Maps hosts only
+- **Google Place ID** (Payload `google-reviews` global) ties the site to the real Maps listing
+- **Write-a-review** + **View on Google** deep links for local trust signals
+- Entity-rich service/portfolio pages that generative engines can cite with NAP-style business context
+
+---
+
+## Analytics & Google Tag Manager (integrated)
+
+Production frontends load a full measurement stack from the root layout:
+
+1. **Consent Mode v2 defaults** (`beforeInteractive`) — storage defaults queued **before** tags
+2. **Google Tag Manager** — container snippet + `<noscript>` iframe (`NEXT_PUBLIC_GTM_ID`)
+3. **Google Analytics 4** — gtag.js loader + config (`NEXT_PUBLIC_GA_ID`)
+4. **Shared `dataLayer`** — typed helper pushes privacy-safe events (allowlisted params only; no raw PII)
+
+### Conversion / engagement events
+
+| Event | Typical trigger |
+| --- | --- |
+| `whatsapp_click` | Tracked WhatsApp CTAs (hero, sticky bar, service landings, catalogue) |
+| `phone_call_click` | Click-to-call CTAs |
+| `generate_lead` | Confirmed quote/lead form success |
+| `select_item` / `view_item` | Catalogue / product exploration |
+| `reviews_view_google_click` / `review_write_click` | Google Reviews CTAs |
+
+Cookie UI: **Cookie Consent** banner + settings button; consent updates align with GTM/GA4 Consent Mode v2. Analytics scripts are intended for **production** (`NODE_ENV=production`).
+
+Configure per brand:
+
+```bash
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+```
+
+---
+
+## Google Reviews & Google Maps
+
+| Piece | Details |
+| --- | --- |
+| **Payload global** | `Google Reviews` (`google-reviews`): enable flag, Place ID, heading/subheading, review limit (3–5), Maps URL, write-review URL |
+| **Native reviews** | Server fetch via **Places API (New)** using **server-only** `GOOGLE_PLACES_API_KEY` (never `NEXT_PUBLIC_*`, never stored in Payload) |
+| **UI** | Stars, carousel/scroller, review text, attribution links; tracked view/write CTAs |
+| **Fallback** | If disabled / missing key / missing Place ID → still shows “View on Google” + “Write a Review” Maps links |
+| **Contact Maps** | `ContactInformation.mapURL` for the business listing (validated Google Maps hosts) |
+| **Caching** | Reviews payload revalidated periodically; graceful last-good fallback while the process is warm |
+
+Production gate: `pnpm env:check` requires a non-empty `GOOGLE_PLACES_API_KEY` for production-shaped environments.
+
+---
+
 ## Features (detailed)
 
 ### Collections
@@ -90,15 +176,15 @@ Compose starts Postgres 16 and the Next/Payload app on port `3000` with local-on
 | **Services** | Service catalogue + landing data |
 | **PortfolioItems** | Portfolio gallery / explorer |
 | **Media** / **LeadMedia** | Uploads + lead attachment media |
-| **FAQs** / **Testimonials** | Reusable trust content |
+| **FAQs** / **Testimonials** | Reusable trust content (FAQs support schema-eligible AEO) |
 | **Leads** | Private inbound quote/contact leads |
-| **Redirects** | Managed URL redirects |
-| **Areas** / **Categories** | Location + taxonomy |
+| **Redirects** | Managed URL redirects (SEO migrations) |
+| **Areas** / **Categories** | Location + taxonomy (GEO / local coverage) |
 | **CurtainBlindCategories** / **CurtainBlindProducts** | Catalogue-style product lines |
 
 ### Globals
 
-Header, Footer, Homepage, AboutPage, ContactPage, ContactInformation, SiteSettings, SEODefaults, SocialMedia, ArchiveSettings, GoogleReviews.
+Header, Footer, Homepage, AboutPage, ContactPage, ContactInformation (incl. **Google Maps URL**), SiteSettings, **SEODefaults**, SocialMedia, ArchiveSettings, **GoogleReviews**.
 
 ### Layout builder blocks
 
@@ -106,12 +192,12 @@ Header, Footer, Homepage, AboutPage, ContactPage, ContactInformation, SiteSettin
 
 ### Frontend / growth
 
-- Service landings (e.g. sofa upholstery, bed upholstery, curtains & blinds)
+- Service landings (sofa upholstery, bed upholstery, curtains & blinds)
 - Portfolio explorer
 - Quote request endpoint + SMTP notifications (`@payloadcms/email-nodemailer`)
-- Mobile sticky contact bar + tracked contact links
-- Analytics scripts + consent mode components
-- Google Reviews carousel / section (Places API New, server-side)
+- Mobile sticky contact bar + GTM-tracked contact links
+- **GTM + GA4 + Consent Mode v2** analytics scripts
+- **Google Reviews** section (Places API New) + Maps deep links
 - Import/verify scripts for catalogue and portfolio batches
 
 ### Plugins & platform
@@ -141,12 +227,13 @@ Copy `.env.example` → `.env`. Required for a healthy local/prod boot:
 | `PREVIEW_SECRET` | Draft preview |
 | `REVALIDATION_SECRET` | On-demand revalidation |
 
-Optional:
+Analytics, Maps & Reviews:
 
 | Variable | Notes |
 | --- | --- |
-| `NEXT_PUBLIC_GA_ID` / `NEXT_PUBLIC_GTM_ID` | Analytics |
-| `GOOGLE_PLACES_API_KEY` | Server-only Places API (New); never `NEXT_PUBLIC_*` |
+| `NEXT_PUBLIC_GTM_ID` | **Google Tag Manager** container ID (integrated in root layout) |
+| `NEXT_PUBLIC_GA_ID` | **Google Analytics 4** measurement ID |
+| `GOOGLE_PLACES_API_KEY` | **Server-only** Places API (New) for native Google Reviews — never expose as `NEXT_PUBLIC_*` |
 | `SMTP_*` | Lead email delivery |
 
 Run `pnpm env:check` before production builds.
